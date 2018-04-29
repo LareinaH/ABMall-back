@@ -19,17 +19,17 @@
 			<property name="mappers" value="com.cotton.base.mapper.BaseMapper" />
 		</plugin>
 
-		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.92.29.192:3306/doubee"
-			userId="lareina" password="lareina" />
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://23.88.61.181:3306/abmall"
+			userId="lareina" password="1qaz@WSX" />
 
-		<javaModelGenerator targetPackage="com.cotton.doubee_admin.model" targetProject="${basedir.src.main.java}" >
+		<javaModelGenerator targetPackage="com.cotton.abmallback.model" targetProject="${basedir.src.main.java}" >
 		    <property name="rootClass" value="com.cotton.base.model.BaseModel"/>
 		    <property name="trimStrings" value="true"/>
 		</javaModelGenerator>
 
 		<sqlMapGenerator targetPackage="mapper" targetProject="${basedir.src.main.resources}" />
 
-		<javaClientGenerator targetPackage="com.cotton.doubee_admin.mapper" targetProject="${basedir.src.main.java}" type="XMLMAPPER" />
+		<javaClientGenerator targetPackage="com.cotton.abmallback.mapper" targetProject="${basedir.src.main.java}" type="XMLMAPPER" />
 
 
 		<!--<table tableName="member">
@@ -42,12 +42,7 @@
 			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
 		<!--</table>-->
 
-		<table tableName="video">
-			<property name="useActualColumnNames" value="true" />
-			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
-		</table>
-
-		<table tableName="video_tag">
+		<table tableName="user">
 			<property name="useActualColumnNames" value="true" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 		</table>

@@ -32,7 +32,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
 	public SqlSessionFactory sqlSessionFactoryBean() {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
-		bean.setTypeAliasesPackage("com.cotton.doubee_admin.model");
+		bean.setTypeAliasesPackage("com.cotton.abmallback.model");
 
 		// 分页插件
 		PageHelper pageHelper = new PageHelper();
