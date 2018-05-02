@@ -3,32 +3,43 @@ package com.cotton.base.common;
 import java.io.Serializable;
 
 public class RestResponse<T> implements Serializable {
-    public static final String OK = "ok";
-    public static final String LoginTimeout = "LoginTimeout";
+
     private static final long serialVersionUID = 4843066638830850455L;
 
-    private String code;
+    private int code;
     private String message;
     private T data;
+
+    //成功
+    private static  int SUCCESS = 200;
+
+    //未登录
+    private static  int UNAUTHORIZED = 401;
+
 
     public RestResponse() {
     }
 
-    public RestResponse(String code, String message) {
+    public RestResponse(int code, String message) {
         this.code = code;
         this.message = message;
     }
 
     public RestResponse(T data) {
-        this.code = OK;
+        this.code = SUCCESS;
         this.data = data;
     }
 
-    public String getCode() {
+    public boolean getSuccessed(){
+
+        return code == SUCCESS;
+    }
+
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
