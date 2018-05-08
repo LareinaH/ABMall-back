@@ -17,7 +17,7 @@ public class MyBatisMapperScannerConfig {
 	public MapperScannerConfigurer mapperScannerConfigurer() {
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
 		mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-		mapperScannerConfigurer.setBasePackage("com.cotton.doubee_admin.mapper");
+		mapperScannerConfigurer.setBasePackage("com.cotton.abmallback.mapper");
 		Properties properties = new Properties();
 		properties.setProperty("mappers", "tk.mybatis.mapper.common.Mapper,tk.mybatis.mapper.common.special.InsertListMapper");
 		properties.setProperty("style", "normal");

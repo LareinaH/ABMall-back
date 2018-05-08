@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cotton.abmallback.mapper.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.cotton.abmallback.model.Goods" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="goods_no" property="goods_no" jdbcType="VARCHAR" />
+    <result column="goods_name" property="goods_name" jdbcType="VARCHAR" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="thums" property="thums" jdbcType="VARCHAR" />
+    <result column="images" property="images" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="group_id" property="group_id" jdbcType="BIGINT" />
+    <result column="is_on_sell" property="is_on_sell" jdbcType="BIT" />
+    <result column="is_recycled" property="is_recycled" jdbcType="BIT" />
+    <result column="is_deleted" property="is_deleted" jdbcType="BIT" />
+    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="modifyAt" property="modifyAt" jdbcType="TIMESTAMP" />
+    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+</mapper>

@@ -4,14 +4,20 @@ import com.cotton.base.model.BaseModel;
 import java.util.Date;
 import javax.persistence.*;
 
-public class User extends BaseModel {
+@Table(name = "sys_user")
+public class SysUser extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * 用户名
+     */
     private String username;
 
     private String password;
+
+    private Boolean is_deleted;
 
     private Date createAt;
 
@@ -32,14 +38,18 @@ public class User extends BaseModel {
     }
 
     /**
-     * @return username
+     * 获取用户名
+     *
+     * @return username - 用户名
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * @param username
+     * 设置用户名
+     *
+     * @param username 用户名
      */
     public void setUsername(String username) {
         this.username = username == null ? null : username.trim();
@@ -57,6 +67,20 @@ public class User extends BaseModel {
      */
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    /**
+     * @return is_deleted
+     */
+    public Boolean getIs_deleted() {
+        return is_deleted;
+    }
+
+    /**
+     * @param is_deleted
+     */
+    public void setIs_deleted(Boolean is_deleted) {
+        this.is_deleted = is_deleted;
     }
 
     /**

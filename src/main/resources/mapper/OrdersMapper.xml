@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cotton.abmallback.mapper.OrdersMapper" >
+  <resultMap id="BaseResultMap" type="com.cotton.abmallback.model.Orders" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_no" property="order_no" jdbcType="VARCHAR" />
+    <result column="member_id" property="member_id" jdbcType="BIGINT" />
+    <result column="order_status" property="order_status" jdbcType="VARCHAR" />
+    <result column="total_money" property="total_money" jdbcType="DECIMAL" />
+    <result column="receiver_name" property="receiver_name" jdbcType="VARCHAR" />
+    <result column="receiver_phone" property="receiver_phone" jdbcType="INTEGER" />
+    <result column="receiver_province_name" property="receiver_province_name" jdbcType="VARCHAR" />
+    <result column="receiver_province_code" property="receiver_province_code" jdbcType="INTEGER" />
+    <result column="receiver_city_code" property="receiver_city_code" jdbcType="INTEGER" />
+    <result column="receiver_city_name" property="receiver_city_name" jdbcType="INTEGER" />
+    <result column="receiver_county_name" property="receiver_county_name" jdbcType="INTEGER" />
+    <result column="receiver_county_code" property="receiver_county_code" jdbcType="INTEGER" />
+    <result column="receiver_address" property="receiver_address" jdbcType="VARCHAR" />
+    <result column="pay_mode" property="pay_mode" jdbcType="VARCHAR" />
+    <result column="is_paid" property="is_paid" jdbcType="BIT" />
+    <result column="trade_no" property="trade_no" jdbcType="VARCHAR" />
+    <result column="delivery_time" property="delivery_time" jdbcType="TIMESTAMP" />
+    <result column="receive_time" property="receive_time" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="BIT" />
+    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="modifyAt" property="modifyAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
