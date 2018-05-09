@@ -1,8 +1,8 @@
 package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.service.MemberService;
+import com.cotton.abmallback.web.controller.ABMallAdminBaseController;
 import com.cotton.base.common.RestResponse;
-import com.cotton.base.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/memberManager")
-public class MemberManagerController extends BaseController {
+public class MemberManagerController extends ABMallAdminBaseController {
 
     private Logger logger = LoggerFactory.getLogger(MemberManagerController.class);
 

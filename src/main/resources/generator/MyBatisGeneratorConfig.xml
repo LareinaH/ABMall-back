@@ -41,7 +41,7 @@
 			<!--<property name="useActualColumnNames" value="true" />-->
 			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
 		<!--</table>-->
-
+<!--
 		<table tableName="goods">
 			<property name="useActualColumnNames" value="true" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -90,7 +90,17 @@
 		<table tableName="sys_user_role">
 			<property name="useActualColumnNames" value="true" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
-		</table>
+		</table>-->
+
+	<!--	<table tableName="ads">
+			<property name="useActualColumnNames" value="true" />
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+		</table>-->
+
+		<table tableName="cash_pick_up">
+        <property name="useActualColumnNames" value="true" />
+        <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+    </table>
 
 	</context>
 

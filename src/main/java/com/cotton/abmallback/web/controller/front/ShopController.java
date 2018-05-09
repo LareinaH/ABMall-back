@@ -1,8 +1,8 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.cotton.abmallback.service.CashPickUpService;
-import com.cotton.abmallback.service.MemberAddressService;
-import com.cotton.abmallback.service.MemberService;
+import com.cotton.abmallback.service.AdsService;
+import com.cotton.abmallback.service.GoodsGroupService;
+import com.cotton.abmallback.service.GoodsService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import org.slf4j.Logger;
@@ -15,67 +15,43 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Shop
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/9
+ */
 @Controller
-@RequestMapping("/member")
-public class MemberController extends ABMallFrontBaseController {
+@RequestMapping("/shop")
+public class ShopController extends ABMallFrontBaseController {
 
-    private Logger logger = LoggerFactory.getLogger(MemberController.class);
-
-    @Autowired
-    private MemberService memberService;
-
+    private Logger logger = LoggerFactory.getLogger(ShopController.class);
 
     @Autowired
-    private MemberAddressService memberAddressService;
+    private GoodsService goodsService;
+
+    @Autowired
+    private GoodsGroupService goodsGroupService;
+
+    @Autowired
+    private AdsService adsService;
 
 
+
+    /**
+     * 首页
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/example")
     public RestResponse<Map<String, Object>> example() {
 
         RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
+
         restResponse.setData(map);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
-
-    }
-
-
-    /**
-     * 绑定手机号
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/bindPhoneNum")
-    public RestResponse<Map<String, Object>> bindPhoneNum() {
-
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
-
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
-
-    }
-
-
-
-    /**
-     * 收货地址列表
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/addressList")
-    public RestResponse<Map<String, Object>> addressList() {
-
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
 
         //TODO:
         //restResponse.setCode(RestResponse);
@@ -84,43 +60,69 @@ public class MemberController extends ABMallFrontBaseController {
     }
 
     /**
-     * 增加收货地址
+     * 首页
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/addAddress")
-    public RestResponse<Map<String, Object>> addAddress() {
+    @RequestMapping(value = "/index")
+    public RestResponse<Map<String, Object>> index() {
 
         RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
+
         restResponse.setData(map);
 
+
         //TODO:
-        //restResponse.setCod5e(RestResponse);
+        //restResponse.setCode(RestResponse);
         return restResponse;
 
     }
+
+    /**
+     * 商品列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/goodsList")
+    public RestResponse<Map<String, Object>> goodsList() {
+
+        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+
+
+
+        restResponse.setData(map);
+
+
+        //TODO:
+        //restResponse.setCode(RestResponse);
+        return restResponse;
+
+    }
+
 
 
     /**
-     * 删除收货地址
+     * 商品详情
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/deleteAddress")
-    public RestResponse<Map<String, Object>> deleteAddress() {
+    @RequestMapping(value = "/goodsDetail")
+    public RestResponse<Map<String, Object>> goodsDetail(String goodsId) {
 
         RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
+
+
+
         restResponse.setData(map);
 
+
         //TODO:
-        //restResponse.setCod5e(RestResponse);
+        //restResponse.setCode(RestResponse);
         return restResponse;
 
     }
-
-
-
 
 }

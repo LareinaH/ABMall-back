@@ -1,6 +1,6 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.cotton.abmallback.service.OrdersService;
+import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import org.slf4j.Logger;
@@ -13,37 +13,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Login
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/9
+ */
 @Controller
-@RequestMapping("/orders")
-public class OrdersController extends ABMallFrontBaseController {
+@RequestMapping("/member")
+public class LoginController extends ABMallFrontBaseController {
 
-    private Logger logger = LoggerFactory.getLogger(OrdersController.class);
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    private OrdersService ordersService;
+    private MemberService memberService;
 
     @ResponseBody
-    @RequestMapping(value = "/example")
-    public RestResponse<Map<String, Object>> example() {
-
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
-
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
-
-    }
-
-    /**
-     * 订单列表
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/ordersList")
-    public RestResponse<Map<String, Object>> ordersList() {
+    @RequestMapping(value = "/login")
+    public RestResponse<Map<String, Object>> login() {
 
         RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -56,13 +44,9 @@ public class OrdersController extends ABMallFrontBaseController {
     }
 
 
-    /**
-     * 确认收货
-     * @return
-     */
     @ResponseBody
-    @RequestMapping(value = "/confirmReceipt")
-    public RestResponse<Map<String, Object>> confirmReceipt() {
+    @RequestMapping(value = "/logout")
+    public RestResponse<Map<String, Object>> logout() {
 
         RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -74,13 +58,9 @@ public class OrdersController extends ABMallFrontBaseController {
 
     }
 
-    /**
-     * 取消订单
-     * @return
-     */
     @ResponseBody
-    @RequestMapping(value = "/cancelOrder")
-    public RestResponse<Map<String, Object>> cancelOrder() {
+    @RequestMapping(value = "/sendVerifyCode")
+    public RestResponse<Map<String, Object>> sendVerifyCode() {
 
         RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -91,6 +71,7 @@ public class OrdersController extends ABMallFrontBaseController {
         return restResponse;
 
     }
+
 
 
 
