@@ -9,7 +9,12 @@ import java.util.Properties;
 
 /**
  * MyBatis扫描mapper接口配置
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
  */
+
 @Configuration
 @AutoConfigureAfter(MyBatisConfig.class)
 public class MyBatisMapperScannerConfig {

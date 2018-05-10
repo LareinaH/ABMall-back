@@ -1,6 +1,5 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.MemberAddressService;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
@@ -15,6 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
 
 @Controller
 @RequestMapping("/member")

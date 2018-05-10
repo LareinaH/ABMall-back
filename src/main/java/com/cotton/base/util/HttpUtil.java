@@ -29,10 +29,9 @@ import java.util.Map;
 /**
  * HTTP 请求工具类
  *
- * @author : liii
- * @version : 1.0.0
- * @date : 2015/7/21
- * @see : TODO
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
  */
 public class HttpUtil {
     private static PoolingHttpClientConnectionManager connMgr;

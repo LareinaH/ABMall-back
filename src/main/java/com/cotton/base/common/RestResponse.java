@@ -2,6 +2,13 @@ package com.cotton.base.common;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 public class RestResponse<T> implements Serializable {
 
     private static final long serialVersionUID = 4843066638830850455L;

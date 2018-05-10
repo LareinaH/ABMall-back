@@ -1,5 +1,12 @@
 package com.cotton.base.service;
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 public class ServiceException extends RuntimeException {
 	private static final long serialVersionUID = 7199992842398112421L;
 	private final String code;

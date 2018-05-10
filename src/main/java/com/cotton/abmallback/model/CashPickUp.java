@@ -1,5 +1,6 @@
 package com.cotton.abmallback.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.cotton.base.model.BaseModel;
 import java.math.BigDecimal;
 import java.util.Date;

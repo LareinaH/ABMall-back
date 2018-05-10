@@ -5,6 +5,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 public class DistanceUtil {
 
     private static double  DEF_PI =Math.PI;// 3.14159265359

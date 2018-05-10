@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
 
 @Controller
 @RequestMapping("/memberManager")

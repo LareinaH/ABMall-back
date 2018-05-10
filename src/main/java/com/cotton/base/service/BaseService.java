@@ -5,6 +5,13 @@ import java.util.List;
 import com.github.pagehelper.PageInfo;
 import com.cotton.base.model.BaseModel;
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 public interface BaseService<ModelType extends BaseModel> {
 	boolean insert(ModelType model);
 

@@ -7,7 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysRoleService {
 }

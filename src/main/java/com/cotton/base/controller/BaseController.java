@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.service.ServiceException;
 
+/**
+ * BaseController
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 public class BaseController {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 

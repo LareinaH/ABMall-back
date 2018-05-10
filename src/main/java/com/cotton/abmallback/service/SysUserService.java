@@ -4,7 +4,11 @@ import com.cotton.abmallback.model.SysUser;
 import com.cotton.base.service.BaseService;
 
 /**
- * @author lu.han 2018-05-08
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
  */
+
 public interface SysUserService extends BaseService<SysUser> {
 }

@@ -7,6 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 public class BaseModel implements Serializable {
 	private static final long serialVersionUID = -6332620263145558954L;
 	public static final String ID = "id";

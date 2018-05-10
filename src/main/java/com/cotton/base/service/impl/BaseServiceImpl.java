@@ -11,6 +11,13 @@ import com.cotton.base.mapper.BaseMapper;
 import com.cotton.base.model.BaseModel;
 import com.cotton.base.service.BaseService;
 
+/**
+ *
+ * @author lareina_h
+ * @version 1.0
+ * @date 2018/5/10
+ */
+
 public class BaseServiceImpl<ModelType extends BaseModel> implements BaseService<ModelType> {
 	@Autowired
 	protected BaseMapper<ModelType> mapper;
