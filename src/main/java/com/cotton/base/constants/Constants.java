@@ -1,4 +1,4 @@
-package com.cotton.base.util;
+package com.cotton.base.constants;
 
 /**
  *

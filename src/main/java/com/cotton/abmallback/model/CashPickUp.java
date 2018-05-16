@@ -1,6 +1,5 @@
 package com.cotton.abmallback.model;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.cotton.base.model.BaseModel;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -42,15 +41,9 @@ public class CashPickUp extends BaseModel {
      */
     private Boolean is_deleted;
 
-    /**
-     * 创建时间
-     */
-    private Date createAt;
+    private Date gmt_create;
 
-    /**
-     * 修改时间
-     */
-    private Date modifyAt;
+    private Date gmt_modify;
 
     /**
      * @return id
@@ -175,38 +168,30 @@ public class CashPickUp extends BaseModel {
     }
 
     /**
-     * 获取创建时间
-     *
-     * @return createAt - 创建时间
+     * @return gmt_create
      */
-    public Date getCreateAt() {
-        return createAt;
+    public Date getGmt_create() {
+        return gmt_create;
     }
 
     /**
-     * 设置创建时间
-     *
-     * @param createAt 创建时间
+     * @param gmt_create
      */
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
+    public void setGmt_create(Date gmt_create) {
+        this.gmt_create = gmt_create;
     }
 
     /**
-     * 获取修改时间
-     *
-     * @return modifyAt - 修改时间
+     * @return gmt_modify
      */
-    public Date getModifyAt() {
-        return modifyAt;
+    public Date getGmt_modify() {
+        return gmt_modify;
     }
 
     /**
-     * 设置修改时间
-     *
-     * @param modifyAt 修改时间
+     * @param gmt_modify
      */
-    public void setModifyAt(Date modifyAt) {
-        this.modifyAt = modifyAt;
+    public void setGmt_modify(Date gmt_modify) {
+        this.gmt_modify = gmt_modify;
     }
 }

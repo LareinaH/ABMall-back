@@ -5,7 +5,7 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -35,10 +35,12 @@ public class Application {
 
         FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
 
+        //配置fastJson 参数
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
 
         fastConverter.setFastJsonConfig(fastJsonConfig);
+
         HttpMessageConverter<?> converter = fastConverter;
 
         return new HttpMessageConverters(converter);

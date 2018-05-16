@@ -1,5 +1,7 @@
 package com.cotton.base.service;
 
+import com.cotton.base.constants.CodeMessage;
+
 /**
  *
  * @author lareina_h

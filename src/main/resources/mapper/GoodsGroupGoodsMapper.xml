@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cotton.abmallback.mapper.GoodsGroupGoodsMapper" >
-  <resultMap id="BaseResultMap" type="com.cotton.abmallback.model.GoodsGroupGoods" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cotton.abmallback.mapper.GoodsGroupGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.cotton.abmallback.model.GoodsGroupGoods">
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="goods_group_id" property="goods_group_id" jdbcType="VARCHAR" />
-    <result column="goods_id" property="goods_id" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="is_deleted" jdbcType="BIT" />
-    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
-    <result column="modifyAt" property="modifyAt" jdbcType="TIMESTAMP" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="goods_group_id" jdbcType="VARCHAR" property="goods_group_id" />
+    <result column="goods_id" jdbcType="VARCHAR" property="goods_id" />
+    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
   </resultMap>
 </mapper>

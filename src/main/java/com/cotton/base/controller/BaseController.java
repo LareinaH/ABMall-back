@@ -1,6 +1,6 @@
 package com.cotton.base.controller;
 
-import com.cotton.base.util.Constants;
+import com.cotton.base.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.MissingServletRequestParameterException;
