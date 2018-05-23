@@ -1,109 +1,116 @@
 package com.cotton.abmallback.model;
 
 import com.cotton.base.model.BaseModel;
-import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "member_address")
 public class MemberAddress extends BaseModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     /**
      * 会员id
      */
-    private Long member_id;
+    @Column(name = "member_id")
+    private Long memberId;
+
+    /**
+     * 地址类型：收货地址 赠品地址
+     */
+    @Column(name = "address_type")
+    private String addressType;
 
     /**
      * 收货人姓名
      */
-    private String receiver_name;
+    @Column(name = "receiver_name")
+    private String receiverName;
 
     /**
      * 收货人联系电话
      */
-    private Integer receiver_phone;
+    @Column(name = "receiver_phone")
+    private Integer receiverPhone;
 
     /**
      * 收货地址-省名称
      */
-    private String receiver_province_name;
+    @Column(name = "receiver_province_name")
+    private String receiverProvinceName;
 
     /**
      * 收货地址-省编码
      */
-    private Integer receiver_province_code;
+    @Column(name = "receiver_province_code")
+    private Integer receiverProvinceCode;
 
     /**
      * 收货地址-城市编码
      */
-    private Integer receiver_city_code;
+    @Column(name = "receiver_city_code")
+    private Integer receiverCityCode;
 
     /**
      * 收货地址-城市名称
      */
-    private Integer receiver_city_name;
+    @Column(name = "receiver_city_name")
+    private Integer receiverCityName;
 
     /**
      * 收货地址：县名称
      */
-    private Integer receiver_county_name;
+    @Column(name = "receiver_county_name")
+    private Integer receiverCountyName;
 
     /**
      * 收货地址-县编码
      */
-    private Integer receiver_county_code;
+    @Column(name = "receiver_county_code")
+    private Integer receiverCountyCode;
 
     /**
      * 详细地址
      */
-    private String receiver_address;
+    @Column(name = "receiver_address")
+    private String receiverAddress;
 
     /**
      * 是否默认地址	0:否 1:是
      */
-    private Boolean is_default;
-
-    /**
-     * 删除状态
-     */
-    private Boolean is_deleted;
-
-    private Date gmt_create;
-
-    private Date gmt_modify;
-
-    /**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "is_default")
+    private Boolean isDefault;
 
     /**
      * 获取会员id
      *
      * @return member_id - 会员id
      */
-    public Long getMember_id() {
-        return member_id;
+    public Long getMemberId() {
+        return memberId;
     }
 
     /**
      * 设置会员id
      *
-     * @param member_id 会员id
+     * @param memberId 会员id
      */
-    public void setMember_id(Long member_id) {
-        this.member_id = member_id;
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
+    /**
+     * 获取地址类型：收货地址 赠品地址
+     *
+     * @return address_type - 地址类型：收货地址 赠品地址
+     */
+    public String getAddressType() {
+        return addressType;
+    }
+
+    /**
+     * 设置地址类型：收货地址 赠品地址
+     *
+     * @param addressType 地址类型：收货地址 赠品地址
+     */
+    public void setAddressType(String addressType) {
+        this.addressType = addressType == null ? null : addressType.trim();
     }
 
     /**
@@ -111,17 +118,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_name - 收货人姓名
      */
-    public String getReceiver_name() {
-        return receiver_name;
+    public String getReceiverName() {
+        return receiverName;
     }
 
     /**
      * 设置收货人姓名
      *
-     * @param receiver_name 收货人姓名
+     * @param receiverName 收货人姓名
      */
-    public void setReceiver_name(String receiver_name) {
-        this.receiver_name = receiver_name == null ? null : receiver_name.trim();
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName == null ? null : receiverName.trim();
     }
 
     /**
@@ -129,17 +136,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_phone - 收货人联系电话
      */
-    public Integer getReceiver_phone() {
-        return receiver_phone;
+    public Integer getReceiverPhone() {
+        return receiverPhone;
     }
 
     /**
      * 设置收货人联系电话
      *
-     * @param receiver_phone 收货人联系电话
+     * @param receiverPhone 收货人联系电话
      */
-    public void setReceiver_phone(Integer receiver_phone) {
-        this.receiver_phone = receiver_phone;
+    public void setReceiverPhone(Integer receiverPhone) {
+        this.receiverPhone = receiverPhone;
     }
 
     /**
@@ -147,17 +154,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_province_name - 收货地址-省名称
      */
-    public String getReceiver_province_name() {
-        return receiver_province_name;
+    public String getReceiverProvinceName() {
+        return receiverProvinceName;
     }
 
     /**
      * 设置收货地址-省名称
      *
-     * @param receiver_province_name 收货地址-省名称
+     * @param receiverProvinceName 收货地址-省名称
      */
-    public void setReceiver_province_name(String receiver_province_name) {
-        this.receiver_province_name = receiver_province_name == null ? null : receiver_province_name.trim();
+    public void setReceiverProvinceName(String receiverProvinceName) {
+        this.receiverProvinceName = receiverProvinceName == null ? null : receiverProvinceName.trim();
     }
 
     /**
@@ -165,17 +172,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_province_code - 收货地址-省编码
      */
-    public Integer getReceiver_province_code() {
-        return receiver_province_code;
+    public Integer getReceiverProvinceCode() {
+        return receiverProvinceCode;
     }
 
     /**
      * 设置收货地址-省编码
      *
-     * @param receiver_province_code 收货地址-省编码
+     * @param receiverProvinceCode 收货地址-省编码
      */
-    public void setReceiver_province_code(Integer receiver_province_code) {
-        this.receiver_province_code = receiver_province_code;
+    public void setReceiverProvinceCode(Integer receiverProvinceCode) {
+        this.receiverProvinceCode = receiverProvinceCode;
     }
 
     /**
@@ -183,17 +190,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_city_code - 收货地址-城市编码
      */
-    public Integer getReceiver_city_code() {
-        return receiver_city_code;
+    public Integer getReceiverCityCode() {
+        return receiverCityCode;
     }
 
     /**
      * 设置收货地址-城市编码
      *
-     * @param receiver_city_code 收货地址-城市编码
+     * @param receiverCityCode 收货地址-城市编码
      */
-    public void setReceiver_city_code(Integer receiver_city_code) {
-        this.receiver_city_code = receiver_city_code;
+    public void setReceiverCityCode(Integer receiverCityCode) {
+        this.receiverCityCode = receiverCityCode;
     }
 
     /**
@@ -201,17 +208,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_city_name - 收货地址-城市名称
      */
-    public Integer getReceiver_city_name() {
-        return receiver_city_name;
+    public Integer getReceiverCityName() {
+        return receiverCityName;
     }
 
     /**
      * 设置收货地址-城市名称
      *
-     * @param receiver_city_name 收货地址-城市名称
+     * @param receiverCityName 收货地址-城市名称
      */
-    public void setReceiver_city_name(Integer receiver_city_name) {
-        this.receiver_city_name = receiver_city_name;
+    public void setReceiverCityName(Integer receiverCityName) {
+        this.receiverCityName = receiverCityName;
     }
 
     /**
@@ -219,17 +226,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_county_name - 收货地址：县名称
      */
-    public Integer getReceiver_county_name() {
-        return receiver_county_name;
+    public Integer getReceiverCountyName() {
+        return receiverCountyName;
     }
 
     /**
      * 设置收货地址：县名称
      *
-     * @param receiver_county_name 收货地址：县名称
+     * @param receiverCountyName 收货地址：县名称
      */
-    public void setReceiver_county_name(Integer receiver_county_name) {
-        this.receiver_county_name = receiver_county_name;
+    public void setReceiverCountyName(Integer receiverCountyName) {
+        this.receiverCountyName = receiverCountyName;
     }
 
     /**
@@ -237,17 +244,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_county_code - 收货地址-县编码
      */
-    public Integer getReceiver_county_code() {
-        return receiver_county_code;
+    public Integer getReceiverCountyCode() {
+        return receiverCountyCode;
     }
 
     /**
      * 设置收货地址-县编码
      *
-     * @param receiver_county_code 收货地址-县编码
+     * @param receiverCountyCode 收货地址-县编码
      */
-    public void setReceiver_county_code(Integer receiver_county_code) {
-        this.receiver_county_code = receiver_county_code;
+    public void setReceiverCountyCode(Integer receiverCountyCode) {
+        this.receiverCountyCode = receiverCountyCode;
     }
 
     /**
@@ -255,17 +262,17 @@ public class MemberAddress extends BaseModel {
      *
      * @return receiver_address - 详细地址
      */
-    public String getReceiver_address() {
-        return receiver_address;
+    public String getReceiverAddress() {
+        return receiverAddress;
     }
 
     /**
      * 设置详细地址
      *
-     * @param receiver_address 详细地址
+     * @param receiverAddress 详细地址
      */
-    public void setReceiver_address(String receiver_address) {
-        this.receiver_address = receiver_address == null ? null : receiver_address.trim();
+    public void setReceiverAddress(String receiverAddress) {
+        this.receiverAddress = receiverAddress == null ? null : receiverAddress.trim();
     }
 
     /**
@@ -273,62 +280,16 @@ public class MemberAddress extends BaseModel {
      *
      * @return is_default - 是否默认地址	0:否 1:是
      */
-    public Boolean getIs_default() {
-        return is_default;
+    public Boolean getIsDefault() {
+        return isDefault;
     }
 
     /**
      * 设置是否默认地址	0:否 1:是
      *
-     * @param is_default 是否默认地址	0:否 1:是
+     * @param isDefault 是否默认地址	0:否 1:是
      */
-    public void setIs_default(Boolean is_default) {
-        this.is_default = is_default;
-    }
-
-    /**
-     * 获取删除状态
-     *
-     * @return is_deleted - 删除状态
-     */
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    /**
-     * 设置删除状态
-     *
-     * @param is_deleted 删除状态
-     */
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
-
-    /**
-     * @return gmt_create
-     */
-    public Date getGmt_create() {
-        return gmt_create;
-    }
-
-    /**
-     * @param gmt_create
-     */
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
-    }
-
-    /**
-     * @return gmt_modify
-     */
-    public Date getGmt_modify() {
-        return gmt_modify;
-    }
-
-    /**
-     * @param gmt_modify
-     */
-    public void setGmt_modify(Date gmt_modify) {
-        this.gmt_modify = gmt_modify;
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
     }
 }

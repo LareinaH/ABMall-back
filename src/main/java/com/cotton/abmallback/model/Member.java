@@ -1,14 +1,9 @@
 package com.cotton.abmallback.model;
 
 import com.cotton.base.model.BaseModel;
-import java.util.Date;
 import javax.persistence.*;
 
 public class Member extends BaseModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     /**
      * uuid
      */
@@ -27,7 +22,14 @@ public class Member extends BaseModel {
     /**
      * 显示名
      */
-    private String display_name;
+    @Column(name = "display_name")
+    private String displayName;
+
+    /**
+     * 手机号码
+     */
+    @Column(name = "phone_num")
+    private String phoneNum;
 
     /**
      * 头像
@@ -37,45 +39,25 @@ public class Member extends BaseModel {
     /**
      * 微信号
      */
-    private String wechat_no;
+    @Column(name = "wechat_no")
+    private String wechatNo;
 
     /**
      * 微信名
      */
-    private String wechat_name;
+    @Column(name = "wechat_name")
+    private String wechatName;
 
     /**
      * openId
      */
-    private String openId;
+    @Column(name = "openId")
+    private String openid;
 
     /**
      * 性别：male,female,unknown
      */
     private String sex;
-
-    /**
-     * 删除状态
-     */
-    private Boolean is_deleted;
-
-    private Date gmt_create;
-
-    private Date gmt_modify;
-
-    /**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * 获取uuid
@@ -136,17 +118,35 @@ public class Member extends BaseModel {
      *
      * @return display_name - 显示名
      */
-    public String getDisplay_name() {
-        return display_name;
+    public String getDisplayName() {
+        return displayName;
     }
 
     /**
      * 设置显示名
      *
-     * @param display_name 显示名
+     * @param displayName 显示名
      */
-    public void setDisplay_name(String display_name) {
-        this.display_name = display_name == null ? null : display_name.trim();
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName == null ? null : displayName.trim();
+    }
+
+    /**
+     * 获取手机号码
+     *
+     * @return phone_num - 手机号码
+     */
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    /**
+     * 设置手机号码
+     *
+     * @param phoneNum 手机号码
+     */
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum == null ? null : phoneNum.trim();
     }
 
     /**
@@ -172,17 +172,17 @@ public class Member extends BaseModel {
      *
      * @return wechat_no - 微信号
      */
-    public String getWechat_no() {
-        return wechat_no;
+    public String getWechatNo() {
+        return wechatNo;
     }
 
     /**
      * 设置微信号
      *
-     * @param wechat_no 微信号
+     * @param wechatNo 微信号
      */
-    public void setWechat_no(String wechat_no) {
-        this.wechat_no = wechat_no == null ? null : wechat_no.trim();
+    public void setWechatNo(String wechatNo) {
+        this.wechatNo = wechatNo == null ? null : wechatNo.trim();
     }
 
     /**
@@ -190,17 +190,17 @@ public class Member extends BaseModel {
      *
      * @return wechat_name - 微信名
      */
-    public String getWechat_name() {
-        return wechat_name;
+    public String getWechatName() {
+        return wechatName;
     }
 
     /**
      * 设置微信名
      *
-     * @param wechat_name 微信名
+     * @param wechatName 微信名
      */
-    public void setWechat_name(String wechat_name) {
-        this.wechat_name = wechat_name == null ? null : wechat_name.trim();
+    public void setWechatName(String wechatName) {
+        this.wechatName = wechatName == null ? null : wechatName.trim();
     }
 
     /**
@@ -208,17 +208,17 @@ public class Member extends BaseModel {
      *
      * @return openId - openId
      */
-    public String getOpenId() {
-        return openId;
+    public String getOpenid() {
+        return openid;
     }
 
     /**
      * 设置openId
      *
-     * @param openId openId
+     * @param openid openId
      */
-    public void setOpenId(String openId) {
-        this.openId = openId == null ? null : openId.trim();
+    public void setOpenid(String openid) {
+        this.openid = openid == null ? null : openid.trim();
     }
 
     /**
@@ -237,51 +237,5 @@ public class Member extends BaseModel {
      */
     public void setSex(String sex) {
         this.sex = sex == null ? null : sex.trim();
-    }
-
-    /**
-     * 获取删除状态
-     *
-     * @return is_deleted - 删除状态
-     */
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    /**
-     * 设置删除状态
-     *
-     * @param is_deleted 删除状态
-     */
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
-
-    /**
-     * @return gmt_create
-     */
-    public Date getGmt_create() {
-        return gmt_create;
-    }
-
-    /**
-     * @param gmt_create
-     */
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
-    }
-
-    /**
-     * @return gmt_modify
-     */
-    public Date getGmt_modify() {
-        return gmt_modify;
-    }
-
-    /**
-     * @param gmt_modify
-     */
-    public void setGmt_modify(Date gmt_modify) {
-        this.gmt_modify = gmt_modify;
     }
 }

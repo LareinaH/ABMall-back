@@ -5,13 +5,9 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="ad_type" jdbcType="VARCHAR" property="ad_type" />
-    <result column="ad_url" jdbcType="VARCHAR" property="ad_url" />
-    <result column="link_url" jdbcType="VARCHAR" property="link_url" />
+    <result column="ad_type" jdbcType="VARCHAR" property="adType" />
+    <result column="ad_url" jdbcType="VARCHAR" property="adUrl" />
+    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
   </resultMap>
 </mapper>

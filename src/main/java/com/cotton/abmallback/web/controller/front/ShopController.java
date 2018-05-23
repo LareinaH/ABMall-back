@@ -1,21 +1,28 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.model.Ads;
 import com.cotton.abmallback.model.Goods;
+import com.cotton.abmallback.model.GoodsSpecification;
+import com.cotton.abmallback.model.vo.GoodsVO;
 import com.cotton.abmallback.service.AdsService;
-import com.cotton.abmallback.service.GoodsGroupService;
 import com.cotton.abmallback.service.GoodsService;
+import com.cotton.abmallback.service.GoodsSpecificationService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,110 +38,136 @@ public class ShopController extends ABMallFrontBaseController {
 
     private Logger logger = LoggerFactory.getLogger(ShopController.class);
 
-    @Autowired
-    private GoodsService goodsService;
+    private final GoodsService goodsService;
+
+    private final GoodsSpecificationService goodsSpecificationService;
+
+    private final AdsService adsService;
 
     @Autowired
-    private GoodsGroupService goodsGroupService;
-
-    @Autowired
-    private AdsService adsService;
-
-
-
-    /**
-     * 首页
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/example")
-    public RestResponse<Map<String, Object>> example() {
-
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        restResponse.setData(map);
-
-        //1 广告
-
-        //2 商品
-
-
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
-
+    public ShopController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService, AdsService adsService) {
+        this.goodsService = goodsService;
+        this.goodsSpecificationService = goodsSpecificationService;
+        this.adsService = adsService;
     }
 
     /**
      * 首页
-     * @return
+     * @return RestResponse<Map<String, Object>> 首页信息
      */
     @ResponseBody
-    @RequestMapping(value = "/index")
+    @RequestMapping(value = "/index",method = {RequestMethod.GET})
     public RestResponse<Map<String, Object>> index() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
+        //广告轮播
+        List<Ads> adsList =  adsService.queryBanner();
 
-        restResponse.setData(map);
+        if(adsList.isEmpty()){
+            logger.error("banner数据不存在");
+            return RestResponse.getFailedResponse(101,"banner数据不存在",null);
+        }
 
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("ads",adsList);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        return RestResponse.getSuccesseResponse(map);
+
+    }
+
+    /**
+     * 推荐码
+     * @return RestResponse<Map<String, Object>> 推荐码
+     */
+    @ResponseBody
+    @RequestMapping(value = "/invitingCode",method = {RequestMethod.GET})
+    public RestResponse<Map<String, Object>> getInvitingCode() {
+
+        //邀请码列表
+        List<Ads> adsList =  adsService.queryInvitinCode();
+
+        if(null == adsList || adsList.isEmpty()){
+            logger.error("邀请码不存在");
+            return RestResponse.getFailedResponse(101,"邀请码不存在",null);
+        }
+
+        //找到当前用户级别对应的邀请码
+        //TODO:根据用户级别匹配
+
+        Ads ads = adsList.get(0);
+
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("invitingCode",ads.getAdUrl());
+        map.put("memberId",getCurrentMemberId());
+
+        return RestResponse.getSuccesseResponse(map);
+
+    }
+
+    /**
+     * 团队体系
+     * @return  团队体系
+     */
+    @ResponseBody
+    @RequestMapping(value = "/teamSystem",method = {RequestMethod.GET})
+    public RestResponse<String> getTeamSystem() {
+
+        //团队体系
+        Ads ads =  adsService.queryTeamSystem();
+
+        if(null== ads){
+            logger.error("团队体系数据不存在!");
+            return RestResponse.getFailedResponse(101,"团队体系数据不存在!",null);
+        }
+
+        return RestResponse.getSuccesseResponse(ads.getAdUrl());
 
     }
 
     /**
      * 商品列表
-     * @return
+     * @return 商品列表
      */
     @ResponseBody
-    @RequestMapping(value = "/goodsList")
-    public RestResponse<Map<String, Object>> goodsList(@RequestParam(defaultValue = "1") int pageNum,
-                                                       @RequestParam(defaultValue = "4") int pageSize) {
+    @RequestMapping(value = "/goodsList",method = {RequestMethod.GET})
+    public RestResponse<List<Goods>> goodsList(@RequestParam(defaultValue = "1") int pageNum,
+                                               @RequestParam(defaultValue = "4") int pageSize) {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Example example = new Example(Goods.class);
+        PageInfo<Goods> goodsPageInfo = goodsService.query(pageNum,pageSize,example);
 
-
-
-        restResponse.setData(map);
-
-        Map<String, Object> conditionMap = new HashMap<String, Object>();
-        PageInfo<Goods> goodsPageInfo = goodsService.query(pageNum,pageSize,conditionMap);
-
-
-
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
-
+        if(goodsPageInfo == null ){
+            logger.error("读取商品列表失败");
+            return RestResponse.getSystemInnerErrorResponse();
+        }
+        return RestResponse.getSuccesseResponse(goodsPageInfo.getList());
     }
-
 
 
     /**
      * 商品详情
-     * @return
+     * @return 商品详情
      */
     @ResponseBody
-    @RequestMapping(value = "/goodsDetail")
-    public RestResponse<Map<String, Object>> goodsDetail(String goodsId) {
+    @RequestMapping(value = "/goodsDetail",method = {RequestMethod.GET})
+    public RestResponse<GoodsVO> goodsDetail(long goodsId) {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
+        //获取商品详情
+        Goods goods = goodsService.getById(goodsId);
 
+        if(null == goods){
+            logger.error("商品编号有误,该商品不存在！");
+            return RestResponse.getFailedResponse(1,"商品编号有误,该商品不存在！");
+        }
+        GoodsSpecification model = new GoodsSpecification();
+        model.setGoodsId(goodsId);
+        model.setIsDeleted(false);
 
+        //获取规格详情
+        List<GoodsSpecification> goodsSpecificationList = goodsSpecificationService.queryList(model);
+        GoodsVO goodsVO = new GoodsVO();
+        BeanUtils.copyProperties(goods,goodsVO);
+        goodsVO.setGoodsSpecificationList(goodsSpecificationList);
 
-        restResponse.setData(map);
-
-
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
-
+        return RestResponse.getSuccesseResponse(goodsVO);
     }
-
 }

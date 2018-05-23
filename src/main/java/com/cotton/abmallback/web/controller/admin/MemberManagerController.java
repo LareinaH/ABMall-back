@@ -34,13 +34,9 @@ public class MemberManagerController extends ABMallAdminBaseController {
     @RequestMapping(value = "/example")
     public RestResponse<Map<String, Object>> example() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
+        Map<String, Object> map = new HashMap<>(2);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        return RestResponse.getSuccesseResponse(map);
 
     }
 

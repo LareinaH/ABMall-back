@@ -5,14 +5,10 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="member_id" jdbcType="BIGINT" property="member_id" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
     <result column="money" jdbcType="DECIMAL" property="money" />
-    <result column="account_no" jdbcType="VARCHAR" property="account_no" />
-    <result column="cash_status" jdbcType="VARCHAR" property="cash_status" />
+    <result column="account_no" jdbcType="VARCHAR" property="accountNo" />
+    <result column="cash_status" jdbcType="VARCHAR" property="cashStatus" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
   </resultMap>
 </mapper>

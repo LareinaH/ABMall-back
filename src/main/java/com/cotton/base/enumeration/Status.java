@@ -8,8 +8,7 @@ package com.cotton.base.enumeration;
  */
 
 public enum Status {
-
-    normal,
-    cancel,
-    delete
+    NORMAL,
+    CANCEL,
+    DELETE
 }

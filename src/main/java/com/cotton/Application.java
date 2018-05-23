@@ -3,6 +3,7 @@ package com.cotton;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -20,11 +21,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class Application {
-
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
-    }
-
 
     /**
      * 覆盖方法configureMessageConverters，使用fastJson
@@ -44,6 +40,17 @@ public class Application {
         HttpMessageConverter<?> converter = fastConverter;
 
         return new HttpMessageConverters(converter);
+    }
+
+
+    /**
+     * 程序入口
+     * @param args 入参
+     * @throws Exception 异常
+     */
+    public static void main(String[] args) throws Exception {
+        SpringApplication app = new SpringApplication(Application.class);
+        app.run(args);
     }
 
 }

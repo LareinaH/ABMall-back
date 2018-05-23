@@ -23,18 +23,51 @@ public class RestResponse<T> implements Serializable {
     //未登录
     private static  int UNAUTHORIZED = 401;
 
+    //内部异常
+    private static  int INNER_ERROR = 500;
 
-    public RestResponse() {
-    }
 
-    public RestResponse(int code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
-    public RestResponse(T data) {
+    private RestResponse() {
         this.code = SUCCESS;
-        this.data = data;
+    }
+
+
+    public static<T> RestResponse<T> getSuccesseResponse(){
+
+        return getSuccesseResponse(null);
+    }
+
+    public static<T> RestResponse<T> getSuccesseResponse(T data){
+        RestResponse restResponse = new RestResponse();
+        restResponse.code = SUCCESS;
+        restResponse.data = data;
+        return restResponse;
+    }
+
+    public static<T> RestResponse<T> getFailedResponse(int code, String message){
+
+        return getFailedResponse(code,message,null);
+    }
+
+    public static<T> RestResponse<T> getFailedResponse(int code, String message,T data){
+        RestResponse restResponse = new RestResponse();
+        restResponse.code = code;
+        restResponse.message = message;
+        restResponse.data = data;
+        return restResponse;
+    }
+
+
+    public static<T> RestResponse<T> getSystemInnerErrorResponse(){
+
+        return getSystemInnerErrorResponse(null);
+    }
+
+    public static<T> RestResponse<T> getSystemInnerErrorResponse(String message){
+        RestResponse restResponse = new RestResponse();
+        restResponse.code = INNER_ERROR;
+        restResponse.message = "系统内部异常：" + message;
+        return restResponse;
     }
 
     public boolean getSuccessed(){

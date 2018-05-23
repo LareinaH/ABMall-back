@@ -33,13 +33,9 @@ public class LoginController extends ABMallFrontBaseController {
     @RequestMapping(value = "/login")
     public RestResponse<Map<String, Object>> login() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
+        Map<String, Object> map = new HashMap<>(2);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        return RestResponse.getSuccesseResponse(map);
 
     }
 
@@ -48,13 +44,10 @@ public class LoginController extends ABMallFrontBaseController {
     @RequestMapping(value = "/logout")
     public RestResponse<Map<String, Object>> logout() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        Map<String, Object> map = new HashMap<>(2);
+
+        return RestResponse.getSuccesseResponse(map);
 
     }
 
@@ -62,13 +55,9 @@ public class LoginController extends ABMallFrontBaseController {
     @RequestMapping(value = "/sendVerifyCode")
     public RestResponse<Map<String, Object>> sendVerifyCode() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
+        Map<String, Object> map = new HashMap<>(2);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        return RestResponse.getSuccesseResponse(map);
 
     }
 

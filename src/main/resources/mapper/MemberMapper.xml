@@ -5,18 +5,15 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="uuid" jdbcType="VARCHAR" property="uuid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="display_name" jdbcType="VARCHAR" property="display_name" />
+    <result column="display_name" jdbcType="VARCHAR" property="displayName" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
-    <result column="wechat_no" jdbcType="VARCHAR" property="wechat_no" />
-    <result column="wechat_name" jdbcType="VARCHAR" property="wechat_name" />
-    <result column="openId" jdbcType="VARCHAR" property="openId" />
+    <result column="wechat_no" jdbcType="VARCHAR" property="wechatNo" />
+    <result column="wechat_name" jdbcType="VARCHAR" property="wechatName" />
+    <result column="openId" jdbcType="VARCHAR" property="openid" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
-    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
   </resultMap>
 </mapper>

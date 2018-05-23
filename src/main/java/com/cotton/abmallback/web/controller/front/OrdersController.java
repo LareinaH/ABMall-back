@@ -34,13 +34,9 @@ public class OrdersController extends ABMallFrontBaseController {
     @RequestMapping(value = "/example")
     public RestResponse<Map<String, Object>> example() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
+        Map<String, Object> map = new HashMap<>(2);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        return RestResponse.getSuccesseResponse(map);
 
     }
 
@@ -52,13 +48,10 @@ public class OrdersController extends ABMallFrontBaseController {
     @RequestMapping(value = "/ordersList")
     public RestResponse<Map<String, Object>> ordersList() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        Map<String, Object> map = new HashMap<>(2);
+
+        return RestResponse.getSuccesseResponse(map);
 
     }
 
@@ -71,14 +64,10 @@ public class OrdersController extends ABMallFrontBaseController {
     @RequestMapping(value = "/confirmReceipt")
     public RestResponse<Map<String, Object>> confirmReceipt() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        Map<String, Object> map = new HashMap<>(2);
 
+        return RestResponse.getSuccesseResponse(map);
     }
 
     /**
@@ -89,16 +78,25 @@ public class OrdersController extends ABMallFrontBaseController {
     @RequestMapping(value = "/cancelOrder")
     public RestResponse<Map<String, Object>> cancelOrder() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        Map<String, Object> map = new HashMap<>(2);
+
+        return RestResponse.getSuccesseResponse(map);
 
     }
 
+    /**
+     * 查看物流
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/showLogistics")
+    public RestResponse<Map<String, Object>> showLogistics() {
 
 
+        Map<String, Object> map = new HashMap<>(2);
+
+        return RestResponse.getSuccesseResponse(map);
+
+    }
 }

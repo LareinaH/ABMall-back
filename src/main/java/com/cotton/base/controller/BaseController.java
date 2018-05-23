@@ -22,19 +22,19 @@ public class BaseController {
 
 	@ExceptionHandler
 	@ResponseBody
-	public RestResponse<Void> handelException(Exception ex) {
+	public RestResponse handelException(Exception ex) {
 		logger.error("exception", ex);
 
 		if (ex instanceof ServiceException) {
 			ServiceException serviceException = (ServiceException) ex;
-			return new RestResponse<Void>(Integer.valueOf(serviceException.getCode()),
-					serviceException.getMessage());
+			return RestResponse.getFailedResponse(Integer.valueOf(serviceException.getCode()),
+					serviceException.getMessage(),null);
 
 		} else if(ex instanceof MissingServletRequestParameterException){
-			return new RestResponse<Void>(Constants.RcError, "参数错误");
+			return RestResponse.getFailedResponse(Constants.RcError, "参数错误",null);
 		}else {
 			// TODO 不暴露服务器错误消息
-			return new RestResponse<Void>(Constants.RcError, "服务器出小差了");
+			return RestResponse.getFailedResponse(Constants.RcError, "服务器出小差了",null);
 		}
 	}
 }

@@ -35,13 +35,10 @@ public class OrdersManagerController extends ABMallAdminBaseController {
     @RequestMapping(value = "/example")
     public RestResponse<Map<String, Object>> example() {
 
-        RestResponse<Map<String, Object>> restResponse = new RestResponse<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        restResponse.setData(map);
 
-        //TODO:
-        //restResponse.setCode(RestResponse);
-        return restResponse;
+        Map<String, Object> map = new HashMap<>(2);
+
+        return RestResponse.getSuccesseResponse(map);
 
     }
 

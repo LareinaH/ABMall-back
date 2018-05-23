@@ -1,15 +1,13 @@
 package com.cotton.base.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.cotton.base.mapper.BaseMapper;
 import com.cotton.base.model.BaseModel;
 import com.cotton.base.service.BaseService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  *
@@ -24,7 +22,7 @@ public class BaseServiceImpl<ModelType extends BaseModel> implements BaseService
 
 	@Override
 	public boolean insert(ModelType model) {
-		model.setCreatedAt(new Date());
+
 		return mapper.insertSelective(model) > 0;
 	}
 
@@ -62,7 +60,7 @@ public class BaseServiceImpl<ModelType extends BaseModel> implements BaseService
 	public PageInfo<ModelType> query(int pageNum, int pageSize) {
 		if (pageSize > 0) {
 			PageHelper.startPage(pageNum, pageSize);
-			PageHelper.orderBy("createdAt DESC");
+			PageHelper.orderBy("gmt_create DESC");
 		}
 		return new PageInfo<ModelType>(mapper.selectAll());
 	}
@@ -71,7 +69,7 @@ public class BaseServiceImpl<ModelType extends BaseModel> implements BaseService
 	public PageInfo<ModelType> query(int pageNum, int pageSize, Object condition) {
 		if (pageSize > 0) {
 			PageHelper.startPage(pageNum, pageSize);
-			PageHelper.orderBy("createdAt DESC");
+			PageHelper.orderBy("gmt_create DESC");
 		}
 		return new PageInfo<ModelType>(mapper.selectByExample(condition));
 	}
@@ -80,7 +78,7 @@ public class BaseServiceImpl<ModelType extends BaseModel> implements BaseService
 	public PageInfo<ModelType> query(int pageNum, int pageSize, ModelType model) {
 		if (pageSize > 0) {
 			PageHelper.startPage(pageNum, pageSize);
-			PageHelper.orderBy("createdAt DESC");
+			PageHelper.orderBy("gmt_create DESC");
 		}
 		return new PageInfo<ModelType>(mapper.select(model));
 	}

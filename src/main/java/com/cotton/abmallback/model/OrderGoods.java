@@ -2,84 +2,62 @@ package com.cotton.abmallback.model;
 
 import com.cotton.base.model.BaseModel;
 import java.math.BigDecimal;
-import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "order_goods")
 public class OrderGoods extends BaseModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     /**
      * 订单编号
      */
-    private String order_no;
+    @Column(name = "order_no")
+    private String orderNo;
 
     /**
      * 商品编号
      */
-    private Long good_no;
+    @Column(name = "good_no")
+    private Long goodNo;
 
     /**
      * 商品名称
      */
-    private String good_name;
+    @Column(name = "good_name")
+    private String goodName;
 
     /**
      * 商品缩略图
      */
-    private String good_thum;
+    @Column(name = "good_thum")
+    private String goodThum;
 
     /**
      * 商品价格
      */
-    private BigDecimal good_price;
+    @Column(name = "good_price")
+    private BigDecimal goodPrice;
 
     /**
      * 商品数量
      */
-    private Integer good_num;
-
-    /**
-     * 删除状态
-     */
-    private Boolean is_deleted;
-
-    private Date gmt_create;
-
-    private Date gmt_modify;
-
-    /**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "good_num")
+    private Integer goodNum;
 
     /**
      * 获取订单编号
      *
      * @return order_no - 订单编号
      */
-    public String getOrder_no() {
-        return order_no;
+    public String getOrderNo() {
+        return orderNo;
     }
 
     /**
      * 设置订单编号
      *
-     * @param order_no 订单编号
+     * @param orderNo 订单编号
      */
-    public void setOrder_no(String order_no) {
-        this.order_no = order_no == null ? null : order_no.trim();
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
     /**
@@ -87,17 +65,17 @@ public class OrderGoods extends BaseModel {
      *
      * @return good_no - 商品编号
      */
-    public Long getGood_no() {
-        return good_no;
+    public Long getGoodNo() {
+        return goodNo;
     }
 
     /**
      * 设置商品编号
      *
-     * @param good_no 商品编号
+     * @param goodNo 商品编号
      */
-    public void setGood_no(Long good_no) {
-        this.good_no = good_no;
+    public void setGoodNo(Long goodNo) {
+        this.goodNo = goodNo;
     }
 
     /**
@@ -105,17 +83,17 @@ public class OrderGoods extends BaseModel {
      *
      * @return good_name - 商品名称
      */
-    public String getGood_name() {
-        return good_name;
+    public String getGoodName() {
+        return goodName;
     }
 
     /**
      * 设置商品名称
      *
-     * @param good_name 商品名称
+     * @param goodName 商品名称
      */
-    public void setGood_name(String good_name) {
-        this.good_name = good_name == null ? null : good_name.trim();
+    public void setGoodName(String goodName) {
+        this.goodName = goodName == null ? null : goodName.trim();
     }
 
     /**
@@ -123,17 +101,17 @@ public class OrderGoods extends BaseModel {
      *
      * @return good_thum - 商品缩略图
      */
-    public String getGood_thum() {
-        return good_thum;
+    public String getGoodThum() {
+        return goodThum;
     }
 
     /**
      * 设置商品缩略图
      *
-     * @param good_thum 商品缩略图
+     * @param goodThum 商品缩略图
      */
-    public void setGood_thum(String good_thum) {
-        this.good_thum = good_thum == null ? null : good_thum.trim();
+    public void setGoodThum(String goodThum) {
+        this.goodThum = goodThum == null ? null : goodThum.trim();
     }
 
     /**
@@ -141,17 +119,17 @@ public class OrderGoods extends BaseModel {
      *
      * @return good_price - 商品价格
      */
-    public BigDecimal getGood_price() {
-        return good_price;
+    public BigDecimal getGoodPrice() {
+        return goodPrice;
     }
 
     /**
      * 设置商品价格
      *
-     * @param good_price 商品价格
+     * @param goodPrice 商品价格
      */
-    public void setGood_price(BigDecimal good_price) {
-        this.good_price = good_price;
+    public void setGoodPrice(BigDecimal goodPrice) {
+        this.goodPrice = goodPrice;
     }
 
     /**
@@ -159,62 +137,16 @@ public class OrderGoods extends BaseModel {
      *
      * @return good_num - 商品数量
      */
-    public Integer getGood_num() {
-        return good_num;
+    public Integer getGoodNum() {
+        return goodNum;
     }
 
     /**
      * 设置商品数量
      *
-     * @param good_num 商品数量
+     * @param goodNum 商品数量
      */
-    public void setGood_num(Integer good_num) {
-        this.good_num = good_num;
-    }
-
-    /**
-     * 获取删除状态
-     *
-     * @return is_deleted - 删除状态
-     */
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    /**
-     * 设置删除状态
-     *
-     * @param is_deleted 删除状态
-     */
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
-
-    /**
-     * @return gmt_create
-     */
-    public Date getGmt_create() {
-        return gmt_create;
-    }
-
-    /**
-     * @param gmt_create
-     */
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
-    }
-
-    /**
-     * @return gmt_modify
-     */
-    public Date getGmt_modify() {
-        return gmt_modify;
-    }
-
-    /**
-     * @param gmt_modify
-     */
-    public void setGmt_modify(Date gmt_modify) {
-        this.gmt_modify = gmt_modify;
+    public void setGoodNum(Integer goodNum) {
+        this.goodNum = goodNum;
     }
 }

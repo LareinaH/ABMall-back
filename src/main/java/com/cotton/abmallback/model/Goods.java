@@ -1,23 +1,21 @@
 package com.cotton.abmallback.model;
 
 import com.cotton.base.model.BaseModel;
-import java.util.Date;
+import java.math.BigDecimal;
 import javax.persistence.*;
 
 public class Goods extends BaseModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     /**
      * 商品编号
      */
-    private String goods_no;
+    @Column(name = "goods_no")
+    private String goodsNo;
 
     /**
      * 商品名字
      */
-    private String goods_name;
+    @Column(name = "goods_name")
+    private String goodsName;
 
     /**
      * 库存
@@ -40,6 +38,12 @@ public class Goods extends BaseModel {
     private String unit;
 
     /**
+     * 优惠价
+     */
+    @Column(name = "preferential_price")
+    private BigDecimal preferentialPrice;
+
+    /**
      * 原价
      */
     private String price;
@@ -47,26 +51,26 @@ public class Goods extends BaseModel {
     /**
      * 分组id
      */
-    private Long group_id;
+    @Column(name = "group_id")
+    private Long groupId;
 
     /**
      * 是否上架 0:不上架 1:上架
      */
-    private Boolean is_on_sell;
+    @Column(name = "is_on_sell")
+    private Boolean isOnSell;
+
+    /**
+     * 销量
+     */
+    @Column(name = "sales_amount")
+    private Integer salesAmount;
 
     /**
      * 是否在回收站
      */
-    private Boolean is_recycled;
-
-    /**
-     * 删除状态
-     */
-    private Boolean is_deleted;
-
-    private Date gmt_create;
-
-    private Date gmt_modify;
+    @Column(name = "is_recycled")
+    private Boolean isRecycled;
 
     /**
      * 关键字
@@ -79,35 +83,21 @@ public class Goods extends BaseModel {
     private String description;
 
     /**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
      * 获取商品编号
      *
      * @return goods_no - 商品编号
      */
-    public String getGoods_no() {
-        return goods_no;
+    public String getGoodsNo() {
+        return goodsNo;
     }
 
     /**
      * 设置商品编号
      *
-     * @param goods_no 商品编号
+     * @param goodsNo 商品编号
      */
-    public void setGoods_no(String goods_no) {
-        this.goods_no = goods_no == null ? null : goods_no.trim();
+    public void setGoodsNo(String goodsNo) {
+        this.goodsNo = goodsNo == null ? null : goodsNo.trim();
     }
 
     /**
@@ -115,17 +105,17 @@ public class Goods extends BaseModel {
      *
      * @return goods_name - 商品名字
      */
-    public String getGoods_name() {
-        return goods_name;
+    public String getGoodsName() {
+        return goodsName;
     }
 
     /**
      * 设置商品名字
      *
-     * @param goods_name 商品名字
+     * @param goodsName 商品名字
      */
-    public void setGoods_name(String goods_name) {
-        this.goods_name = goods_name == null ? null : goods_name.trim();
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName == null ? null : goodsName.trim();
     }
 
     /**
@@ -201,6 +191,24 @@ public class Goods extends BaseModel {
     }
 
     /**
+     * 获取优惠价
+     *
+     * @return preferential_price - 优惠价
+     */
+    public BigDecimal getPreferentialPrice() {
+        return preferentialPrice;
+    }
+
+    /**
+     * 设置优惠价
+     *
+     * @param preferentialPrice 优惠价
+     */
+    public void setPreferentialPrice(BigDecimal preferentialPrice) {
+        this.preferentialPrice = preferentialPrice;
+    }
+
+    /**
      * 获取原价
      *
      * @return price - 原价
@@ -223,17 +231,17 @@ public class Goods extends BaseModel {
      *
      * @return group_id - 分组id
      */
-    public Long getGroup_id() {
-        return group_id;
+    public Long getGroupId() {
+        return groupId;
     }
 
     /**
      * 设置分组id
      *
-     * @param group_id 分组id
+     * @param groupId 分组id
      */
-    public void setGroup_id(Long group_id) {
-        this.group_id = group_id;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     /**
@@ -241,17 +249,35 @@ public class Goods extends BaseModel {
      *
      * @return is_on_sell - 是否上架 0:不上架 1:上架
      */
-    public Boolean getIs_on_sell() {
-        return is_on_sell;
+    public Boolean getIsOnSell() {
+        return isOnSell;
     }
 
     /**
      * 设置是否上架 0:不上架 1:上架
      *
-     * @param is_on_sell 是否上架 0:不上架 1:上架
+     * @param isOnSell 是否上架 0:不上架 1:上架
      */
-    public void setIs_on_sell(Boolean is_on_sell) {
-        this.is_on_sell = is_on_sell;
+    public void setIsOnSell(Boolean isOnSell) {
+        this.isOnSell = isOnSell;
+    }
+
+    /**
+     * 获取销量
+     *
+     * @return sales_amount - 销量
+     */
+    public Integer getSalesAmount() {
+        return salesAmount;
+    }
+
+    /**
+     * 设置销量
+     *
+     * @param salesAmount 销量
+     */
+    public void setSalesAmount(Integer salesAmount) {
+        this.salesAmount = salesAmount;
     }
 
     /**
@@ -259,63 +285,17 @@ public class Goods extends BaseModel {
      *
      * @return is_recycled - 是否在回收站
      */
-    public Boolean getIs_recycled() {
-        return is_recycled;
+    public Boolean getIsRecycled() {
+        return isRecycled;
     }
 
     /**
      * 设置是否在回收站
      *
-     * @param is_recycled 是否在回收站
+     * @param isRecycled 是否在回收站
      */
-    public void setIs_recycled(Boolean is_recycled) {
-        this.is_recycled = is_recycled;
-    }
-
-    /**
-     * 获取删除状态
-     *
-     * @return is_deleted - 删除状态
-     */
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    /**
-     * 设置删除状态
-     *
-     * @param is_deleted 删除状态
-     */
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
-
-    /**
-     * @return gmt_create
-     */
-    public Date getGmt_create() {
-        return gmt_create;
-    }
-
-    /**
-     * @param gmt_create
-     */
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
-    }
-
-    /**
-     * @return gmt_modify
-     */
-    public Date getGmt_modify() {
-        return gmt_modify;
-    }
-
-    /**
-     * @param gmt_modify
-     */
-    public void setGmt_modify(Date gmt_modify) {
-        this.gmt_modify = gmt_modify;
+    public void setIsRecycled(Boolean isRecycled) {
+        this.isRecycled = isRecycled;
     }
 
     /**

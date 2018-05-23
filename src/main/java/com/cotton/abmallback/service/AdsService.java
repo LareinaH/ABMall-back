@@ -3,6 +3,8 @@ package com.cotton.abmallback.service;
 import com.cotton.base.service.BaseService;
 import com.cotton.abmallback.model.Ads;
 
+import java.util.List;
+
 /**
  * Ads
  *
@@ -11,4 +13,10 @@ import com.cotton.abmallback.model.Ads;
  * @date 2018/5/9
  */
 public interface AdsService extends BaseService<Ads> {
+
+    List<Ads> queryBanner();
+
+    List<Ads> queryInvitinCode();
+
+    Ads queryTeamSystem();
 }

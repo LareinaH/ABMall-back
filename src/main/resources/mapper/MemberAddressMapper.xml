@@ -5,20 +5,17 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="member_id" jdbcType="BIGINT" property="member_id" />
-    <result column="receiver_name" jdbcType="VARCHAR" property="receiver_name" />
-    <result column="receiver_phone" jdbcType="INTEGER" property="receiver_phone" />
-    <result column="receiver_province_name" jdbcType="VARCHAR" property="receiver_province_name" />
-    <result column="receiver_province_code" jdbcType="INTEGER" property="receiver_province_code" />
-    <result column="receiver_city_code" jdbcType="INTEGER" property="receiver_city_code" />
-    <result column="receiver_city_name" jdbcType="INTEGER" property="receiver_city_name" />
-    <result column="receiver_county_name" jdbcType="INTEGER" property="receiver_county_name" />
-    <result column="receiver_county_code" jdbcType="INTEGER" property="receiver_county_code" />
-    <result column="receiver_address" jdbcType="VARCHAR" property="receiver_address" />
-    <result column="is_default" jdbcType="BIT" property="is_default" />
-    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="address_type" jdbcType="VARCHAR" property="addressType" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiver_phone" jdbcType="INTEGER" property="receiverPhone" />
+    <result column="receiver_province_name" jdbcType="VARCHAR" property="receiverProvinceName" />
+    <result column="receiver_province_code" jdbcType="INTEGER" property="receiverProvinceCode" />
+    <result column="receiver_city_code" jdbcType="INTEGER" property="receiverCityCode" />
+    <result column="receiver_city_name" jdbcType="INTEGER" property="receiverCityName" />
+    <result column="receiver_county_name" jdbcType="INTEGER" property="receiverCountyName" />
+    <result column="receiver_county_code" jdbcType="INTEGER" property="receiverCountyCode" />
+    <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress" />
+    <result column="is_default" jdbcType="BIT" property="isDefault" />
   </resultMap>
 </mapper>

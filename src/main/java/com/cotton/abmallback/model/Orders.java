@@ -4,100 +4,115 @@ import com.cotton.base.model.BaseModel;
 import java.util.Date;
 import javax.persistence.*;
 
+@Table(name = "orders")
 public class Orders extends BaseModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     /**
      * 订单编号
      */
-    private String order_no;
+    @Column(name = "order_no")
+    private String orderNo;
 
     /**
      * 会员id
      */
-    private Long member_id;
+    @Column(name = "member_id")
+    private Long memberId;
 
     /**
      * 订单状态
      */
-    private String order_status;
+    @Column(name = "order_status")
+    private String orderStatus;
 
     /**
      * 订单总价
      */
-    private Long total_money;
+    @Column(name = "total_money")
+    private Long totalMoney;
 
     /**
      * 收货人姓名
      */
-    private String receiver_name;
+    @Column(name = "receiver_name")
+    private String receiverName;
 
     /**
      * 收货人联系电话
      */
-    private Integer receiver_phone;
+    @Column(name = "receiver_phone")
+    private Integer receiverPhone;
 
     /**
      * 收货地址-省名称
      */
-    private String receiver_province_name;
+    @Column(name = "receiver_province_name")
+    private String receiverProvinceName;
 
     /**
      * 收货地址-省编码
      */
-    private Integer receiver_province_code;
+    @Column(name = "receiver_province_code")
+    private Integer receiverProvinceCode;
 
     /**
      * 收货地址-城市编码
      */
-    private Integer receiver_city_code;
+    @Column(name = "receiver_city_code")
+    private Integer receiverCityCode;
 
     /**
      * 收货地址-城市名称
      */
-    private Integer receiver_city_name;
+    @Column(name = "receiver_city_name")
+    private Integer receiverCityName;
 
     /**
      * 收货地址：县名称
      */
-    private Integer receiver_county_name;
+    @Column(name = "receiver_county_name")
+    private Integer receiverCountyName;
 
     /**
      * 收货地址-县编码
      */
-    private Integer receiver_county_code;
+    @Column(name = "receiver_county_code")
+    private Integer receiverCountyCode;
 
     /**
      * 详细地址
      */
-    private String receiver_address;
+    @Column(name = "receiver_address")
+    private String receiverAddress;
 
     /**
      * 支付方式
      */
-    private String pay_mode;
+    @Column(name = "pay_mode")
+    private String payMode;
 
     /**
      * 是否支付：0:未支付 1:已支付
      */
-    private Boolean is_paid;
+    @Column(name = "is_paid")
+    private Boolean isPaid;
 
     /**
      * 支付交易流水号
      */
-    private String trade_no;
+    @Column(name = "trade_no")
+    private String tradeNo;
 
     /**
      * 发货时间
      */
-    private Date delivery_time;
+    @Column(name = "delivery_time")
+    private Date deliveryTime;
 
     /**
      * 收货时间
      */
-    private Date receive_time;
+    @Column(name = "receive_time")
+    private Date receiveTime;
 
     /**
      * 订单备注
@@ -105,44 +120,21 @@ public class Orders extends BaseModel {
     private String remarks;
 
     /**
-     * 删除状态
-     */
-    private Boolean is_deleted;
-
-    private Date gmt_create;
-
-    private Date gmt_modify;
-
-    /**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
      * 获取订单编号
      *
      * @return order_no - 订单编号
      */
-    public String getOrder_no() {
-        return order_no;
+    public String getOrderNo() {
+        return orderNo;
     }
 
     /**
      * 设置订单编号
      *
-     * @param order_no 订单编号
+     * @param orderNo 订单编号
      */
-    public void setOrder_no(String order_no) {
-        this.order_no = order_no == null ? null : order_no.trim();
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
     /**
@@ -150,17 +142,17 @@ public class Orders extends BaseModel {
      *
      * @return member_id - 会员id
      */
-    public Long getMember_id() {
-        return member_id;
+    public Long getMemberId() {
+        return memberId;
     }
 
     /**
      * 设置会员id
      *
-     * @param member_id 会员id
+     * @param memberId 会员id
      */
-    public void setMember_id(Long member_id) {
-        this.member_id = member_id;
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
     /**
@@ -168,17 +160,17 @@ public class Orders extends BaseModel {
      *
      * @return order_status - 订单状态
      */
-    public String getOrder_status() {
-        return order_status;
+    public String getOrderStatus() {
+        return orderStatus;
     }
 
     /**
      * 设置订单状态
      *
-     * @param order_status 订单状态
+     * @param orderStatus 订单状态
      */
-    public void setOrder_status(String order_status) {
-        this.order_status = order_status == null ? null : order_status.trim();
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus == null ? null : orderStatus.trim();
     }
 
     /**
@@ -186,17 +178,17 @@ public class Orders extends BaseModel {
      *
      * @return total_money - 订单总价
      */
-    public Long getTotal_money() {
-        return total_money;
+    public Long getTotalMoney() {
+        return totalMoney;
     }
 
     /**
      * 设置订单总价
      *
-     * @param total_money 订单总价
+     * @param totalMoney 订单总价
      */
-    public void setTotal_money(Long total_money) {
-        this.total_money = total_money;
+    public void setTotalMoney(Long totalMoney) {
+        this.totalMoney = totalMoney;
     }
 
     /**
@@ -204,17 +196,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_name - 收货人姓名
      */
-    public String getReceiver_name() {
-        return receiver_name;
+    public String getReceiverName() {
+        return receiverName;
     }
 
     /**
      * 设置收货人姓名
      *
-     * @param receiver_name 收货人姓名
+     * @param receiverName 收货人姓名
      */
-    public void setReceiver_name(String receiver_name) {
-        this.receiver_name = receiver_name == null ? null : receiver_name.trim();
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName == null ? null : receiverName.trim();
     }
 
     /**
@@ -222,17 +214,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_phone - 收货人联系电话
      */
-    public Integer getReceiver_phone() {
-        return receiver_phone;
+    public Integer getReceiverPhone() {
+        return receiverPhone;
     }
 
     /**
      * 设置收货人联系电话
      *
-     * @param receiver_phone 收货人联系电话
+     * @param receiverPhone 收货人联系电话
      */
-    public void setReceiver_phone(Integer receiver_phone) {
-        this.receiver_phone = receiver_phone;
+    public void setReceiverPhone(Integer receiverPhone) {
+        this.receiverPhone = receiverPhone;
     }
 
     /**
@@ -240,17 +232,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_province_name - 收货地址-省名称
      */
-    public String getReceiver_province_name() {
-        return receiver_province_name;
+    public String getReceiverProvinceName() {
+        return receiverProvinceName;
     }
 
     /**
      * 设置收货地址-省名称
      *
-     * @param receiver_province_name 收货地址-省名称
+     * @param receiverProvinceName 收货地址-省名称
      */
-    public void setReceiver_province_name(String receiver_province_name) {
-        this.receiver_province_name = receiver_province_name == null ? null : receiver_province_name.trim();
+    public void setReceiverProvinceName(String receiverProvinceName) {
+        this.receiverProvinceName = receiverProvinceName == null ? null : receiverProvinceName.trim();
     }
 
     /**
@@ -258,17 +250,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_province_code - 收货地址-省编码
      */
-    public Integer getReceiver_province_code() {
-        return receiver_province_code;
+    public Integer getReceiverProvinceCode() {
+        return receiverProvinceCode;
     }
 
     /**
      * 设置收货地址-省编码
      *
-     * @param receiver_province_code 收货地址-省编码
+     * @param receiverProvinceCode 收货地址-省编码
      */
-    public void setReceiver_province_code(Integer receiver_province_code) {
-        this.receiver_province_code = receiver_province_code;
+    public void setReceiverProvinceCode(Integer receiverProvinceCode) {
+        this.receiverProvinceCode = receiverProvinceCode;
     }
 
     /**
@@ -276,17 +268,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_city_code - 收货地址-城市编码
      */
-    public Integer getReceiver_city_code() {
-        return receiver_city_code;
+    public Integer getReceiverCityCode() {
+        return receiverCityCode;
     }
 
     /**
      * 设置收货地址-城市编码
      *
-     * @param receiver_city_code 收货地址-城市编码
+     * @param receiverCityCode 收货地址-城市编码
      */
-    public void setReceiver_city_code(Integer receiver_city_code) {
-        this.receiver_city_code = receiver_city_code;
+    public void setReceiverCityCode(Integer receiverCityCode) {
+        this.receiverCityCode = receiverCityCode;
     }
 
     /**
@@ -294,17 +286,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_city_name - 收货地址-城市名称
      */
-    public Integer getReceiver_city_name() {
-        return receiver_city_name;
+    public Integer getReceiverCityName() {
+        return receiverCityName;
     }
 
     /**
      * 设置收货地址-城市名称
      *
-     * @param receiver_city_name 收货地址-城市名称
+     * @param receiverCityName 收货地址-城市名称
      */
-    public void setReceiver_city_name(Integer receiver_city_name) {
-        this.receiver_city_name = receiver_city_name;
+    public void setReceiverCityName(Integer receiverCityName) {
+        this.receiverCityName = receiverCityName;
     }
 
     /**
@@ -312,17 +304,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_county_name - 收货地址：县名称
      */
-    public Integer getReceiver_county_name() {
-        return receiver_county_name;
+    public Integer getReceiverCountyName() {
+        return receiverCountyName;
     }
 
     /**
      * 设置收货地址：县名称
      *
-     * @param receiver_county_name 收货地址：县名称
+     * @param receiverCountyName 收货地址：县名称
      */
-    public void setReceiver_county_name(Integer receiver_county_name) {
-        this.receiver_county_name = receiver_county_name;
+    public void setReceiverCountyName(Integer receiverCountyName) {
+        this.receiverCountyName = receiverCountyName;
     }
 
     /**
@@ -330,17 +322,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_county_code - 收货地址-县编码
      */
-    public Integer getReceiver_county_code() {
-        return receiver_county_code;
+    public Integer getReceiverCountyCode() {
+        return receiverCountyCode;
     }
 
     /**
      * 设置收货地址-县编码
      *
-     * @param receiver_county_code 收货地址-县编码
+     * @param receiverCountyCode 收货地址-县编码
      */
-    public void setReceiver_county_code(Integer receiver_county_code) {
-        this.receiver_county_code = receiver_county_code;
+    public void setReceiverCountyCode(Integer receiverCountyCode) {
+        this.receiverCountyCode = receiverCountyCode;
     }
 
     /**
@@ -348,17 +340,17 @@ public class Orders extends BaseModel {
      *
      * @return receiver_address - 详细地址
      */
-    public String getReceiver_address() {
-        return receiver_address;
+    public String getReceiverAddress() {
+        return receiverAddress;
     }
 
     /**
      * 设置详细地址
      *
-     * @param receiver_address 详细地址
+     * @param receiverAddress 详细地址
      */
-    public void setReceiver_address(String receiver_address) {
-        this.receiver_address = receiver_address == null ? null : receiver_address.trim();
+    public void setReceiverAddress(String receiverAddress) {
+        this.receiverAddress = receiverAddress == null ? null : receiverAddress.trim();
     }
 
     /**
@@ -366,17 +358,17 @@ public class Orders extends BaseModel {
      *
      * @return pay_mode - 支付方式
      */
-    public String getPay_mode() {
-        return pay_mode;
+    public String getPayMode() {
+        return payMode;
     }
 
     /**
      * 设置支付方式
      *
-     * @param pay_mode 支付方式
+     * @param payMode 支付方式
      */
-    public void setPay_mode(String pay_mode) {
-        this.pay_mode = pay_mode == null ? null : pay_mode.trim();
+    public void setPayMode(String payMode) {
+        this.payMode = payMode == null ? null : payMode.trim();
     }
 
     /**
@@ -384,17 +376,17 @@ public class Orders extends BaseModel {
      *
      * @return is_paid - 是否支付：0:未支付 1:已支付
      */
-    public Boolean getIs_paid() {
-        return is_paid;
+    public Boolean getIsPaid() {
+        return isPaid;
     }
 
     /**
      * 设置是否支付：0:未支付 1:已支付
      *
-     * @param is_paid 是否支付：0:未支付 1:已支付
+     * @param isPaid 是否支付：0:未支付 1:已支付
      */
-    public void setIs_paid(Boolean is_paid) {
-        this.is_paid = is_paid;
+    public void setIsPaid(Boolean isPaid) {
+        this.isPaid = isPaid;
     }
 
     /**
@@ -402,17 +394,17 @@ public class Orders extends BaseModel {
      *
      * @return trade_no - 支付交易流水号
      */
-    public String getTrade_no() {
-        return trade_no;
+    public String getTradeNo() {
+        return tradeNo;
     }
 
     /**
      * 设置支付交易流水号
      *
-     * @param trade_no 支付交易流水号
+     * @param tradeNo 支付交易流水号
      */
-    public void setTrade_no(String trade_no) {
-        this.trade_no = trade_no == null ? null : trade_no.trim();
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo == null ? null : tradeNo.trim();
     }
 
     /**
@@ -420,17 +412,17 @@ public class Orders extends BaseModel {
      *
      * @return delivery_time - 发货时间
      */
-    public Date getDelivery_time() {
-        return delivery_time;
+    public Date getDeliveryTime() {
+        return deliveryTime;
     }
 
     /**
      * 设置发货时间
      *
-     * @param delivery_time 发货时间
+     * @param deliveryTime 发货时间
      */
-    public void setDelivery_time(Date delivery_time) {
-        this.delivery_time = delivery_time;
+    public void setDeliveryTime(Date deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 
     /**
@@ -438,17 +430,17 @@ public class Orders extends BaseModel {
      *
      * @return receive_time - 收货时间
      */
-    public Date getReceive_time() {
-        return receive_time;
+    public Date getReceiveTime() {
+        return receiveTime;
     }
 
     /**
      * 设置收货时间
      *
-     * @param receive_time 收货时间
+     * @param receiveTime 收货时间
      */
-    public void setReceive_time(Date receive_time) {
-        this.receive_time = receive_time;
+    public void setReceiveTime(Date receiveTime) {
+        this.receiveTime = receiveTime;
     }
 
     /**
@@ -467,51 +459,5 @@ public class Orders extends BaseModel {
      */
     public void setRemarks(String remarks) {
         this.remarks = remarks == null ? null : remarks.trim();
-    }
-
-    /**
-     * 获取删除状态
-     *
-     * @return is_deleted - 删除状态
-     */
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    /**
-     * 设置删除状态
-     *
-     * @param is_deleted 删除状态
-     */
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
-
-    /**
-     * @return gmt_create
-     */
-    public Date getGmt_create() {
-        return gmt_create;
-    }
-
-    /**
-     * @param gmt_create
-     */
-    public void setGmt_create(Date gmt_create) {
-        this.gmt_create = gmt_create;
-    }
-
-    /**
-     * @return gmt_modify
-     */
-    public Date getGmt_modify() {
-        return gmt_modify;
-    }
-
-    /**
-     * @param gmt_modify
-     */
-    public void setGmt_modify(Date gmt_modify) {
-        this.gmt_modify = gmt_modify;
     }
 }

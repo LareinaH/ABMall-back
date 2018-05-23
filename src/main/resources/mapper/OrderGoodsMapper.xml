@@ -5,15 +5,11 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="order_no" jdbcType="VARCHAR" property="order_no" />
-    <result column="good_no" jdbcType="BIGINT" property="good_no" />
-    <result column="good_name" jdbcType="VARCHAR" property="good_name" />
-    <result column="good_thum" jdbcType="VARCHAR" property="good_thum" />
-    <result column="good_price" jdbcType="DECIMAL" property="good_price" />
-    <result column="good_num" jdbcType="INTEGER" property="good_num" />
-    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="good_no" jdbcType="BIGINT" property="goodNo" />
+    <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+    <result column="good_thum" jdbcType="VARCHAR" property="goodThum" />
+    <result column="good_price" jdbcType="DECIMAL" property="goodPrice" />
+    <result column="good_num" jdbcType="INTEGER" property="goodNum" />
   </resultMap>
 </mapper>

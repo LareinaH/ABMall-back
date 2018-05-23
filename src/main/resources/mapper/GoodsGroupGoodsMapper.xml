@@ -5,11 +5,7 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="goods_group_id" jdbcType="VARCHAR" property="goods_group_id" />
-    <result column="goods_id" jdbcType="VARCHAR" property="goods_id" />
-    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
+    <result column="goods_group_id" jdbcType="VARCHAR" property="goodsGroupId" />
+    <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
   </resultMap>
 </mapper>

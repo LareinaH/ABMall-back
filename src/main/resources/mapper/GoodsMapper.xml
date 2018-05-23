@@ -5,20 +5,18 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="goods_no" jdbcType="VARCHAR" property="goods_no" />
-    <result column="goods_name" jdbcType="VARCHAR" property="goods_name" />
+    <result column="goods_no" jdbcType="VARCHAR" property="goodsNo" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
     <result column="stock" jdbcType="INTEGER" property="stock" />
     <result column="thums" jdbcType="VARCHAR" property="thums" />
     <result column="images" jdbcType="VARCHAR" property="images" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="preferential_price" jdbcType="DECIMAL" property="preferentialPrice" />
     <result column="price" jdbcType="VARCHAR" property="price" />
-    <result column="group_id" jdbcType="BIGINT" property="group_id" />
-    <result column="is_on_sell" jdbcType="BIT" property="is_on_sell" />
-    <result column="is_recycled" jdbcType="BIT" property="is_recycled" />
-    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmt_modify" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="is_on_sell" jdbcType="BIT" property="isOnSell" />
+    <result column="sales_amount" jdbcType="INTEGER" property="salesAmount" />
+    <result column="is_recycled" jdbcType="BIT" property="isRecycled" />
     <result column="keywords" jdbcType="VARCHAR" property="keywords" />
     <result column="description" jdbcType="LONGVARCHAR" property="description" />
   </resultMap>
