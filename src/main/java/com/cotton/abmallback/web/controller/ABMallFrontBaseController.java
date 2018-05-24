@@ -1,6 +1,7 @@
 package com.cotton.abmallback.web.controller;
 
 import com.cotton.abmallback.model.Member;
+import com.cotton.abmallback.web.PermissionContext;
 import com.cotton.base.controller.BaseController;
 
 /**
@@ -17,6 +18,6 @@ public class ABMallFrontBaseController extends BaseController {
     }
 
     protected Member getCurrentMember(){
-        return  new Member();
+        return  PermissionContext.getMember();
     }
 }

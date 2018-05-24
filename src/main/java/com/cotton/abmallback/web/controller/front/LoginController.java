@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
@@ -26,17 +27,20 @@ public class LoginController extends ABMallFrontBaseController {
 
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+    private final MemberService memberService;
+
     @Autowired
-    private MemberService memberService;
+    public LoginController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     @ResponseBody
     @RequestMapping(value = "/login")
-    public RestResponse<Map<String, Object>> login() {
+    public RestResponse<Member> login() {
 
-        Map<String, Object> map = new HashMap<>(2);
 
-        return RestResponse.getSuccesseResponse(map);
 
+        return RestResponse.getSuccesseResponse();
     }
 
 

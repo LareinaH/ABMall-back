@@ -27,11 +27,8 @@ public class MsgMemberMessage extends BaseModel {
     @Column(name = "system_message_id")
     private Long systemMessageId;
 
-    /**
-     * 消息状态:已读,未读
-     */
-    @Column(name = "message_staus")
-    private String messageStaus;
+    @Column(name = "is_read")
+    private Boolean isRead;
 
     /**
      * 消息内容
@@ -111,21 +108,17 @@ public class MsgMemberMessage extends BaseModel {
     }
 
     /**
-     * 获取消息状态:已读,未读
-     *
-     * @return message_staus - 消息状态:已读,未读
+     * @return is_read
      */
-    public String getMessageStaus() {
-        return messageStaus;
+    public Boolean getIsRead() {
+        return isRead;
     }
 
     /**
-     * 设置消息状态:已读,未读
-     *
-     * @param messageStaus 消息状态:已读,未读
+     * @param isRead
      */
-    public void setMessageStaus(String messageStaus) {
-        this.messageStaus = messageStaus == null ? null : messageStaus.trim();
+    public void setIsRead(Boolean isRead) {
+        this.isRead = isRead;
     }
 
     /**

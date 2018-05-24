@@ -3,10 +3,12 @@ package com.cotton.abmallback.web.controller.front;
 import com.cotton.abmallback.model.Ads;
 import com.cotton.abmallback.model.Goods;
 import com.cotton.abmallback.model.GoodsSpecification;
+import com.cotton.abmallback.model.ShopActivities;
 import com.cotton.abmallback.model.vo.GoodsVO;
 import com.cotton.abmallback.service.AdsService;
 import com.cotton.abmallback.service.GoodsService;
 import com.cotton.abmallback.service.GoodsSpecificationService;
+import com.cotton.abmallback.service.ShopActivitiesService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
@@ -44,11 +46,14 @@ public class ShopController extends ABMallFrontBaseController {
 
     private final AdsService adsService;
 
+    private final ShopActivitiesService shopActivitiesService;
+
     @Autowired
-    public ShopController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService, AdsService adsService) {
+    public ShopController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService, AdsService adsService, ShopActivitiesService shopActivitiesService) {
         this.goodsService = goodsService;
         this.goodsSpecificationService = goodsSpecificationService;
         this.adsService = adsService;
+        this.shopActivitiesService = shopActivitiesService;
     }
 
     /**
@@ -83,7 +88,7 @@ public class ShopController extends ABMallFrontBaseController {
     public RestResponse<Map<String, Object>> getInvitingCode() {
 
         //邀请码列表
-        List<Ads> adsList =  adsService.queryInvitinCode();
+        List<Ads> adsList =  adsService.queryInvitingCode();
 
         if(null == adsList || adsList.isEmpty()){
             logger.error("邀请码不存在");
@@ -133,6 +138,11 @@ public class ShopController extends ABMallFrontBaseController {
                                                @RequestParam(defaultValue = "4") int pageSize) {
 
         Example example = new Example(Goods.class);
+        example.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDeleted",false);
+
         PageInfo<Goods> goodsPageInfo = goodsService.query(pageNum,pageSize,example);
 
         if(goodsPageInfo == null ){
@@ -169,5 +179,29 @@ public class ShopController extends ABMallFrontBaseController {
         goodsVO.setGoodsSpecificationList(goodsSpecificationList);
 
         return RestResponse.getSuccesseResponse(goodsVO);
+    }
+
+    /**
+     * 商城活动
+     * @return 商城活动
+     */
+    @ResponseBody
+    @RequestMapping(value = "/shopActivities",method = {RequestMethod.GET})
+    public RestResponse<ShopActivities> shopActivities() {
+
+        Example example = new Example(ShopActivities.class);
+        example.setOrderByClause("gmt_start desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDeleted",false);
+
+        PageInfo<ShopActivities> shopActivitiesPageInfo = shopActivitiesService.query(1,1,example);
+
+        if(null != shopActivitiesPageInfo && null != shopActivitiesPageInfo.getList() &&
+                !shopActivitiesPageInfo.getList().isEmpty()){
+            return RestResponse.getSuccesseResponse(shopActivitiesPageInfo.getList().get(0));
+        }
+
+        return RestResponse.getSuccesseResponse();
     }
 }

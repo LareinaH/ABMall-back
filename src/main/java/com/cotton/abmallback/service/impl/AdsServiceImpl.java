@@ -21,7 +21,6 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 public class AdsServiceImpl extends BaseServiceImpl<Ads> implements AdsService {
 
-
     @Override
     public List<Ads> queryBanner() {
 
@@ -36,7 +35,7 @@ public class AdsServiceImpl extends BaseServiceImpl<Ads> implements AdsService {
     }
 
     @Override
-    public List<Ads> queryInvitinCode() {
+    public List<Ads> queryInvitingCode() {
         Example example = new Example(Ads.class);
         example.setOrderByClause("sort desc");
 

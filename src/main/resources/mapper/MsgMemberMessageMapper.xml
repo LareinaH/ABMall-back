@@ -9,7 +9,7 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="member_id" jdbcType="BIGINT" property="memberId" />
     <result column="system_message_id" jdbcType="BIGINT" property="systemMessageId" />
-    <result column="message_staus" jdbcType="VARCHAR" property="messageStaus" />
+    <result column="is_read" jdbcType="BIT" property="isRead" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
 </mapper>

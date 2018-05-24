@@ -163,14 +163,14 @@
 			<ignoreColumn column="gmt_modify" />
 		</table>-->
 
-		<table tableName="msg_message_template">
+<!--		<table tableName="msg_message_template">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 		<table tableName="msg_member_message">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -179,7 +179,7 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>
-		<table tableName="msg_platform_message">
+<!--		<table tableName="msg_platform_message">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
@@ -210,7 +210,7 @@
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 	</context>
 
 </generatorConfiguration>

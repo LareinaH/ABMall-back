@@ -16,7 +16,7 @@ public interface AdsService extends BaseService<Ads> {
 
     List<Ads> queryBanner();
 
-    List<Ads> queryInvitinCode();
+    List<Ads> queryInvitingCode();
 
     Ads queryTeamSystem();
 }

@@ -44,6 +44,11 @@ public class RestResponse<T> implements Serializable {
         return restResponse;
     }
 
+    public static<T> RestResponse<T> getUnauthorizedFailedResponse(){
+
+        return getFailedResponse(UNAUTHORIZED,"用户未登录",null);
+    }
+
     public static<T> RestResponse<T> getFailedResponse(int code, String message){
 
         return getFailedResponse(code,message,null);
