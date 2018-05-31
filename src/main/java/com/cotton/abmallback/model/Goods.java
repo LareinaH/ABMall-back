@@ -4,6 +4,7 @@ import com.cotton.base.model.BaseModel;
 import java.math.BigDecimal;
 import javax.persistence.*;
 
+@Table(name = "goods")
 public class Goods extends BaseModel {
     /**
      * 商品编号

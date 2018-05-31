@@ -159,7 +159,7 @@ public class ShopController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/goodsDetail",method = {RequestMethod.GET})
-    public RestResponse<GoodsVO> goodsDetail(long goodsId) {
+    public RestResponse<GoodsVO> goodsDetail(@RequestParam()long goodsId) {
 
         //获取商品详情
         Goods goods = goodsService.getById(goodsId);

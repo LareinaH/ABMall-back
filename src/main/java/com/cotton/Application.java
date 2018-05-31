@@ -34,6 +34,7 @@ public class Application {
         //配置fastJson 参数
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteDateUseDateFormat);
 
         fastConverter.setFastJsonConfig(fastJsonConfig);
 

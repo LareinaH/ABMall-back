@@ -1,14 +1,18 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.manager.SmsManager;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -27,11 +31,14 @@ public class LoginController extends ABMallFrontBaseController {
 
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    private final MemberService memberService;
+    private MemberService memberService;
+
+    private SmsManager smsManager;
 
     @Autowired
-    public LoginController(MemberService memberService) {
+    public LoginController(MemberService memberService, SmsManager smsManager) {
         this.memberService = memberService;
+        this.smsManager = smsManager;
     }
 
     @ResponseBody
@@ -56,16 +63,20 @@ public class LoginController extends ABMallFrontBaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/sendVerifyCode")
-    public RestResponse<Map<String, Object>> sendVerifyCode() {
+    @RequestMapping(value = "/sendVerifyCode",method = {RequestMethod.POST})
+    public RestResponse<Void> sendVerifyCode(@RequestBody Map<String,Object> params) {
 
-        Map<String, Object> map = new HashMap<>(2);
+        String phoneNum = params.get("phoneNum").toString();
 
-        return RestResponse.getSuccesseResponse(map);
+        if(StringUtils.isBlank(phoneNum)){
+            return RestResponse.getFailedResponse(500,"手机号码不能为空!");
+        }
 
+        if(smsManager.sendCaptcha(phoneNum)) {
+
+            return RestResponse.getSuccesseResponse();
+        }else {
+            return RestResponse.getFailedResponse(500,"验证码发送失败!");
+        }
     }
-
-
-
-
 }

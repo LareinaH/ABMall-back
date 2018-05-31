@@ -75,7 +75,7 @@ public class MessageController extends ABMallFrontBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/readMessage")
-    public RestResponse<Void> readMessage(long messageId) {
+    public RestResponse<Void> readMessage(@RequestParam(defaultValue = "1")long messageId) {
 
         MsgMemberMessage msgMemberMessage = new MsgMemberMessage();
         msgMemberMessage.setId(messageId);
@@ -90,7 +90,7 @@ public class MessageController extends ABMallFrontBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/platformMessage")
-    public RestResponse<MsgPlatformMessage> platformMessage(long messageId) {
+    public RestResponse<MsgPlatformMessage> platformMessage(@RequestParam()long messageId) {
 
         MsgPlatformMessage msgPlatformMessage = msgPlatformMessageService.getById(messageId);
 

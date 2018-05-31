@@ -3,6 +3,7 @@ package com.cotton.abmallback.model;
 import com.cotton.base.model.BaseModel;
 import javax.persistence.*;
 
+@Table(name = "member")
 public class Member extends BaseModel {
     /**
      * uuid
