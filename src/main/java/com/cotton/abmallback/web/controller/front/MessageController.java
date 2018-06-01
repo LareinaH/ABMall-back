@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
@@ -53,7 +51,7 @@ public class MessageController extends ABMallFrontBaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/list")
+    @RequestMapping(value = "/list",method = {RequestMethod.GET})
     public RestResponse<List<MsgMemberMessage>> list(@RequestParam(defaultValue = "1") int pageNum,
                                                      @RequestParam(defaultValue = "4") int pageSize) {
 
@@ -74,8 +72,8 @@ public class MessageController extends ABMallFrontBaseController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/readMessage")
-    public RestResponse<Void> readMessage(@RequestParam(defaultValue = "1")long messageId) {
+    @RequestMapping(value = "/readMessage",method = {RequestMethod.POST})
+    public RestResponse<Void> readMessage(@RequestParam()long messageId) {
 
         MsgMemberMessage msgMemberMessage = new MsgMemberMessage();
         msgMemberMessage.setId(messageId);
@@ -89,10 +87,10 @@ public class MessageController extends ABMallFrontBaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/platformMessage")
-    public RestResponse<MsgPlatformMessage> platformMessage(@RequestParam()long messageId) {
+    @RequestMapping(value = "/platformMessage",method = {RequestMethod.GET})
+    public RestResponse<MsgPlatformMessage> platformMessage(@RequestParam()long systemMessageId) {
 
-        MsgPlatformMessage msgPlatformMessage = msgPlatformMessageService.getById(messageId);
+        MsgPlatformMessage msgPlatformMessage = msgPlatformMessageService.getById(systemMessageId);
 
         if(null != msgPlatformMessage){
             return RestResponse.getSuccesseResponse(msgPlatformMessage);

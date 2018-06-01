@@ -42,22 +42,22 @@ public class MemberAddress extends BaseModel {
     private Integer receiverProvinceCode;
 
     /**
+     * 收货地址-城市名称
+     */
+    @Column(name = "receiver_city_name")
+    private String receiverCityName;
+
+    /**
      * 收货地址-城市编码
      */
     @Column(name = "receiver_city_code")
     private Integer receiverCityCode;
 
     /**
-     * 收货地址-城市名称
-     */
-    @Column(name = "receiver_city_name")
-    private Integer receiverCityName;
-
-    /**
      * 收货地址：县名称
      */
     @Column(name = "receiver_county_name")
-    private Integer receiverCountyName;
+    private String receiverCountyName;
 
     /**
      * 收货地址-县编码
@@ -186,6 +186,24 @@ public class MemberAddress extends BaseModel {
     }
 
     /**
+     * 获取收货地址-城市名称
+     *
+     * @return receiver_city_name - 收货地址-城市名称
+     */
+    public String getReceiverCityName() {
+        return receiverCityName;
+    }
+
+    /**
+     * 设置收货地址-城市名称
+     *
+     * @param receiverCityName 收货地址-城市名称
+     */
+    public void setReceiverCityName(String receiverCityName) {
+        this.receiverCityName = receiverCityName == null ? null : receiverCityName.trim();
+    }
+
+    /**
      * 获取收货地址-城市编码
      *
      * @return receiver_city_code - 收货地址-城市编码
@@ -204,29 +222,11 @@ public class MemberAddress extends BaseModel {
     }
 
     /**
-     * 获取收货地址-城市名称
-     *
-     * @return receiver_city_name - 收货地址-城市名称
-     */
-    public Integer getReceiverCityName() {
-        return receiverCityName;
-    }
-
-    /**
-     * 设置收货地址-城市名称
-     *
-     * @param receiverCityName 收货地址-城市名称
-     */
-    public void setReceiverCityName(Integer receiverCityName) {
-        this.receiverCityName = receiverCityName;
-    }
-
-    /**
      * 获取收货地址：县名称
      *
      * @return receiver_county_name - 收货地址：县名称
      */
-    public Integer getReceiverCountyName() {
+    public String getReceiverCountyName() {
         return receiverCountyName;
     }
 
@@ -235,8 +235,8 @@ public class MemberAddress extends BaseModel {
      *
      * @param receiverCountyName 收货地址：县名称
      */
-    public void setReceiverCountyName(Integer receiverCountyName) {
-        this.receiverCountyName = receiverCountyName;
+    public void setReceiverCountyName(String receiverCountyName) {
+        this.receiverCountyName = receiverCountyName == null ? null : receiverCountyName.trim();
     }
 
     /**

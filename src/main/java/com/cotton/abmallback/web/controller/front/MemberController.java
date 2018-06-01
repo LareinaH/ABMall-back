@@ -11,10 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
@@ -81,7 +78,8 @@ public class MemberController extends ABMallFrontBaseController {
     @ResponseBody
     @RequestMapping(value = "/addressList",method = {RequestMethod.GET})
     public RestResponse<List<MemberAddress>> addressList(@RequestParam(defaultValue = "1") int pageNum,
-                                                         @RequestParam(defaultValue = "4") int pageSize) {
+                                                         @RequestParam(defaultValue = "4") int pageSize,
+                                                         @RequestParam(defaultValue = "ADDRESS")String addressType) {
 
         Example example = new Example(MemberAddress.class);
         example.setOrderByClause("isDefault desc");
@@ -89,7 +87,7 @@ public class MemberController extends ABMallFrontBaseController {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("memberId", getCurrentMemberId());
         criteria.andEqualTo("isDeleted","0");
-        criteria.andEqualTo("memberId","");
+        criteria.andEqualTo("addressType",addressType);
 
         PageInfo<MemberAddress> memberAddressPageInfo = memberAddressService.query(pageNum,pageSize,example);
 
@@ -107,7 +105,7 @@ public class MemberController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/addAddress",method = {RequestMethod.POST})
-    public RestResponse<Void> addAddress(MemberAddress memberAddress) {
+    public RestResponse<Void> addAddress(@RequestBody MemberAddress memberAddress) {
 
         //MemberAddress memberAddress = new MemberAddress();
         memberAddress.setMemberId(getCurrentMemberId());
@@ -143,11 +141,12 @@ public class MemberController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/setDefaultAddress",method = {RequestMethod.POST})
-    public RestResponse<Void> setDefaultAddress(long addressId) {
+    public RestResponse<Void> setDefaultAddress(long addressId, String addressType) {
 
         //取消默认地址
         MemberAddress model = new MemberAddress();
         model.setMemberId(getCurrentMemberId());
+        model.setAddressType(addressType);
         model.setIsDefault(true);
         model.setIsDeleted(false);
 

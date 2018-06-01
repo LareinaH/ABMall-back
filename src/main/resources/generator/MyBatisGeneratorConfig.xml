@@ -69,6 +69,7 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>
+		-->
 		<table tableName="member_address">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -76,7 +77,7 @@
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>-->
+		</table>
 
 		<!--
 		<table tableName="order_goods">
@@ -212,14 +213,14 @@
 			<ignoreColumn column="gmt_modify" />
 		</table>-->
 
-		<table tableName="sms_captcha">
+<!--		<table tableName="sms_captcha">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 	</context>
 
 </generatorConfiguration>
