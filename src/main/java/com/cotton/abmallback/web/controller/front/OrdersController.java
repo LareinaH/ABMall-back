@@ -88,7 +88,9 @@ public class OrdersController extends ABMallFrontBaseController {
         orders.setMemberId(getCurrentMemberId());
         //根据时间戳生成订单编号
         orders.setOrderNo("");
+        orders.setTotalMoney(goodsSpecification.getPreferentialPrice().multiply(new BigDecimal(Double.valueOf(count))));
 
+        //收货人信息
         orders.setReceiverName(memberAddress.getReceiverName());
         orders.setReceiverPhone(memberAddress.getReceiverPhone());
         orders.setReceiverProvinceName(memberAddress.getReceiverProvinceName());
@@ -98,8 +100,6 @@ public class OrdersController extends ABMallFrontBaseController {
         orders.setReceiverCountyName(memberAddress.getReceiverCountyName());
         orders.setReceiverCountyCode(memberAddress.getReceiverCountyCode());
         orders.setReceiverAddress(memberAddress.getReceiverAddress());
-
-        orders.setTotalMoney(goodsSpecification.getPreferentialPrice().multiply(new BigDecimal(Double.valueOf(count))));
 
         if(ordersService.insert(orders)){
             OrderGoods orderGoods = new OrderGoods();

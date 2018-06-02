@@ -10,7 +10,7 @@
     <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
     <result column="total_money" jdbcType="DECIMAL" property="totalMoney" />
     <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
-    <result column="receiver_phone" jdbcType="INTEGER" property="receiverPhone" />
+    <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
     <result column="receiver_province_name" jdbcType="VARCHAR" property="receiverProvinceName" />
     <result column="receiver_province_code" jdbcType="INTEGER" property="receiverProvinceCode" />
     <result column="receiver_city_name" jdbcType="VARCHAR" property="receiverCityName" />

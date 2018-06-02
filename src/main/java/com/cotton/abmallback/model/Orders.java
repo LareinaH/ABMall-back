@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
+@Table(name = "orders")
 public class Orders extends BaseModel {
     /**
      * 订单编号
@@ -40,7 +41,7 @@ public class Orders extends BaseModel {
      * 收货人联系电话
      */
     @Column(name = "receiver_phone")
-    private Integer receiverPhone;
+    private String receiverPhone;
 
     /**
      * 收货地址-省名称
@@ -217,7 +218,7 @@ public class Orders extends BaseModel {
      *
      * @return receiver_phone - 收货人联系电话
      */
-    public Integer getReceiverPhone() {
+    public String getReceiverPhone() {
         return receiverPhone;
     }
 
@@ -226,8 +227,8 @@ public class Orders extends BaseModel {
      *
      * @param receiverPhone 收货人联系电话
      */
-    public void setReceiverPhone(Integer receiverPhone) {
-        this.receiverPhone = receiverPhone;
+    public void setReceiverPhone(String receiverPhone) {
+        this.receiverPhone = receiverPhone == null ? null : receiverPhone.trim();
     }
 
     /**
