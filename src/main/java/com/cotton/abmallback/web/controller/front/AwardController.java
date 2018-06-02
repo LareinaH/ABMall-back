@@ -55,7 +55,7 @@ public class AwardController extends BaseController {
      * @return List<AccountMoneyFlow>
      */
     @ResponseBody
-    @RequestMapping(value = "/queryList", method = {RequestMethod.GET})
+    @RequestMapping(value = "/list", method = {RequestMethod.GET})
     public RestResponse<List<AccountMoneyFlow>> queryList(@RequestParam(defaultValue = "1") int pageNum,
                                                           @RequestParam(defaultValue = "4") int pageSize,
                                                           @RequestParam(required = false) String type) {
@@ -72,6 +72,7 @@ public class AwardController extends BaseController {
 
         PageInfo<AccountMoneyFlow> accountMoneyFlowPageInfo = accountMoneyFlowService.query(pageNum, pageSize, example);
         if (null != accountMoneyFlowPageInfo) {
+            //组装返回信息
             return RestResponse.getSuccesseResponse(accountMoneyFlowPageInfo.getList());
         } else {
             logger.error("读取列表失败");

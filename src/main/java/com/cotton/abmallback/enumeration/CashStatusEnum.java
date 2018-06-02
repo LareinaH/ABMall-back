@@ -20,7 +20,7 @@ public enum CashStatusEnum {
     /**
      * 完成/到账
      */
-    FINISH,
+    ARRIVAL,
 
     /**
      * 拒绝

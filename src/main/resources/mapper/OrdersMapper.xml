@@ -13,14 +13,15 @@
     <result column="receiver_phone" jdbcType="INTEGER" property="receiverPhone" />
     <result column="receiver_province_name" jdbcType="VARCHAR" property="receiverProvinceName" />
     <result column="receiver_province_code" jdbcType="INTEGER" property="receiverProvinceCode" />
+    <result column="receiver_city_name" jdbcType="VARCHAR" property="receiverCityName" />
     <result column="receiver_city_code" jdbcType="INTEGER" property="receiverCityCode" />
-    <result column="receiver_city_name" jdbcType="INTEGER" property="receiverCityName" />
-    <result column="receiver_county_name" jdbcType="INTEGER" property="receiverCountyName" />
+    <result column="receiver_county_name" jdbcType="VARCHAR" property="receiverCountyName" />
     <result column="receiver_county_code" jdbcType="INTEGER" property="receiverCountyCode" />
     <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress" />
     <result column="pay_mode" jdbcType="VARCHAR" property="payMode" />
     <result column="is_paid" jdbcType="BIT" property="isPaid" />
     <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="logistic_code" jdbcType="VARCHAR" property="logisticCode" />
     <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />

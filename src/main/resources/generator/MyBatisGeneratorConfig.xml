@@ -70,14 +70,14 @@
 			<ignoreColumn column="gmt_modify" />
 		</table>
 		-->
-		<table tableName="member_address">
+<!--		<table tableName="member_address">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 
 		<!--
 		<table tableName="order_goods">
@@ -88,7 +88,8 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>
-		<table tableName="orders">
+		-->
+		<table tableName="orders" domainObjectName="Orders">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
@@ -96,6 +97,8 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>
+
+		<!--
 		<table tableName="sys_user">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
