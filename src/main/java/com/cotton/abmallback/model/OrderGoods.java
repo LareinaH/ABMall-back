@@ -27,6 +27,9 @@ public class OrderGoods extends BaseModel {
     @Column(name = "good_name")
     private String goodName;
 
+    @Column(name = "goods_specification_name")
+    private String goodsSpecificationName;
+
     /**
      * 商品缩略图
      */
@@ -111,6 +114,20 @@ public class OrderGoods extends BaseModel {
      */
     public void setGoodName(String goodName) {
         this.goodName = goodName == null ? null : goodName.trim();
+    }
+
+    /**
+     * @return goods_specification_name
+     */
+    public String getGoodsSpecificationName() {
+        return goodsSpecificationName;
+    }
+
+    /**
+     * @param goodsSpecificationName
+     */
+    public void setGoodsSpecificationName(String goodsSpecificationName) {
+        this.goodsSpecificationName = goodsSpecificationName == null ? null : goodsSpecificationName.trim();
     }
 
     /**

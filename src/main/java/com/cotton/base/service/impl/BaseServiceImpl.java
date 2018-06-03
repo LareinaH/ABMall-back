@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,7 @@ public class BaseServiceImpl<ModelType extends BaseModel> implements BaseService
 
 	@Override
 	public boolean update(ModelType model) {
+		model.setGmtModify(new Date());
 		return mapper.updateByPrimaryKeySelective(model) > 0;
 	}
 

@@ -66,7 +66,7 @@ public class KdniaoService {
         try {
             params.put("RequestData", urlEncoder(requestData, "UTF-8"));
             params.put("EBusinessID", eBusinessID);
-            params.put("RequestType", "1008");
+            params.put("RequestType", "1002");
             String dataSign=encrypt(requestData, appKey, "UTF-8");
             params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
             params.put("DataType", "2");
@@ -81,7 +81,7 @@ public class KdniaoService {
 
         if(jsonObject.containsKey("Success") && RESULT_TRUE.equals(jsonObject.getString("Success"))){
 
-            return jsonObject.getString("traces");
+            return jsonObject.getString("Traces");
 
         }else {
             return "";

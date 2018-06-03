@@ -2,14 +2,18 @@ package com.cotton.abmallback.web.controller.front;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.model.*;
+import com.cotton.abmallback.model.vo.GoodsVO;
+import com.cotton.abmallback.model.vo.OrdersVO;
 import com.cotton.abmallback.service.*;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.third.KdniaoService;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +126,7 @@ public class OrdersController extends ABMallFrontBaseController {
             //增加订单商品
             OrderGoods orderGoods = new OrderGoods();
             orderGoods.setGoodName(goods.getGoodsName());
+            orderGoods.setGoodsSpecificationName(goodsSpecification.getGoodsSpecificationName());
             orderGoods.setGoodId(goods.getId());
             orderGoods.setOrderId(orders.getId());
             orderGoods.setGoodSpecificationId(goodsSpecification.getId());
@@ -145,8 +151,6 @@ public class OrdersController extends ABMallFrontBaseController {
 
         }
 
-
-
         return RestResponse.getFailedResponse(500,"内部错误");
 
     }
@@ -157,8 +161,8 @@ public class OrdersController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/list")
-    public RestResponse<List<Orders>> ordersList(@RequestParam(defaultValue = "1") int pageNum,
-                                                 @RequestParam(defaultValue = "4") int pageSize) {
+    public RestResponse<List<OrdersVO>> ordersList(@RequestParam(defaultValue = "1") int pageNum,
+                                                   @RequestParam(defaultValue = "4") int pageSize) {
 
         Example example = new Example(Orders.class);
         example.setOrderByClause("gmt_create desc");
@@ -172,7 +176,18 @@ public class OrdersController extends ABMallFrontBaseController {
             logger.error("读取订单列表失败");
             return RestResponse.getSystemInnerErrorResponse();
         }
-        return RestResponse.getSuccesseResponse(ordersPageInfo.getList());
+
+        List<OrdersVO> ordersVOList = new ArrayList<>();
+        for(Orders orders : ordersPageInfo.getList()){
+            OrdersVO ordersVO = new OrdersVO();
+            BeanUtils.copyProperties(orders,ordersVO);
+            OrderGoods model = new OrderGoods();
+            model.setOrderId(orders.getId());
+            List<OrderGoods> orderGoodsList = orderGoodsService.queryList(model);
+            ordersVO.setOrderGoodsList(orderGoodsList);
+            ordersVOList.add(ordersVO);
+        }
+        return RestResponse.getSuccesseResponse(ordersVOList);
     }
 
 
@@ -215,11 +230,30 @@ public class OrdersController extends ABMallFrontBaseController {
 
         orders.setOrderStatus(OrderStatusEnum.CANCLE.name());
 
-        if(ordersService.update(orders)){
+        OrderGoods model = new OrderGoods();
+        model.setOrderId(orderId);
+        List<OrderGoods> orderGoodsList = orderGoodsService.queryList(model);
 
-            //处理库存和销量
+        if(CollectionUtils.isNotEmpty(orderGoodsList)) {
 
-            return RestResponse.getSuccesseResponse();
+            OrderGoods orderGoods = orderGoodsList.get(0);
+
+            GoodsSpecification goodsSpecification = goodsSpecificationService.getById(orderGoods.getGoodSpecificationId());
+
+            Goods goods = goodsService.getById(goodsSpecification.getGoodsId());
+
+            if (ordersService.update(orders)) {
+
+                //处理库存和销量
+
+                goods.setStock(goods.getStock() + orderGoods.getGoodNum());
+                goods.setSalesAmount(goods.getSalesAmount() - orderGoods.getGoodNum());
+
+                goodsSpecification.setStock(goodsSpecification.getStock() + orderGoods.getGoodNum());
+                goodsSpecification.setSalesAmount(goodsSpecification.getSalesAmount() - orderGoods.getGoodNum());
+
+                return RestResponse.getSuccesseResponse();
+            }
         }
 
         return RestResponse.getFailedResponse(500,"取消订单失败!");
@@ -244,7 +278,7 @@ public class OrdersController extends ABMallFrontBaseController {
             return RestResponse.getFailedResponse(500,"物流编号不存在");
         }
 
-        String traces = kdniaoService.orderTracesSubByJson("SF","118650888018");
+        String traces = kdniaoService.orderTracesSubByJson("YZPY",orders.getLogisticCode());
 
         return RestResponse.getSuccesseResponse(traces);
 
