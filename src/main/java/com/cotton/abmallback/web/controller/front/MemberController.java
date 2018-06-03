@@ -116,6 +116,23 @@ public class MemberController extends ABMallFrontBaseController {
         }
     }
 
+
+    /**
+     * 增加收货地址
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/editAddress",method = {RequestMethod.POST})
+    public RestResponse<Void> editAddress(@RequestBody MemberAddress memberAddress) {
+
+        //MemberAddress memberAddress = new MemberAddress();
+        if(memberAddressService.update(memberAddress)){
+            return RestResponse.getSuccesseResponse();
+        }else {
+            return RestResponse.getFailedResponse(500,"增加收货地址失败");
+        }
+    }
+
     /**
      * 删除收货地址
      * @return
