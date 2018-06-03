@@ -5,8 +5,9 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
-    <result column="good_no" jdbcType="BIGINT" property="goodNo" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="good_id" jdbcType="BIGINT" property="goodId" />
+    <result column="good_specification_id" jdbcType="BIGINT" property="goodSpecificationId" />
     <result column="good_name" jdbcType="VARCHAR" property="goodName" />
     <result column="good_thum" jdbcType="VARCHAR" property="goodThum" />
     <result column="good_price" jdbcType="DECIMAL" property="goodPrice" />

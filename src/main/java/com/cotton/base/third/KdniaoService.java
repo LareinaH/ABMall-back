@@ -2,6 +2,8 @@ package com.cotton.base.third;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -23,22 +25,24 @@ import java.util.Map;
 @Component
 public class KdniaoService {
 
+    private Logger logger = LoggerFactory.getLogger(KdniaoService.class);
+
     /**
      * 电商id
      */
-    @Value("kdniao.businessId")
+    @Value("${kdniao.businessId}")
     private String eBusinessID = "";
 
     /**
      * appkey
      */
-    @Value("kdniao.appKey")
+    @Value("${kdniao.appKey}")
     private String appKey = "";
 
     /**
      *  请求url
      */
-    @Value("kdniao.reqURL")
+    @Value("${kdniao.reqURL}")
     private String reqURL = "http://api.kdniao.cc/api/dist";
 
 
@@ -49,47 +53,27 @@ public class KdniaoService {
      * Json方式  物流信息订阅
      * @throws Exception 异常信息
      */
-    public String orderTracesSubByJson(String logisticCode) throws Exception{
+    public String orderTracesSubByJson(String shipperCode, String logisticCode) {
 
         Map<String,String> request = new HashMap<>(3);
         request.put("LogisticCode",logisticCode);
+        request.put("ShipperCode",shipperCode);
 
         String requestData = JSON.toJSONString(request);
 
-        /*String requestData="{'OrderCode': 'SF201608081055208281'," +
-                "'ShipperCode':'SF'," +
-                "'LogisticCode':'3100707578976'," +
-                "'PayType':1," +
-                "'ExpType':1," +
-                "'CustomerName':'',"+
-                "'CustomerPwd':''," +
-                "'MonthCode':''," +
-                "'IsNotice':0," +
-                "'Cost':1.0," +
-                "'OtherCost':1.0," +
-                "'Sender':" +
-                "{" +
-                "'Company':'LV','Name':'Taylor','Mobile':'15018442396','ProvinceName':'上海','CityName':'上海','ExpAreaName':'青浦区','Address':'明珠路73号'}," +
-                "'Receiver':" +
-                "{" +
-                "'Company':'GCCUI','Name':'Yann','Mobile':'15018442396','ProvinceName':'北京','CityName':'北京','ExpAreaName':'朝阳区','Address':'三里屯街道雅秀大厦'}," +
-                "'Commodity':" +
-                "[{" +
-                "'GoodsName':'鞋子','Goodsquantity':1,'GoodsWeight':1.0}]," +
-                "'Weight':1.0," +
-                "'Quantity':1," +
-                "'Volume':0.0," +
-                "'Remark':'小心轻放'}";
-
-                */
-
         Map<String, String> params = new HashMap<>(10);
-        params.put("RequestData", urlEncoder(requestData, "UTF-8"));
-        params.put("EBusinessID", eBusinessID);
-        params.put("RequestType", "1008");
-        String dataSign=encrypt(requestData, appKey, "UTF-8");
-        params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
-        params.put("DataType", "2");
+
+        try {
+            params.put("RequestData", urlEncoder(requestData, "UTF-8"));
+            params.put("EBusinessID", eBusinessID);
+            params.put("RequestType", "1008");
+            String dataSign=encrypt(requestData, appKey, "UTF-8");
+            params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
+            params.put("DataType", "2");
+
+        }  catch (Exception e){
+            logger.error("快递查询异常:",e);
+        }
 
         String result=sendPost(reqURL, params);
 

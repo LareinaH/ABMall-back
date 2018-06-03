@@ -9,14 +9,17 @@ public class OrderGoods extends BaseModel {
     /**
      * 订单编号
      */
-    @Column(name = "order_no")
-    private String orderNo;
+    @Column(name = "order_id")
+    private Long orderId;
 
     /**
      * 商品编号
      */
-    @Column(name = "good_no")
-    private Long goodNo;
+    @Column(name = "good_id")
+    private Long goodId;
+
+    @Column(name = "good_specification_id")
+    private Long goodSpecificationId;
 
     /**
      * 商品名称
@@ -45,37 +48,51 @@ public class OrderGoods extends BaseModel {
     /**
      * 获取订单编号
      *
-     * @return order_no - 订单编号
+     * @return order_id - 订单编号
      */
-    public String getOrderNo() {
-        return orderNo;
+    public Long getOrderId() {
+        return orderId;
     }
 
     /**
      * 设置订单编号
      *
-     * @param orderNo 订单编号
+     * @param orderId 订单编号
      */
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     /**
      * 获取商品编号
      *
-     * @return good_no - 商品编号
+     * @return good_id - 商品编号
      */
-    public Long getGoodNo() {
-        return goodNo;
+    public Long getGoodId() {
+        return goodId;
     }
 
     /**
      * 设置商品编号
      *
-     * @param goodNo 商品编号
+     * @param goodId 商品编号
      */
-    public void setGoodNo(Long goodNo) {
-        this.goodNo = goodNo;
+    public void setGoodId(Long goodId) {
+        this.goodId = goodId;
+    }
+
+    /**
+     * @return good_specification_id
+     */
+    public Long getGoodSpecificationId() {
+        return goodSpecificationId;
+    }
+
+    /**
+     * @param goodSpecificationId
+     */
+    public void setGoodSpecificationId(Long goodSpecificationId) {
+        this.goodSpecificationId = goodSpecificationId;
     }
 
     /**

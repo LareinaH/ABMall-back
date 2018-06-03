@@ -5,20 +5,22 @@ import com.cotton.abmallback.model.*;
 import com.cotton.abmallback.service.*;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
+import com.cotton.base.third.KdniaoService;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -46,19 +48,32 @@ public class OrdersController extends ABMallFrontBaseController {
 
     private final OrderGoodsService orderGoodsService;
 
+    private final KdniaoService kdniaoService;
+
     @Autowired
-    public OrdersController(OrdersService ordersService, GoodsService goodsService, OrderGoodsService orderGoodsService, GoodsSpecificationService goodsSpecificationService, MemberAddressService memberAddressService) {
+    public OrdersController(OrdersService ordersService, GoodsService goodsService, OrderGoodsService orderGoodsService, GoodsSpecificationService goodsSpecificationService, MemberAddressService memberAddressService, KdniaoService kdniaoService) {
         this.ordersService = ordersService;
         this.goodsService = goodsService;
         this.orderGoodsService = orderGoodsService;
         this.goodsSpecificationService = goodsSpecificationService;
         this.memberAddressService = memberAddressService;
+        this.kdniaoService = kdniaoService;
     }
 
     @ResponseBody
     @RequestMapping(value = "/createOrder")
     @Transactional(rollbackFor = Exception.class)
-    public RestResponse<Void> createOrder(long goodsSpecificationServiceId, int count,long addressId) {
+    public RestResponse<Void> createOrder(@RequestBody Map<String,Object> params) {
+
+        if (params.get("goodsSpecificationServiceId") == null ||
+                params.get("count") == null || params.get("addressId") == null) {
+
+            return RestResponse.getFailedResponse(500,"入参为空");
+        }
+
+        long goodsSpecificationServiceId = Long.valueOf(params.get("goodsSpecificationServiceId").toString()) ;
+        int count = Integer.valueOf(params.get("count").toString());
+        long addressId = Long.valueOf(params.get("addressId").toString());
 
         //根据goodsSpecificationServiceId查找商品
         GoodsSpecification goodsSpecification = goodsSpecificationService.getById(goodsSpecificationServiceId);
@@ -102,19 +117,31 @@ public class OrdersController extends ABMallFrontBaseController {
         orders.setReceiverAddress(memberAddress.getReceiverAddress());
 
         if(ordersService.insert(orders)){
-            OrderGoods orderGoods = new OrderGoods();
 
+            //增加订单商品
+            OrderGoods orderGoods = new OrderGoods();
             orderGoods.setGoodName(goods.getGoodsName());
-            orderGoods.setGoodNo(goods.getId());
-            orderGoods.setOrderNo(orders.getOrderNo());
+            orderGoods.setGoodId(goods.getId());
+            orderGoods.setOrderId(orders.getId());
+            orderGoods.setGoodSpecificationId(goodsSpecification.getId());
             orderGoods.setGoodThum(goods.getThums());
             orderGoods.setGoodNum(count);
+            orderGoods.setGoodPrice(goodsSpecification.getPreferentialPrice());
 
             orderGoodsService.insert(orderGoods);
 
             //扣库存  加销量
+            goods.setStock(goods.getStock() - count);
+            goods.setSalesAmount(goods.getSalesAmount() + count);
+
+            goodsSpecification.setStock(goodsSpecification.getStock() - count);
+            goodsSpecification.setSalesAmount(goodsSpecification.getSalesAmount() + count);
+
+            goodsService.update(goods);
+            goodsSpecificationService.update(goodsSpecification);
 
 
+            return RestResponse.getSuccesseResponse();
 
         }
 
@@ -129,7 +156,7 @@ public class OrdersController extends ABMallFrontBaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/ordersList")
+    @RequestMapping(value = "/list")
     public RestResponse<List<Orders>> ordersList(@RequestParam(defaultValue = "1") int pageNum,
                                                  @RequestParam(defaultValue = "4") int pageSize) {
 
@@ -163,6 +190,7 @@ public class OrdersController extends ABMallFrontBaseController {
             return RestResponse.getFailedResponse(500,"订单编号不存在");
         }
         orders.setOrderStatus(OrderStatusEnum.TEAM_SYSTEM.name());
+        orders.setReceiveTime(new Date());
 
         if(ordersService.update(orders)){
 
@@ -203,12 +231,22 @@ public class OrdersController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/showLogistics")
-    public RestResponse<Map<String, Object>> showLogistics(@RequestParam long orderId) {
+    public RestResponse<String> showLogistics(@RequestParam long orderId) {
 
+        Orders orders = ordersService.getById(orderId);
+        if(null == orders){
+            return RestResponse.getFailedResponse(500,"订单编号不存在");
+        }
 
-        Map<String, Object> map = new HashMap<>(2);
+        String logisticCode = orders.getLogisticCode();
 
-        return RestResponse.getSuccesseResponse(map);
+        if(StringUtils.isBlank(logisticCode)){
+            return RestResponse.getFailedResponse(500,"物流编号不存在");
+        }
+
+        String traces = kdniaoService.orderTracesSubByJson("SF","118650888018");
+
+        return RestResponse.getSuccesseResponse(traces);
 
     }
 }
