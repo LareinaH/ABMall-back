@@ -1,13 +1,17 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.cotton.abmallback.model.AccountMoneyFlow;
+import com.cotton.abmallback.model.*;
 import com.cotton.abmallback.service.AccountMoneyFlowService;
+import com.cotton.abmallback.service.MemberService;
+import com.cotton.abmallback.service.OrderGoodsService;
+import com.cotton.abmallback.service.OrdersService;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +39,16 @@ public class AwardController extends BaseController {
     private Logger logger = LoggerFactory.getLogger(AwardController.class);
 
     private AccountMoneyFlowService accountMoneyFlowService;
+    private OrdersService ordersService;
+    private MemberService memberService;
+    private OrderGoodsService orderGoodsService;
 
     @Autowired
-    public AwardController(AccountMoneyFlowService accountMoneyFlowService) {
+    public AwardController(AccountMoneyFlowService accountMoneyFlowService, OrdersService ordersService, MemberService memberService, OrderGoodsService orderGoodsService) {
         this.accountMoneyFlowService = accountMoneyFlowService;
+        this.ordersService = ordersService;
+        this.memberService = memberService;
+        this.orderGoodsService = orderGoodsService;
     }
 
     @ResponseBody
@@ -56,9 +67,9 @@ public class AwardController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = {RequestMethod.GET})
-    public RestResponse<List<AccountMoneyFlow>> queryList(@RequestParam(defaultValue = "1") int pageNum,
-                                                          @RequestParam(defaultValue = "4") int pageSize,
-                                                          @RequestParam(required = false) String type) {
+    public RestResponse<List<AccountMoneyFlowVO>> queryList(@RequestParam(defaultValue = "1") int pageNum,
+                                                            @RequestParam(defaultValue = "4") int pageSize,
+                                                            @RequestParam(required = false) String type) {
 
         Example example = new Example(AccountMoneyFlow.class);
         example.setOrderByClause("gmt_create desc");
@@ -72,8 +83,36 @@ public class AwardController extends BaseController {
 
         PageInfo<AccountMoneyFlow> accountMoneyFlowPageInfo = accountMoneyFlowService.query(pageNum, pageSize, example);
         if (null != accountMoneyFlowPageInfo) {
+
             //组装返回信息
-            return RestResponse.getSuccesseResponse(accountMoneyFlowPageInfo.getList());
+            List<AccountMoneyFlowVO> accountMoneyFlowVOList = new ArrayList<>();
+
+            for(AccountMoneyFlow accountMoneyFlow : accountMoneyFlowPageInfo.getList()){
+                AccountMoneyFlowVO accountMoneyFlowVO = new AccountMoneyFlowVO();
+                BeanUtils.copyProperties(accountMoneyFlow,accountMoneyFlowVO);
+
+                //查找订单信息
+                Orders orders = ordersService.getById(accountMoneyFlow.getOrderId());
+                if( null != orders){
+                    Member member = memberService.getById(orders.getMemberId());
+                    OrderGoods model = new OrderGoods();
+                    model.setOrderId(orders.getId());
+                    OrderGoods orderGoods = orderGoodsService.selectOne(model);
+
+                    if(null != member) {
+                        accountMoneyFlowVO.setBuyerName(member.getName());
+                        accountMoneyFlowVO.setBuyerPhoto(member.getPhoto());
+                    }
+                    if(null != orderGoods) {
+                        accountMoneyFlowVO.setOrderGoodName(orderGoods.getGoodName());
+                        accountMoneyFlowVO.setOrderGoodsSpecificationName(orderGoods.getGoodsSpecificationName());
+                        accountMoneyFlowVO.setOrderGoodThum(orderGoods.getGoodThum());
+                    }
+                    accountMoneyFlowVO.setOrderTotalMoney(orders.getTotalMoney());
+                }
+                accountMoneyFlowVOList.add(accountMoneyFlowVO);
+            }
+            return RestResponse.getSuccesseResponse(accountMoneyFlowVOList);
         } else {
             logger.error("读取列表失败");
             return RestResponse.getFailedResponse(500, "读取列表失败");
