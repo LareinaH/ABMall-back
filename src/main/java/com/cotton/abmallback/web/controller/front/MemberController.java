@@ -7,6 +7,7 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +95,36 @@ public class MemberController extends ABMallFrontBaseController {
 
         if(null != memberAddressPageInfo) {
             return RestResponse.getSuccesseResponse(memberAddressPageInfo.getList());
+        }else {
+            return RestResponse.getFailedResponse(500,"读取列表失败");
+        }
+
+    }
+
+    /**
+     * 默认地址
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/defaultAddress",method = {RequestMethod.GET})
+    public RestResponse<MemberAddress> defaultAddress(@RequestParam(defaultValue = "ADDRESS")String addressType) {
+
+        Example example = new Example(MemberAddress.class);
+        example.setOrderByClause("isDefault desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("memberId", getCurrentMemberId());
+        criteria.andEqualTo("isDeleted","0");
+        criteria.andEqualTo("addressType",addressType);
+
+        PageInfo<MemberAddress> memberAddressPageInfo = memberAddressService.query(1,1,example);
+
+        if(null != memberAddressPageInfo) {
+            if(memberAddressPageInfo.getList().size()>0) {
+                return RestResponse.getSuccesseResponse(memberAddressPageInfo.getList().get(0));
+            }else {
+                return RestResponse.getSuccesseResponse();
+            }
         }else {
             return RestResponse.getFailedResponse(500,"读取列表失败");
         }
