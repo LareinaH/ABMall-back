@@ -104,7 +104,7 @@ public class OrdersController extends ABMallFrontBaseController {
 
         //创建订单
         Orders orders = new Orders();
-        orders.setOrderStatus(OrderStatusEnum.INVITING_CODE.name());
+        orders.setOrderStatus(OrderStatusEnum.WAIT_BUYER_PAY.name());
         orders.setMemberId(getCurrentMemberId());
         //根据时间戳生成订单编号
         orders.setOrderNo("");
@@ -204,7 +204,7 @@ public class OrdersController extends ABMallFrontBaseController {
         if(null == orders){
             return RestResponse.getFailedResponse(500,"订单编号不存在");
         }
-        orders.setOrderStatus(OrderStatusEnum.TEAM_SYSTEM.name());
+        orders.setOrderStatus(OrderStatusEnum.CONFIRMED.name());
         orders.setReceiveTime(new Date());
 
         if(ordersService.update(orders)){

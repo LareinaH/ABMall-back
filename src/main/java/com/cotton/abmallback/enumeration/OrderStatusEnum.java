@@ -9,11 +9,11 @@ package com.cotton.abmallback.enumeration;
  */
 public enum OrderStatusEnum {
 
-    INVITING_CODE("待付款"),
-    INVITING_CODE_BACKGROUND("待发货"),
-    INVITING_CODE_BAC("待收货"),
-    TEAM_SYSTEM("确认收货"),
-    TEAM_SYST("补货"),
+    WAIT_BUYER_PAY("待付款"),
+    WAIT_DELIVER("待发货"),
+    WAIT_CONFIRM("待收货"),
+    CONFIRMED("确认收货"),
+    REPLENISHMENT("补货"),
     CANCLE("取消");
 
     private String name;
