@@ -282,6 +282,7 @@ public class OrdersController extends ABMallFrontBaseController {
         map.put("address",orders.getReceiverProvinceName() + orders.getReceiverCityName() + orders.getReceiverCountyName() + orders.getReceiverAddress());
         map.put("tracks",traces);
         map.put("logisticsCompany","中国邮政");
+        map.put("logisticsCode",orders.getLogisticCode());
 
         return RestResponse.getSuccesseResponse(map);
 
