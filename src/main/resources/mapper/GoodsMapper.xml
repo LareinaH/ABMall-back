@@ -10,6 +10,7 @@
     <result column="stock" jdbcType="INTEGER" property="stock" />
     <result column="thums" jdbcType="VARCHAR" property="thums" />
     <result column="images" jdbcType="VARCHAR" property="images" />
+    <result column="breif" jdbcType="VARCHAR" property="breif" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
     <result column="preferential_price" jdbcType="DECIMAL" property="preferentialPrice" />
     <result column="price" jdbcType="VARCHAR" property="price" />

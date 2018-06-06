@@ -34,6 +34,11 @@ public class Goods extends BaseModel {
     private String images;
 
     /**
+     * 商品简介
+     */
+    private String breif;
+
+    /**
      * 商品单位
      */
     private String unit;
@@ -171,6 +176,24 @@ public class Goods extends BaseModel {
      */
     public void setImages(String images) {
         this.images = images == null ? null : images.trim();
+    }
+
+    /**
+     * 获取商品简介
+     *
+     * @return breif - 商品简介
+     */
+    public String getBreif() {
+        return breif;
+    }
+
+    /**
+     * 设置商品简介
+     *
+     * @param breif 商品简介
+     */
+    public void setBreif(String breif) {
+        this.breif = breif == null ? null : breif.trim();
     }
 
     /**
