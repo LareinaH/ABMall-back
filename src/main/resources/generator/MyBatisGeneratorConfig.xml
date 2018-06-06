@@ -32,7 +32,6 @@
 		<javaClientGenerator targetPackage="com.cotton.abmallback.mapper" targetProject="${basedir.src.main.java}" type="XMLMAPPER" />
 
 
-<!--
 		<table tableName="goods" domainObjectName="Goods">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -40,7 +39,7 @@
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>-->
+		</table>
 <!--
 		<table tableName="goods_group">
 			<property name="useActualColumnNames" value="false" />
@@ -79,14 +78,14 @@
 			<ignoreColumn column="gmt_modify" />
 		</table>-->
 
-		<table tableName="order_goods">
+<!--		<table tableName="order_goods">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 	<!--	<table tableName="orders" domainObjectName="Orders">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />

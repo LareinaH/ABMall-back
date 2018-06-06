@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * OrdersController
@@ -265,7 +262,9 @@ public class OrdersController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/showLogistics")
-    public RestResponse<String> showLogistics(@RequestParam long orderId) {
+    public RestResponse<Map<String,Object>> showLogistics(@RequestParam long orderId) {
+
+        Map<String, Object> map = new HashMap<>(2);
 
         Orders orders = ordersService.getById(orderId);
         if(null == orders){
@@ -280,7 +279,11 @@ public class OrdersController extends ABMallFrontBaseController {
 
         String traces = kdniaoService.orderTracesSubByJson("YZPY",orders.getLogisticCode());
 
-        return RestResponse.getSuccesseResponse(traces);
+        map.put("address",orders.getReceiverProvinceName() + orders.getReceiverCityName() + orders.getReceiverCountyName() + orders.getReceiverAddress());
+        map.put("tracks",traces);
+        map.put("logisticsCompany","中国邮政");
+
+        return RestResponse.getSuccesseResponse(map);
 
     }
 }

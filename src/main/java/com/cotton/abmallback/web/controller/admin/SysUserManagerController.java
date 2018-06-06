@@ -9,9 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
@@ -27,14 +25,14 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin/sysUser")
-public class SysUserController extends BaseController {
+public class SysUserManagerController extends BaseController {
 
-    private Logger logger = LoggerFactory.getLogger(SysUserController.class);
+    private Logger logger = LoggerFactory.getLogger(SysUserManagerController.class);
 
     private SysUserService sysUserService;
 
     @Autowired
-    public SysUserController(SysUserService sysUserService) {
+    public SysUserManagerController(SysUserService sysUserService) {
         this.sysUserService = sysUserService;
     }
 
@@ -48,17 +46,32 @@ public class SysUserController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/add")
-    public RestResponse<Map<String, Object>> add() {
+    @RequestMapping(value = "/add",method = {RequestMethod.POST})
+    public RestResponse<Void> add(@RequestBody SysUser sysUser) {
 
-        Map<String, Object> map = new HashMap<>(2);
+        if(sysUserService.insert(sysUser)){
+            return RestResponse.getSuccesseResponse();
+        }else {
+            return RestResponse.getFailedResponse(500,"增加失败");
+        }
 
-        return RestResponse.getSuccesseResponse(map);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/get")
-    public RestResponse<SysUser> get(long sysUserId) {
+    @RequestMapping(value = "/update" ,method = {RequestMethod.POST})
+    public RestResponse<Void> update(@RequestBody SysUser sysUser) {
+
+
+        if(!sysUserService.update(sysUser)){
+            return RestResponse.getFailedResponse(500,"更新数据失败"+sysUser.toString());
+        }
+
+        return RestResponse.getSuccesseResponse();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/get",method = {RequestMethod.GET})
+    public RestResponse<SysUser> get(@RequestParam long sysUserId) {
 
         SysUser sysUser = sysUserService.getById(sysUserId);
 
@@ -69,29 +82,8 @@ public class SysUserController extends BaseController {
         return RestResponse.getSuccesseResponse(sysUser);
     }
 
-
     @ResponseBody
-    @RequestMapping(value = "/delete")
-    public RestResponse<Map<String, Object>> delete(long sysUserId) {
-
-        SysUser sysUser = sysUserService.getById(sysUserId);
-
-        if(null == sysUser){
-            return RestResponse.getFailedResponse(500,"无法查找数据,请检查sysUserId 是否正确");
-
-        }
-        sysUser.setIsDeleted(true);
-
-        if(!sysUserService.update(sysUser)){
-            return RestResponse.getFailedResponse(500,"更新数据失败,sysUserId为:"+sysUserId);
-        }
-
-        return RestResponse.getSuccesseResponse();
-    }
-
-
-    @ResponseBody
-    @RequestMapping(value = "/queryList")
+    @RequestMapping(value = "/queryList",method = {RequestMethod.GET})
     public RestResponse<List<SysUser>> queryList() {
 
         Example example = new Example(SysUser.class);
@@ -109,7 +101,7 @@ public class SysUserController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/queryPageList")
+    @RequestMapping(value = "/queryPageList",method = {RequestMethod.GET})
     public RestResponse<PageInfo<SysUser>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
                                                          @RequestParam(defaultValue = "4") int pageSize) {
 
@@ -131,8 +123,8 @@ public class SysUserController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/update")
-    public RestResponse<Void> update(long sysUserId) {
+    @RequestMapping(value = "/delete",method = {RequestMethod.DELETE})
+    public RestResponse<Map<String, Object>> delete(@RequestParam long sysUserId) {
 
         SysUser sysUser = sysUserService.getById(sysUserId);
 
@@ -140,7 +132,7 @@ public class SysUserController extends BaseController {
             return RestResponse.getFailedResponse(500,"无法查找数据,请检查sysUserId 是否正确");
 
         }
-        //TODO:修改数据
+        sysUser.setIsDeleted(true);
 
         if(!sysUserService.update(sysUser)){
             return RestResponse.getFailedResponse(500,"更新数据失败,sysUserId为:"+sysUserId);
