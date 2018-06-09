@@ -73,6 +73,12 @@ public class Goods extends BaseModel {
     private Integer salesAmount;
 
     /**
+     * 是否正在活动中
+     */
+    @Column(name = "is_in_activities")
+    private Boolean isInActivities;
+
+    /**
      * 是否在回收站
      */
     @Column(name = "is_recycled")
@@ -302,6 +308,24 @@ public class Goods extends BaseModel {
      */
     public void setSalesAmount(Integer salesAmount) {
         this.salesAmount = salesAmount;
+    }
+
+    /**
+     * 获取是否正在活动中
+     *
+     * @return is_in_activities - 是否正在活动中
+     */
+    public Boolean getIsInActivities() {
+        return isInActivities;
+    }
+
+    /**
+     * 设置是否正在活动中
+     *
+     * @param isInActivities 是否正在活动中
+     */
+    public void setIsInActivities(Boolean isInActivities) {
+        this.isInActivities = isInActivities;
     }
 
     /**

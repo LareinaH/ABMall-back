@@ -138,10 +138,11 @@ public class ShopController extends ABMallFrontBaseController {
                                                @RequestParam(defaultValue = "4") int pageSize) {
 
         Example example = new Example(Goods.class);
-        example.setOrderByClause("gmt_create desc");
+        example.setOrderByClause("is_in_activities desc, gmt_create desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted",false);
+
 
         PageInfo<Goods> goodsPageInfo = goodsService.query(pageNum,pageSize,example);
 

@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.enumeration.MessageTypeEnum;
 import com.cotton.abmallback.model.MsgMemberMessage;
 import com.cotton.abmallback.model.MsgPlatformMessage;
 import com.cotton.abmallback.service.MsgMemberMessageService;
@@ -51,9 +52,129 @@ public class MessageController extends ABMallFrontBaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/index",method = {RequestMethod.GET})
+    public RestResponse<Map<String, Object>> index() {
+
+        Map<String, Object> map = new HashMap<>(2);
+
+        //晋级奖励
+        Example example = new Example(MsgMemberMessage.class);
+        example.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDeleted",false);
+        criteria.andEqualTo("memberId",getCurrentMemberId());
+        criteria.andEqualTo("type",MessageTypeEnum.PROMOTION_AWARD.name());
+
+        PageInfo<MsgMemberMessage> msgMemberMessagePageInfo = msgMemberMessageService.query(1,1,example);
+        if(msgMemberMessagePageInfo != null && msgMemberMessagePageInfo.getList() != null
+                && msgMemberMessagePageInfo.getList().size()>0) {
+            Map<String,Object> subMap = new HashMap<>(2);
+            subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
+
+            criteria.andEqualTo("isRead",false);
+            long count = msgMemberMessageService.count(example);
+            subMap.put("unReadCount",count);
+
+            map.put(MessageTypeEnum.PROMOTION_AWARD.name(),subMap);
+        }
+
+        //分享奖励
+        Example example2 = new Example(MsgMemberMessage.class);
+        example2.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria2 = example2.createCriteria();
+        criteria2.andEqualTo("isDeleted",false);
+        criteria2.andEqualTo("memberId",getCurrentMemberId());
+        criteria2.andEqualTo("type",MessageTypeEnum.SHARE_AWARD.name());
+
+        msgMemberMessagePageInfo = msgMemberMessageService.query(1,1,example2);
+        if(msgMemberMessagePageInfo != null && msgMemberMessagePageInfo.getList() != null
+                && msgMemberMessagePageInfo.getList().size()>0) {
+            Map<String,Object> subMap = new HashMap<>(2);
+            subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
+
+            criteria.andEqualTo("isRead",false);
+            long count = msgMemberMessageService.count(example2);
+            subMap.put("unReadCount",count);
+
+            map.put(MessageTypeEnum.SHARE_AWARD.name(),subMap);
+        }
+
+        //高管奖励
+        Example example3 = new Example(MsgMemberMessage.class);
+        example3.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria3 = example3.createCriteria();
+        criteria3.andEqualTo("isDeleted",false);
+        criteria3.andEqualTo("memberId",getCurrentMemberId());
+        criteria3.andEqualTo("type",MessageTypeEnum.EXECUTIVE_AWARD.name());
+
+        msgMemberMessagePageInfo = msgMemberMessageService.query(1,1,example3);
+        if(msgMemberMessagePageInfo != null && msgMemberMessagePageInfo.getList() != null
+                && msgMemberMessagePageInfo.getList().size()>0) {
+            Map<String,Object> subMap = new HashMap<>(2);
+            subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
+
+            criteria.andEqualTo("isRead",false);
+            long count = msgMemberMessageService.count(example3);
+            subMap.put("unReadCount",count);
+
+            map.put(MessageTypeEnum.EXECUTIVE_AWARD.name(),subMap);
+        }
+
+        // 平台通知
+        Example example4 = new Example(MsgMemberMessage.class);
+        example4.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria4 = example4.createCriteria();
+        criteria4.andEqualTo("isDeleted",false);
+        criteria4.andEqualTo("memberId",getCurrentMemberId());
+        criteria4.andEqualTo("type",MessageTypeEnum.SYSTEM_NOTICE.name());
+
+        msgMemberMessagePageInfo = msgMemberMessageService.query(1,1,example4);
+        if(msgMemberMessagePageInfo != null && msgMemberMessagePageInfo.getList() != null
+                && msgMemberMessagePageInfo.getList().size()>0) {
+            Map<String,Object> subMap = new HashMap<>(2);
+            subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
+
+            criteria.andEqualTo("isRead",false);
+            long count = msgMemberMessageService.count(example4);
+            subMap.put("unReadCount",count);
+
+            map.put(MessageTypeEnum.SYSTEM_NOTICE.name(),subMap);
+        }
+
+        // 活动奖励
+        Example example5 = new Example(MsgMemberMessage.class);
+        example5.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria5 = example5.createCriteria();
+        criteria5.andEqualTo("isDeleted",false);
+        criteria5.andEqualTo("memberId",getCurrentMemberId());
+        criteria5.andEqualTo("type",MessageTypeEnum.ACTIVITY_AWARD.name());
+
+        msgMemberMessagePageInfo = msgMemberMessageService.query(1,1,example5);
+        if(msgMemberMessagePageInfo != null && msgMemberMessagePageInfo.getList() != null
+                && msgMemberMessagePageInfo.getList().size()>0) {
+            Map<String,Object> subMap = new HashMap<>(2);
+            subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
+
+            criteria.andEqualTo("isRead",false);
+            long count = msgMemberMessageService.count(example5);
+            subMap.put("unReadCount",count);
+
+            map.put(MessageTypeEnum.ACTIVITY_AWARD.name(),subMap);
+        }
+
+        return RestResponse.getSuccesseResponse(map);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/list",method = {RequestMethod.GET})
     public RestResponse<List<MsgMemberMessage>> list(@RequestParam(defaultValue = "1") int pageNum,
-                                                     @RequestParam(defaultValue = "4") int pageSize) {
+                                                     @RequestParam(defaultValue = "4") int pageSize,
+                                                     @RequestParam(defaultValue = "PROMOTION_AWARD")String type) {
 
         Example example = new Example(MsgMemberMessage.class);
         example.setOrderByClause("gmt_create desc");
@@ -61,6 +182,7 @@ public class MessageController extends ABMallFrontBaseController {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted",false);
         criteria.andEqualTo("memberId",getCurrentMemberId());
+        criteria.andEqualTo("type",type);
         PageInfo<MsgMemberMessage> msgMemberMessagePageInfo = msgMemberMessageService.query(pageNum,pageSize,example);
 
         if(msgMemberMessagePageInfo == null ){

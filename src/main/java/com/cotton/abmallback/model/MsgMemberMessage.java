@@ -27,6 +27,12 @@ public class MsgMemberMessage extends BaseModel {
     @Column(name = "system_message_id")
     private Long systemMessageId;
 
+    /**
+     * 升级到的等级
+     */
+    @Column(name = "promotion_level")
+    private String promotionLevel;
+
     @Column(name = "is_read")
     private Boolean isRead;
 
@@ -105,6 +111,24 @@ public class MsgMemberMessage extends BaseModel {
      */
     public void setSystemMessageId(Long systemMessageId) {
         this.systemMessageId = systemMessageId;
+    }
+
+    /**
+     * 获取升级到的等级
+     *
+     * @return promotion_level - 升级到的等级
+     */
+    public String getPromotionLevel() {
+        return promotionLevel;
+    }
+
+    /**
+     * 设置升级到的等级
+     *
+     * @param promotionLevel 升级到的等级
+     */
+    public void setPromotionLevel(String promotionLevel) {
+        this.promotionLevel = promotionLevel == null ? null : promotionLevel.trim();
     }
 
     /**
