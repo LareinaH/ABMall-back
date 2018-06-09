@@ -19,6 +19,12 @@ public class AccountMoneyFlow extends BaseModel {
     private String accountMoneyType;
 
     /**
+     * 晋级到的级别
+     */
+    @Column(name = "promotion_level")
+    private String promotionLevel;
+
+    /**
      * 订单id
      */
     @Column(name = "order_id")
@@ -64,6 +70,24 @@ public class AccountMoneyFlow extends BaseModel {
      */
     public void setAccountMoneyType(String accountMoneyType) {
         this.accountMoneyType = accountMoneyType == null ? null : accountMoneyType.trim();
+    }
+
+    /**
+     * 获取晋级到的级别
+     *
+     * @return promotion_level - 晋级到的级别
+     */
+    public String getPromotionLevel() {
+        return promotionLevel;
+    }
+
+    /**
+     * 设置晋级到的级别
+     *
+     * @param promotionLevel 晋级到的级别
+     */
+    public void setPromotionLevel(String promotionLevel) {
+        this.promotionLevel = promotionLevel == null ? null : promotionLevel.trim();
     }
 
     /**
