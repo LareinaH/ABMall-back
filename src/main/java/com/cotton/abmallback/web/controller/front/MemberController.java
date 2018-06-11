@@ -84,7 +84,7 @@ public class MemberController extends ABMallFrontBaseController {
                                                          @RequestParam(defaultValue = "ADDRESS")String addressType) {
 
         Example example = new Example(MemberAddress.class);
-        example.setOrderByClause("isDefault desc");
+        example.setOrderByClause("is_default desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("memberId", getCurrentMemberId());
@@ -110,7 +110,7 @@ public class MemberController extends ABMallFrontBaseController {
     public RestResponse<MemberAddress> defaultAddress(@RequestParam(defaultValue = "ADDRESS")String addressType) {
 
         Example example = new Example(MemberAddress.class);
-        example.setOrderByClause("isDefault desc");
+        example.setOrderByClause("is_default desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("memberId", getCurrentMemberId());
