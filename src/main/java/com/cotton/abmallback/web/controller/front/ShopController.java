@@ -1,14 +1,8 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.cotton.abmallback.model.Ads;
-import com.cotton.abmallback.model.Goods;
-import com.cotton.abmallback.model.GoodsSpecification;
-import com.cotton.abmallback.model.ShopActivities;
+import com.cotton.abmallback.model.*;
 import com.cotton.abmallback.model.vo.GoodsVO;
-import com.cotton.abmallback.service.AdsService;
-import com.cotton.abmallback.service.GoodsService;
-import com.cotton.abmallback.service.GoodsSpecificationService;
-import com.cotton.abmallback.service.ShopActivitiesService;
+import com.cotton.abmallback.service.*;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
@@ -48,12 +42,15 @@ public class ShopController extends ABMallFrontBaseController {
 
     private final ShopActivitiesService shopActivitiesService;
 
+    private final MemberService memberService;
+
     @Autowired
-    public ShopController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService, AdsService adsService, ShopActivitiesService shopActivitiesService) {
+    public ShopController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService, AdsService adsService, ShopActivitiesService shopActivitiesService, MemberService memberService) {
         this.goodsService = goodsService;
         this.goodsSpecificationService = goodsSpecificationService;
         this.adsService = adsService;
         this.shopActivitiesService = shopActivitiesService;
+        this.memberService = memberService;
     }
 
     /**
@@ -87,22 +84,20 @@ public class ShopController extends ABMallFrontBaseController {
     @RequestMapping(value = "/invitingCode",method = {RequestMethod.GET})
     public RestResponse<Map<String, Object>> getInvitingCode() {
 
-        //邀请码列表
-        List<Ads> adsList =  adsService.queryInvitingCode();
+        //获取当前用户
+        Member member = memberService.getById(getCurrentMemberId());
 
-        if(null == adsList || adsList.isEmpty()){
+        //邀请码列表
+        Ads ads =  adsService.queryInvitingCode(member.getLevel());
+
+        if(null == ads ){
             logger.error("邀请码不存在");
             return RestResponse.getFailedResponse(101,"邀请码不存在",null);
         }
 
-        //找到当前用户级别对应的邀请码
-        //TODO:根据用户级别匹配
-
-        Ads ads = adsList.get(0);
-
         Map<String, Object> map = new HashMap<>(2);
         map.put("invitingCode",ads.getAdUrl());
-        map.put("memberId",getCurrentMemberId());
+        map.put("uuid",member.getUuid());
 
         return RestResponse.getSuccesseResponse(map);
 

@@ -49,10 +49,12 @@ public class MemberController extends ABMallFrontBaseController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/example")
-    public RestResponse<Map<String, Object>> example() {
+    @RequestMapping(value = "/myInfo",method = {RequestMethod.GET})
+    public RestResponse<Map<String, Object>> myInfo() {
 
         Map<String, Object> map = new HashMap<>(2);
+        map.put("totalSales",1394.40);
+        map.put("availablePickUpCashAmount",900.34);
 
         return RestResponse.getSuccesseResponse(map);
     }

@@ -35,15 +35,16 @@ public class AdsServiceImpl extends BaseServiceImpl<Ads> implements AdsService {
     }
 
     @Override
-    public List<Ads> queryInvitingCode() {
+    public Ads queryInvitingCode(String level) {
         Example example = new Example(Ads.class);
         example.setOrderByClause("sort desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("adType", AdTypeEnum.INVITING_CODE_BACKGROUND.name());
         criteria.andEqualTo("isDeleted","0");
+        criteria.andEqualTo("level",level);
 
-        return queryList(example);
+        return queryList(example).get(0);
     }
 
     @Override

@@ -11,6 +11,7 @@
     <result column="display_name" jdbcType="VARCHAR" property="displayName" />
     <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
     <result column="wechat_no" jdbcType="VARCHAR" property="wechatNo" />
     <result column="wechat_name" jdbcType="VARCHAR" property="wechatName" />
     <result column="openId" jdbcType="VARCHAR" property="openid" />

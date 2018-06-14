@@ -38,6 +38,11 @@ public class Member extends BaseModel {
     private String photo;
 
     /**
+     * 会员等级
+     */
+    private String level;
+
+    /**
      * 微信号
      */
     @Column(name = "wechat_no")
@@ -166,6 +171,24 @@ public class Member extends BaseModel {
      */
     public void setPhoto(String photo) {
         this.photo = photo == null ? null : photo.trim();
+    }
+
+    /**
+     * 获取会员等级
+     *
+     * @return level - 会员等级
+     */
+    public String getLevel() {
+        return level;
+    }
+
+    /**
+     * 设置会员等级
+     *
+     * @param level 会员等级
+     */
+    public void setLevel(String level) {
+        this.level = level == null ? null : level.trim();
     }
 
     /**

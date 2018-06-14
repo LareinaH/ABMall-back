@@ -12,6 +12,11 @@ public class Ads extends BaseModel {
     private String adType;
 
     /**
+     * 邀请码码对应的会员等级,当type=INVITING_CODE_BACKGROUND时有效
+     */
+    private String level;
+
+    /**
      * 图片地址
      */
     @Column(name = "ad_url")
@@ -44,6 +49,24 @@ public class Ads extends BaseModel {
      */
     public void setAdType(String adType) {
         this.adType = adType == null ? null : adType.trim();
+    }
+
+    /**
+     * 获取邀请码码对应的会员等级,当type=INVITING_CODE_BACKGROUND时有效
+     *
+     * @return level - 邀请码码对应的会员等级,当type=INVITING_CODE_BACKGROUND时有效
+     */
+    public String getLevel() {
+        return level;
+    }
+
+    /**
+     * 设置邀请码码对应的会员等级,当type=INVITING_CODE_BACKGROUND时有效
+     *
+     * @param level 邀请码码对应的会员等级,当type=INVITING_CODE_BACKGROUND时有效
+     */
+    public void setLevel(String level) {
+        this.level = level == null ? null : level.trim();
     }
 
     /**
