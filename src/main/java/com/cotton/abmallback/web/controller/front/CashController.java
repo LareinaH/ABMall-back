@@ -62,6 +62,7 @@ public class CashController extends ABMallFrontBaseController {
                                                          @RequestParam(defaultValue = "10") int pageSize) {
 
         Example example = new Example(CashPickUp.class);
+        example.setOrderByClause("gmt_create desc");
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("memberId",getCurrentMemberId());
         criteria.andEqualTo("isDeleted",false);

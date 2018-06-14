@@ -62,13 +62,13 @@ public class SmsManager {
         return false;
     }
 
-    public boolean checkCaptcha(long phoneNum,String captcha){
+    public boolean checkCaptcha(String phoneNum,String captcha){
 
         Example example = new Example(SmsCaptcha.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("phoneNum",phoneNum);
         criteria.andEqualTo("captcha",captcha);
-        criteria.andLessThanOrEqualTo("gmtExpires",new Date());
+        criteria.andGreaterThanOrEqualTo("gmtExpires",new Date());
 
         List<SmsCaptcha> smsCaptchaList = smsCaptchaService.queryList(example);
 

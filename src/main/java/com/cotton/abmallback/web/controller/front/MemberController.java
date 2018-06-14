@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.manager.SmsManager;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.model.MemberAddress;
 import com.cotton.abmallback.service.MemberAddressService;
@@ -7,7 +8,6 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,14 +33,17 @@ public class MemberController extends ABMallFrontBaseController {
 
     private Logger logger = LoggerFactory.getLogger(MemberController.class);
 
-    private final MemberService memberService;
+    private MemberService memberService;
 
-    private final MemberAddressService memberAddressService;
+    private MemberAddressService memberAddressService;
+
+    private SmsManager smsManager;
 
     @Autowired
-    public MemberController(MemberAddressService memberAddressService, MemberService memberService) {
+    public MemberController(MemberAddressService memberAddressService, MemberService memberService, SmsManager smsManager) {
         this.memberAddressService = memberAddressService;
         this.memberService = memberService;
+        this.smsManager = smsManager;
     }
 
 
@@ -61,8 +63,14 @@ public class MemberController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/bindPhoneNum",method = {RequestMethod.POST})
-    public RestResponse<Void> bindPhoneNum(@RequestParam() String phoneNum) {
+    public RestResponse<Void> bindPhoneNum(String phoneNum,String code) {
 
+        //校验验证码
+        if(!smsManager.checkCaptcha(phoneNum,code)){
+            return RestResponse.getFailedResponse(500,"验证码错误");
+        }
+
+        //更新手机号
         Member member = getCurrentMember();
         member.setPhoneNum(phoneNum);
 

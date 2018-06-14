@@ -142,6 +142,7 @@ public class ShopController extends ABMallFrontBaseController {
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted",false);
+        criteria.andEqualTo("isOnSell",true);
 
 
         PageInfo<Goods> goodsPageInfo = goodsService.query(pageNum,pageSize,example);
@@ -171,6 +172,7 @@ public class ShopController extends ABMallFrontBaseController {
         }
         GoodsSpecification model = new GoodsSpecification();
         model.setGoodsId(goodsId);
+        model.setIsOnSell(true);
         model.setIsDeleted(false);
 
         //获取规格详情
