@@ -12,9 +12,15 @@
     <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
     <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="refer_total_count" jdbcType="INTEGER" property="referTotalCount" />
     <result column="wechat_no" jdbcType="VARCHAR" property="wechatNo" />
     <result column="wechat_name" jdbcType="VARCHAR" property="wechatName" />
     <result column="openId" jdbcType="VARCHAR" property="openid" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="money_total_spend" jdbcType="DECIMAL" property="moneyTotalSpend" />
+    <result column="money_total_earn" jdbcType="DECIMAL" property="moneyTotalEarn" />
+    <result column="money_total_take" jdbcType="DECIMAL" property="moneyTotalTake" />
+    <result column="money_lock" jdbcType="DECIMAL" property="moneyLock" />
+    <result column="referrer_id" jdbcType="LONGVARCHAR" property="referrerId" />
   </resultMap>
 </mapper>

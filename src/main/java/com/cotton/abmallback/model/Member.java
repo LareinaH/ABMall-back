@@ -1,8 +1,8 @@
 package com.cotton.abmallback.model;
 
 import com.cotton.base.model.BaseModel;
+import java.math.BigDecimal;
 import javax.persistence.*;
-
 @Table(name = "member")
 public class Member extends BaseModel {
     /**
@@ -43,6 +43,12 @@ public class Member extends BaseModel {
     private String level;
 
     /**
+     * 直推人数
+     */
+    @Column(name = "refer_total_count")
+    private Integer referTotalCount;
+
+    /**
      * 微信号
      */
     @Column(name = "wechat_no")
@@ -64,6 +70,36 @@ public class Member extends BaseModel {
      * 性别：male,female,unknown
      */
     private String sex;
+
+    /**
+     * 总消费
+     */
+    @Column(name = "money_total_spend")
+    private BigDecimal moneyTotalSpend;
+
+    /**
+     * 总赚取
+     */
+    @Column(name = "money_total_earn")
+    private BigDecimal moneyTotalEarn;
+
+    /**
+     * 总提取
+     */
+    @Column(name = "money_total_take")
+    private BigDecimal moneyTotalTake;
+
+    /**
+     * 锁定费用
+     */
+    @Column(name = "money_lock")
+    private BigDecimal moneyLock;
+
+    /**
+     * 引荐人id
+     */
+    @Column(name = "referrer_id")
+    private String referrerId;
 
     /**
      * 获取uuid
@@ -192,6 +228,24 @@ public class Member extends BaseModel {
     }
 
     /**
+     * 获取直推人数
+     *
+     * @return refer_total_count - 直推人数
+     */
+    public Integer getReferTotalCount() {
+        return referTotalCount;
+    }
+
+    /**
+     * 设置直推人数
+     *
+     * @param referTotalCount 直推人数
+     */
+    public void setReferTotalCount(Integer referTotalCount) {
+        this.referTotalCount = referTotalCount;
+    }
+
+    /**
      * 获取微信号
      *
      * @return wechat_no - 微信号
@@ -261,5 +315,95 @@ public class Member extends BaseModel {
      */
     public void setSex(String sex) {
         this.sex = sex == null ? null : sex.trim();
+    }
+
+    /**
+     * 获取总消费
+     *
+     * @return money_total_spend - 总消费
+     */
+    public BigDecimal getMoneyTotalSpend() {
+        return moneyTotalSpend;
+    }
+
+    /**
+     * 设置总消费
+     *
+     * @param moneyTotalSpend 总消费
+     */
+    public void setMoneyTotalSpend(BigDecimal moneyTotalSpend) {
+        this.moneyTotalSpend = moneyTotalSpend;
+    }
+
+    /**
+     * 获取总赚取
+     *
+     * @return money_total_earn - 总赚取
+     */
+    public BigDecimal getMoneyTotalEarn() {
+        return moneyTotalEarn;
+    }
+
+    /**
+     * 设置总赚取
+     *
+     * @param moneyTotalEarn 总赚取
+     */
+    public void setMoneyTotalEarn(BigDecimal moneyTotalEarn) {
+        this.moneyTotalEarn = moneyTotalEarn;
+    }
+
+    /**
+     * 获取总提取
+     *
+     * @return money_total_take - 总提取
+     */
+    public BigDecimal getMoneyTotalTake() {
+        return moneyTotalTake;
+    }
+
+    /**
+     * 设置总提取
+     *
+     * @param moneyTotalTake 总提取
+     */
+    public void setMoneyTotalTake(BigDecimal moneyTotalTake) {
+        this.moneyTotalTake = moneyTotalTake;
+    }
+
+    /**
+     * 获取锁定费用
+     *
+     * @return money_lock - 锁定费用
+     */
+    public BigDecimal getMoneyLock() {
+        return moneyLock;
+    }
+
+    /**
+     * 设置锁定费用
+     *
+     * @param moneyLock 锁定费用
+     */
+    public void setMoneyLock(BigDecimal moneyLock) {
+        this.moneyLock = moneyLock;
+    }
+
+    /**
+     * 获取引荐人id
+     *
+     * @return referrer_id - 引荐人id
+     */
+    public String getReferrerId() {
+        return referrerId;
+    }
+
+    /**
+     * 设置引荐人id
+     *
+     * @param referrerId 引荐人id
+     */
+    public void setReferrerId(String referrerId) {
+        this.referrerId = referrerId == null ? null : referrerId.trim();
     }
 }

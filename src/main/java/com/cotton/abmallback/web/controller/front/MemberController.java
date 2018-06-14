@@ -1,8 +1,10 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.enumeration.MemberLevelEnum;
 import com.cotton.abmallback.manager.SmsManager;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.model.MemberAddress;
+import com.cotton.abmallback.model.vo.front.MyTeamVO;
 import com.cotton.abmallback.service.MemberAddressService;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
@@ -11,11 +13,13 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +57,9 @@ public class MemberController extends ABMallFrontBaseController {
     public RestResponse<Map<String, Object>> myInfo() {
 
         Map<String, Object> map = new HashMap<>(2);
-        map.put("totalSales",1394.40);
-        map.put("availablePickUpCashAmount",900.34);
+        Member member = memberService.getById(getCurrentMemberId());
+        map.put("totalSales",member.getMoneyTotalSpend());
+        map.put("availablePickUpCashAmount",member.getMoneyTotalEarn().subtract(member.getMoneyTotalTake()).subtract(member.getMoneyLock()));
 
         return RestResponse.getSuccesseResponse(map);
     }
@@ -62,7 +67,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 绑定手机号
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/bindPhoneNum",method = {RequestMethod.POST})
@@ -87,7 +92,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 绑定手机号
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/changePhoneNum",method = {RequestMethod.POST})
@@ -120,7 +125,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 收货地址列表
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/addressList",method = {RequestMethod.GET})
@@ -148,7 +153,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 默认地址
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/defaultAddress",method = {RequestMethod.GET})
@@ -178,7 +183,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 增加收货地址
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/addAddress",method = {RequestMethod.POST})
@@ -196,7 +201,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 增加收货地址
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/editAddress",method = {RequestMethod.POST})
@@ -212,7 +217,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 删除收货地址
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/deleteAddress",method = {RequestMethod.DELETE})
@@ -231,7 +236,7 @@ public class MemberController extends ABMallFrontBaseController {
 
     /**
      * 设为默认收货地址
-     * @return
+     * @return 统一返回对象
      */
     @ResponseBody
     @RequestMapping(value = "/setDefaultAddress",method = {RequestMethod.POST})
@@ -259,5 +264,122 @@ public class MemberController extends ABMallFrontBaseController {
         }else {
             return RestResponse.getFailedResponse(500,"设置默认收货地址失败");
         }
+    }
+
+
+    /**
+     * 我的团队
+     * @return 统一返回对象
+     */
+    @ResponseBody
+    @RequestMapping(value = "/myTeam",method = {RequestMethod.GET})
+    public RestResponse<List<MyTeamVO>> myTeam(@RequestParam(defaultValue = "1") int pageNum,
+                                                         @RequestParam(defaultValue = "4") int pageSize,
+                                                         @RequestParam(defaultValue = "")String level) {
+
+        Example example = new Example(Member.class);
+        example.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("referrerId", getCurrentMemberId());
+        criteria.andEqualTo("isDeleted","0");
+
+        if(StringUtils.isNotBlank(level)) {
+            criteria.andEqualTo("level", level);
+        }
+
+        PageInfo<Member> memberPageInfo = memberService.query(pageNum,pageSize,example);
+
+        if(null != memberPageInfo) {
+
+            List<MyTeamVO> myTeamVOList = new ArrayList<>();
+
+            for(Member member : memberPageInfo.getList()){
+
+                MyTeamVO myTeamVO = new MyTeamVO();
+                BeanUtils.copyProperties(member,myTeamVO);
+                myTeamVOList.add(myTeamVO);
+            }
+
+            return RestResponse.getSuccesseResponse(myTeamVOList);
+        }else {
+            return RestResponse.getFailedResponse(500,"读取列表失败");
+        }
+
+    }
+
+    /**
+     * 我的团队数目统计
+     * @return 统一返回对象
+     */
+    @ResponseBody
+    @RequestMapping(value = "/myTeamCount",method = {RequestMethod.GET})
+    public RestResponse<Map<String, Object>> myTeamCount() {
+
+        Map<String, Object> map = new HashMap<>(2);
+
+        Example example = new Example(Member.class);
+        example.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("referrerId", getCurrentMemberId());
+        criteria.andEqualTo("isDeleted","0");
+
+        long total = memberService.count(example);
+        map.put("total",total);
+
+        criteria.andEqualTo("level",MemberLevelEnum.WHITE.name());
+        long whiteTotal = memberService.count(example);
+        map.put("white",whiteTotal);
+
+        criteria.andEqualTo("level",MemberLevelEnum.V1.name());
+        long v1Total = memberService.count(example);
+        map.put("v1",v1Total);
+
+        criteria.andEqualTo("level",MemberLevelEnum.V2.name());
+        long v2Total = memberService.count(example);
+        map.put("v2",v2Total);
+
+        criteria.andEqualTo("level",MemberLevelEnum.V3.name());
+        long v3Total = memberService.count(example);
+        map.put("v3",v3Total);
+
+        return RestResponse.getSuccesseResponse(map);
+    }
+
+    /**
+     * 排行榜
+     * @return 统一返回对象
+     */
+    @ResponseBody
+    @RequestMapping(value = "/rank",method = {RequestMethod.GET})
+    public RestResponse<List<MyTeamVO>> rank(@RequestParam(defaultValue = "1") int pageNum,
+                                               @RequestParam(defaultValue = "4") int pageSize) {
+
+        Example example = new Example(Member.class);
+        example.setOrderByClause("refer_total_count desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("referrerId", getCurrentMemberId());
+        criteria.andEqualTo("isDeleted","0");
+
+        PageInfo<Member> memberPageInfo = memberService.query(pageNum,pageSize,example);
+
+        if(null != memberPageInfo) {
+
+            List<MyTeamVO> rankList = new ArrayList<>();
+
+            for(Member member : memberPageInfo.getList()){
+
+                MyTeamVO myTeamVO = new MyTeamVO();
+                BeanUtils.copyProperties(member,myTeamVO);
+                rankList.add(myTeamVO);
+            }
+
+            return RestResponse.getSuccesseResponse(rankList);
+        }else {
+            return RestResponse.getFailedResponse(500,"获取排行榜失败");
+        }
+
     }
 }
