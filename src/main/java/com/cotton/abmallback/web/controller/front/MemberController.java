@@ -8,6 +8,7 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,40 @@ public class MemberController extends ABMallFrontBaseController {
 
         //更新手机号
         Member member = getCurrentMember();
+        member.setPhoneNum(phoneNum);
+
+        if(memberService.update(member)){
+            return RestResponse.getSuccesseResponse();
+        }else {
+            return RestResponse.getFailedResponse(1,"绑定手机号失败！");
+        }
+    }
+
+
+    /**
+     * 绑定手机号
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/changePhoneNum",method = {RequestMethod.POST})
+    public RestResponse<Void> changePhoneNum(String oldPhoneNum,String phoneNum,String code) {
+
+        if(oldPhoneNum.equals(phoneNum)){
+            return RestResponse.getFailedResponse(1,"新手机号与原有手机号相同！");
+        }
+        //更新手机号
+        Member member = memberService.getById(getCurrentMemberId());
+
+        if(!oldPhoneNum.equals(member.getPhoneNum())){
+            return RestResponse.getFailedResponse(1,"原手机号错误！");
+
+        }
+
+        //校验验证码
+        if(!smsManager.checkCaptcha(phoneNum,code)){
+            return RestResponse.getFailedResponse(500,"验证码错误");
+        }
+
         member.setPhoneNum(phoneNum);
 
         if(memberService.update(member)){
