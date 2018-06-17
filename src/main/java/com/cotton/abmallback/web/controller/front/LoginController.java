@@ -26,7 +26,6 @@ import java.util.UUID;
  * @date 2018/5/9
  */
 @Controller
-@RequestMapping("un/member")
 public class LoginController extends ABMallFrontBaseController {
 
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -42,7 +41,7 @@ public class LoginController extends ABMallFrontBaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/login",method = {RequestMethod.GET})
+    @RequestMapping(value = "un/member/login",method = {RequestMethod.GET})
     public RestResponse<LoginMemberVO> login(@RequestParam(defaultValue = "false") boolean bWechat,
                                       @RequestParam(required = false)  String phoneNum,
                                       @RequestParam(required = false)  String code,
@@ -169,7 +168,7 @@ public class LoginController extends ABMallFrontBaseController {
      * @return RestResponse
      */
     @ResponseBody
-    @RequestMapping(value = "/logout",method = {RequestMethod.GET})
+    @RequestMapping(value = "/member/logout",method = {RequestMethod.GET})
     public RestResponse<Void> logout(@RequestParam String deviceType,
                                      @RequestParam boolean bWechat) {
 
@@ -199,7 +198,7 @@ public class LoginController extends ABMallFrontBaseController {
      * @return RestResponse
      */
     @ResponseBody
-    @RequestMapping(value = "/sendVerifyCode",method = {RequestMethod.POST})
+    @RequestMapping(value = "un/member/sendVerifyCode",method = {RequestMethod.POST})
     public RestResponse<Void> sendVerifyCode(@RequestBody Map<String,Object> params) {
 
         String phoneNum = params.get("phoneNum").toString();

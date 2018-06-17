@@ -14,13 +14,14 @@ import com.cotton.base.controller.BaseController;
 public class ABMallFrontBaseController extends BaseController {
 
     protected long getCurrentMemberId(){
+        Member member = PermissionContext.getMember();
+        if(null != member){
+            return member.getId();
+        }
         return 1L;
     }
 
     protected Member getCurrentMember(){
-        Member member = new Member();
-        member.setId(1L);
-        return member;
-        //return  PermissionContext.getMember();
+        return  PermissionContext.getMember();
     }
 }

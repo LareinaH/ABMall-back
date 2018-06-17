@@ -33,13 +33,13 @@ import java.util.*;
 public class WechatController {
 
     @Value("${wechat.appId}")
-    private String appId;
+    private String appId = "";
     @Value("${wechat.secret}")
-    private String secret;
-    @Value("${wchat.token}")
-    private String token;
+    private String secret = "";
+    @Value("${wechat.token}")
+    private String token = "";
     @Value("${shareUrl}")
-    private String url;
+    private String url = "";
 
     @RequestMapping(value = "/wechatConfig")
     @ResponseBody

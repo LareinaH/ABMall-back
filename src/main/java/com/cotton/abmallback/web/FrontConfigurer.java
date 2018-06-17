@@ -4,7 +4,7 @@ import com.cotton.abmallback.web.interceptor.front.CheckLoginInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
  * FrontConfigurer
@@ -13,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @version 1.0
  * @date 2018/6/17
  */
-//@Configuration
-public class FrontConfigurer extends WebMvcConfigurerAdapter {
+@Configuration
+public class FrontConfigurer extends WebMvcConfigurationSupport {
 
     @Bean
     CheckLoginInterceptor checkLoginInterceptor(){
@@ -25,7 +25,7 @@ public class FrontConfigurer extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(checkLoginInterceptor()).addPathPatterns("/**").
-                excludePathPatterns("un/member/*","/wechat/*");
+                excludePathPatterns("/un/member/*","/wechat/*","/admin/**");
         super.addInterceptors(registry);
     }
 }
