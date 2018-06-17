@@ -97,7 +97,7 @@ public class ShopController extends ABMallFrontBaseController {
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("invitingCode",ads.getAdUrl());
-        map.put("uuid",member.getUuid());
+        map.put("uuid",member.getId());
 
         return RestResponse.getSuccesseResponse(map);
 

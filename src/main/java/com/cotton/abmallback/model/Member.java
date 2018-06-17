@@ -6,14 +6,14 @@ import javax.persistence.*;
 @Table(name = "member")
 public class Member extends BaseModel {
     /**
-     * uuid
-     */
-    private String uuid;
-
-    /**
      * 会员名
      */
     private String name;
+
+    /**
+     * 性别：male,female,unknown
+     */
+    private String sex;
 
     /**
      * 密码
@@ -63,13 +63,14 @@ public class Member extends BaseModel {
     /**
      * openId
      */
-    @Column(name = "openId")
-    private String openid;
+    @Column(name = "open_id")
+    private String openId;
 
     /**
-     * 性别：male,female,unknown
+     * unionId
      */
-    private String sex;
+    @Column(name = "union_id")
+    private String unionId;
 
     /**
      * 总消费
@@ -96,28 +97,34 @@ public class Member extends BaseModel {
     private BigDecimal moneyLock;
 
     /**
+     * android-微信授权的登录凭证
+     */
+    @Column(name = "token_android_wechat")
+    private String tokenAndroidWechat;
+
+    /**
+     * ios-微信授权的登录凭证
+     */
+    @Column(name = "token_ios_wechat")
+    private String tokenIosWechat;
+
+    /**
+     * android的登录凭证
+     */
+    @Column(name = "token_android")
+    private String tokenAndroid;
+
+    /**
+     * ios的登录凭证
+     */
+    @Column(name = "token_ios")
+    private String tokenIos;
+
+    /**
      * 引荐人id
      */
     @Column(name = "referrer_id")
     private String referrerId;
-
-    /**
-     * 获取uuid
-     *
-     * @return uuid - uuid
-     */
-    public String getUuid() {
-        return uuid;
-    }
-
-    /**
-     * 设置uuid
-     *
-     * @param uuid uuid
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
-    }
 
     /**
      * 获取会员名
@@ -135,6 +142,24 @@ public class Member extends BaseModel {
      */
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    /**
+     * 获取性别：male,female,unknown
+     *
+     * @return sex - 性别：male,female,unknown
+     */
+    public String getSex() {
+        return sex;
+    }
+
+    /**
+     * 设置性别：male,female,unknown
+     *
+     * @param sex 性别：male,female,unknown
+     */
+    public void setSex(String sex) {
+        this.sex = sex == null ? null : sex.trim();
     }
 
     /**
@@ -284,37 +309,37 @@ public class Member extends BaseModel {
     /**
      * 获取openId
      *
-     * @return openId - openId
+     * @return open_id - openId
      */
-    public String getOpenid() {
-        return openid;
+    public String getOpenId() {
+        return openId;
     }
 
     /**
      * 设置openId
      *
-     * @param openid openId
+     * @param openId openId
      */
-    public void setOpenid(String openid) {
-        this.openid = openid == null ? null : openid.trim();
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
     }
 
     /**
-     * 获取性别：male,female,unknown
+     * 获取unionId
      *
-     * @return sex - 性别：male,female,unknown
+     * @return union_id - unionId
      */
-    public String getSex() {
-        return sex;
+    public String getUnionId() {
+        return unionId;
     }
 
     /**
-     * 设置性别：male,female,unknown
+     * 设置unionId
      *
-     * @param sex 性别：male,female,unknown
+     * @param unionId unionId
      */
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
+    public void setUnionId(String unionId) {
+        this.unionId = unionId == null ? null : unionId.trim();
     }
 
     /**
@@ -387,6 +412,78 @@ public class Member extends BaseModel {
      */
     public void setMoneyLock(BigDecimal moneyLock) {
         this.moneyLock = moneyLock;
+    }
+
+    /**
+     * 获取android-微信授权的登录凭证
+     *
+     * @return token_android_wechat - android-微信授权的登录凭证
+     */
+    public String getTokenAndroidWechat() {
+        return tokenAndroidWechat;
+    }
+
+    /**
+     * 设置android-微信授权的登录凭证
+     *
+     * @param tokenAndroidWechat android-微信授权的登录凭证
+     */
+    public void setTokenAndroidWechat(String tokenAndroidWechat) {
+        this.tokenAndroidWechat = tokenAndroidWechat == null ? null : tokenAndroidWechat.trim();
+    }
+
+    /**
+     * 获取ios-微信授权的登录凭证
+     *
+     * @return token_ios_wechat - ios-微信授权的登录凭证
+     */
+    public String getTokenIosWechat() {
+        return tokenIosWechat;
+    }
+
+    /**
+     * 设置ios-微信授权的登录凭证
+     *
+     * @param tokenIosWechat ios-微信授权的登录凭证
+     */
+    public void setTokenIosWechat(String tokenIosWechat) {
+        this.tokenIosWechat = tokenIosWechat == null ? null : tokenIosWechat.trim();
+    }
+
+    /**
+     * 获取android的登录凭证
+     *
+     * @return token_android - android的登录凭证
+     */
+    public String getTokenAndroid() {
+        return tokenAndroid;
+    }
+
+    /**
+     * 设置android的登录凭证
+     *
+     * @param tokenAndroid android的登录凭证
+     */
+    public void setTokenAndroid(String tokenAndroid) {
+        this.tokenAndroid = tokenAndroid == null ? null : tokenAndroid.trim();
+    }
+
+    /**
+     * 获取ios的登录凭证
+     *
+     * @return token_ios - ios的登录凭证
+     */
+    public String getTokenIos() {
+        return tokenIos;
+    }
+
+    /**
+     * 设置ios的登录凭证
+     *
+     * @param tokenIos ios的登录凭证
+     */
+    public void setTokenIos(String tokenIos) {
+        this.tokenIos = tokenIos == null ? null : tokenIos.trim();
     }
 
     /**

@@ -51,7 +51,10 @@ public class MemberController extends ABMallFrontBaseController {
         this.smsManager = smsManager;
     }
 
-
+    /**
+     * 获取用户的账户信息
+     * @return RestResponse
+     */
     @ResponseBody
     @RequestMapping(value = "/myInfo",method = {RequestMethod.GET})
     public RestResponse<Map<String, Object>> myInfo() {
@@ -63,7 +66,6 @@ public class MemberController extends ABMallFrontBaseController {
 
         return RestResponse.getSuccesseResponse(map);
     }
-
 
     /**
      * 绑定手机号
@@ -78,6 +80,15 @@ public class MemberController extends ABMallFrontBaseController {
             return RestResponse.getFailedResponse(500,"验证码错误");
         }
 
+        //查看手机号是否存在
+        Member model = new Member();
+        model.setPhoneNum(phoneNum);
+        model.setIsDeleted(false);
+
+        if(memberService.count(model) > 0){
+            return RestResponse.getFailedResponse(500,"改手机号已经存在");
+        }
+
         //更新手机号
         Member member = getCurrentMember();
         member.setPhoneNum(phoneNum);
@@ -88,7 +99,6 @@ public class MemberController extends ABMallFrontBaseController {
             return RestResponse.getFailedResponse(1,"绑定手机号失败！");
         }
     }
-
 
     /**
      * 绑定手机号
@@ -101,7 +111,7 @@ public class MemberController extends ABMallFrontBaseController {
         if(oldPhoneNum.equals(phoneNum)){
             return RestResponse.getFailedResponse(1,"新手机号与原有手机号相同！");
         }
-        //更新手机号
+
         Member member = memberService.getById(getCurrentMemberId());
 
         if(!oldPhoneNum.equals(member.getPhoneNum())){
@@ -112,6 +122,15 @@ public class MemberController extends ABMallFrontBaseController {
         //校验验证码
         if(!smsManager.checkCaptcha(phoneNum,code)){
             return RestResponse.getFailedResponse(500,"验证码错误");
+        }
+
+        //查看手机号是否存在
+        Member model = new Member();
+        model.setPhoneNum(phoneNum);
+        model.setIsDeleted(false);
+
+        if(memberService.count(model) > 0){
+            return RestResponse.getFailedResponse(500,"改手机号已经存在");
         }
 
         member.setPhoneNum(phoneNum);

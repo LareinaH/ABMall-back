@@ -31,15 +31,14 @@
 
 		<javaClientGenerator targetPackage="com.cotton.abmallback.mapper" targetProject="${basedir.src.main.java}" type="XMLMAPPER" />
 
-
-		<table tableName="goods" domainObjectName="Goods">
+<!--		<table tableName="goods" domainObjectName="Goods">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 <!--
 		<table tableName="goods_group">
 			<property name="useActualColumnNames" value="false" />
@@ -60,7 +59,7 @@
 
 		-->
 
-<!--		<table tableName="member">
+		<table tableName="member">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
@@ -68,7 +67,6 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>
-		-->
 <!--		<table tableName="member_address">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -137,6 +135,8 @@
 			<ignoreColumn column="gmt_modify" />
 		</table>
 
+		-->
+<!--
 		<table tableName="ads">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -144,8 +144,9 @@
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 
+		<!--
 		<table tableName="cash_pick_up">
         	<property name="useActualColumnNames" value="false" />
         	<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -188,14 +189,16 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>
-		<table tableName="account_money_flow">
+		-->
+<!--		<table tableName="account_money_flow">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
+		<!--
 		<table tableName="shop_activities">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />

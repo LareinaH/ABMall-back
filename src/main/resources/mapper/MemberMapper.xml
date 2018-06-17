@@ -5,8 +5,8 @@
     <!--
       WARNING - @mbggenerated
     -->
-    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="display_name" jdbcType="VARCHAR" property="displayName" />
     <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
@@ -15,12 +15,16 @@
     <result column="refer_total_count" jdbcType="INTEGER" property="referTotalCount" />
     <result column="wechat_no" jdbcType="VARCHAR" property="wechatNo" />
     <result column="wechat_name" jdbcType="VARCHAR" property="wechatName" />
-    <result column="openId" jdbcType="VARCHAR" property="openid" />
-    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="union_id" jdbcType="VARCHAR" property="unionId" />
     <result column="money_total_spend" jdbcType="DECIMAL" property="moneyTotalSpend" />
     <result column="money_total_earn" jdbcType="DECIMAL" property="moneyTotalEarn" />
     <result column="money_total_take" jdbcType="DECIMAL" property="moneyTotalTake" />
     <result column="money_lock" jdbcType="DECIMAL" property="moneyLock" />
+    <result column="token_android_wechat" jdbcType="VARCHAR" property="tokenAndroidWechat" />
+    <result column="token_ios_wechat" jdbcType="VARCHAR" property="tokenIosWechat" />
+    <result column="token_android" jdbcType="VARCHAR" property="tokenAndroid" />
+    <result column="token_ios" jdbcType="VARCHAR" property="tokenIos" />
     <result column="referrer_id" jdbcType="LONGVARCHAR" property="referrerId" />
   </resultMap>
 </mapper>

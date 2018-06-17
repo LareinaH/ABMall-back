@@ -1,4 +1,4 @@
-package com.cotton.abmallback.web.interceptor;
+package com.cotton.abmallback.web.interceptor.front;
 
 /**
  * CheckLoginInterceptor
@@ -7,6 +7,8 @@ package com.cotton.abmallback.web.interceptor;
  * @version 1.0
  * @date 2018/5/25
  */
+import com.alibaba.fastjson.JSONObject;
+import com.cotton.abmallback.enumeration.DeviceType;
 import com.cotton.base.common.RestResponse;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.service.MemberService;
@@ -40,15 +42,21 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         //1 从request里获取【APP-SESSION-TICKET】
         String appSessionTicket = httpServletRequest.getHeader("APP-SESSION-TICKET");
 
-        if ( StringUtils.isEmpty(appSessionTicket)) {
+        //从request里获取【device-type】
+        String deviceType = httpServletRequest.getHeader("DEVICE-TYPE");
+
+        if ( StringUtils.isEmpty(appSessionTicket) ) {
             setReLogin(httpServletRequest, httpServletResponse);
             return false;
         }
-        //根据ticket 获取用户
-
+        //根据ticket 和 device-type获取用户信息
         Member model = new Member();
-        //model.setTicket(appSessionTicket);
 
+        if(deviceType.equalsIgnoreCase(DeviceType.IOS.name())){
+            model.setTokenIos(appSessionTicket);
+        }else{
+            model.setTokenAndroid(appSessionTicket);
+        }
         List<Member> memberList = memberService.queryList(model);
 
         if(memberList.isEmpty()){
@@ -77,8 +85,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         RestResponse<Void> restResponse = RestResponse.getUnauthorizedFailedResponse();
 
         //转换成json
-
-        String jsonString = "";
+        String jsonString = JSONObject.toJSONString(restResponse);
 
         //写入response
         try {
