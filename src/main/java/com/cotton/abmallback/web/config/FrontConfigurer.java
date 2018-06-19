@@ -1,10 +1,9 @@
-package com.cotton.abmallback.web;
+package com.cotton.abmallback.web.config;
 
 import com.cotton.abmallback.web.interceptor.front.CheckLoginInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
  * FrontConfigurer
@@ -14,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  * @date 2018/6/17
  */
 @Configuration
-public class FrontConfigurer extends WebMvcConfigurationSupport {
+public class FrontConfigurer  extends WebConfigurer {
 
     @Bean
     CheckLoginInterceptor checkLoginInterceptor(){

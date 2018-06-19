@@ -32,7 +32,6 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
     MemberService memberService;
 
 
-
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
 
