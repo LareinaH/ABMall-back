@@ -168,25 +168,17 @@ public class LoginController extends ABMallFrontBaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/member/logout",method = {RequestMethod.GET})
-    public RestResponse<Void> logout(@RequestParam String deviceType,
-                                     @RequestParam boolean bWechat) {
+    public RestResponse<Void> logout(@RequestHeader(value = "DEVICE-TYPE", defaultValue = "IOS") String deviceType) {
 
         Member member = memberService.getById(getCurrentMemberId());
 
         if(deviceType.equalsIgnoreCase(DeviceType.IOS.name())){
-            if(bWechat){
-                member.setTokenIosWechat("-");
-            }else {
-                member.setTokenIos("-");
-            }
-        }else {
-            if(bWechat){
-                member.setTokenAndroidWechat("-");
-            }else {
-                member.setTokenAndroid("-");
-            }
-        }
 
+            member.setTokenIos("-");
+        }else {
+            member.setTokenAndroid("-");
+        }
+        
         return RestResponse.getSuccesseResponse();
 
     }
