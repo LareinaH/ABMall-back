@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.enumeration.AdTypeEnum;
 import com.cotton.abmallback.model.Ads;
 import com.cotton.abmallback.service.AdsService;
 import com.cotton.base.common.RestResponse;
@@ -83,11 +84,12 @@ public class AdsManagerController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/queryList", method = {RequestMethod.GET})
-    public RestResponse<List<Ads>> queryList() {
+    public RestResponse<List<Ads>> queryList(AdTypeEnum adType) {
 
         Example example = new Example(Ads.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
+        criteria.andEqualTo("adType",adType.name());
 
         List<Ads> adsList = adsService.queryList(example);
 
@@ -101,13 +103,15 @@ public class AdsManagerController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
     public RestResponse<PageInfo<Ads>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
-                                                     @RequestParam(defaultValue = "4") int pageSize) {
+                                                     @RequestParam(defaultValue = "4") int pageSize,
+                                                     AdTypeEnum adType) {
 
         Example example = new Example(Ads.class);
         example.setOrderByClause("gmt_create desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
+        criteria.andEqualTo("adType",adType.name());
 
         PageInfo<Ads> adsPageInfo = adsService.query(pageNum, pageSize, example);
 
