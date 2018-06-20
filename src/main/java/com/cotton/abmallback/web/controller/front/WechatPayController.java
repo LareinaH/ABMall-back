@@ -27,8 +27,8 @@ import javax.annotation.Resource;
  */
 
 @Controller
-@RequestMapping("/wechat")
-public class WechatController {
+@RequestMapping("/wechat/pay")
+public class WechatPayController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -45,7 +45,7 @@ public class WechatController {
      *
      * @param orderId 订单id
      */
-    @PostMapping("/pay/unifiedOrder")
+    @PostMapping("/unifiedOrder")
     public RestResponse<WxPayUnifiedOrderResult> unifiedOrder(long orderId) throws WxPayException {
 
         //根据orderId 获取订单信息

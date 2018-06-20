@@ -223,6 +223,7 @@ public class LoginController extends ABMallFrontBaseController {
         loginMemberVO.setSex(member.getSex());
         loginMemberVO.setBindPhone(StringUtils.isNotBlank(member.getPhoneNum()));
         loginMemberVO.setTicket(token);
+        loginMemberVO.setPhoneNum(member.getPhoneNum());
 
         return loginMemberVO;
     }

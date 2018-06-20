@@ -19,7 +19,6 @@ public class LoginMemberVO {
      */
     private String sex;
 
-
     /**
      * 头像
      */
@@ -34,6 +33,11 @@ public class LoginMemberVO {
      * 是否绑定手机
      */
     private boolean isBindPhone;
+
+    /**
+     * 手机号码
+     */
+    private String phoneNum;
 
     /**
      * 登录凭证
@@ -78,6 +82,14 @@ public class LoginMemberVO {
 
     public void setTicket(String ticket) {
         this.ticket = ticket;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 
     public boolean isBindPhone() {
