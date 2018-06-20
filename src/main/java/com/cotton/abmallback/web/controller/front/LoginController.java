@@ -113,7 +113,6 @@ public class LoginController extends ABMallFrontBaseController {
      */
     private RestResponse<LoginMemberVO> loginWeChatApp(String unionId,String openId,String headImageUrl, String nickname, String deviceType) {
 
-
         //根据openid号查找用户
         Member model = new Member();
         model.setOpenId(openId);
