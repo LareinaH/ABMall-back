@@ -1,4 +1,4 @@
-package com.cotton.abmallback.third;
+package com.cotton.abmallback.third.alibaba;
 
 import org.springframework.stereotype.Service;
 

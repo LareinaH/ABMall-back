@@ -65,7 +65,7 @@ public class OrdersController extends ABMallFrontBaseController {
     @ResponseBody
     @RequestMapping(value = "/createOrder")
     @Transactional(rollbackFor = Exception.class)
-    public RestResponse<Void> createOrder(@RequestBody Map<String,Object> params) {
+    public RestResponse<Orders> createOrder(@RequestBody Map<String,Object> params) {
 
         if (params.get("goodsSpecificationServiceId") == null ||
                 params.get("count") == null || params.get("addressId") == null) {
@@ -144,8 +144,7 @@ public class OrdersController extends ABMallFrontBaseController {
             goodsSpecificationService.update(goodsSpecification);
 
 
-            return RestResponse.getSuccesseResponse();
-
+            return RestResponse.getSuccesseResponse(orders);
         }
 
         return RestResponse.getFailedResponse(500,"内部错误");
@@ -211,6 +210,7 @@ public class OrdersController extends ABMallFrontBaseController {
 
         return RestResponse.getFailedResponse(500,"确认收获失败!");
     }
+
 
     /**
      * 取消订单
