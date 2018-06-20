@@ -127,9 +127,9 @@ public class LoginController extends ABMallFrontBaseController {
         if(member != null){
 
             if(deviceType.equalsIgnoreCase(DeviceType.IOS.name())){
-                member.setTokenIosWechat(token);
+                member.setTokenIos(token);
             }else {
-                member.setTokenAndroidWechat(token);
+                member.setTokenAndroid(token);
             }
             memberService.update(member);
 
