@@ -8,6 +8,7 @@ import com.cotton.abmallback.service.*;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.third.KdniaoService;
+import com.cotton.base.utils.RandomUtil;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -62,6 +64,11 @@ public class OrdersController extends ABMallFrontBaseController {
         this.kdniaoService = kdniaoService;
     }
 
+    /**
+     * 创建订单
+     * @param params 订单信息
+     * @return RestResponse
+     */
     @ResponseBody
     @RequestMapping(value = "/createOrder")
     @Transactional(rollbackFor = Exception.class)
@@ -103,8 +110,11 @@ public class OrdersController extends ABMallFrontBaseController {
         Orders orders = new Orders();
         orders.setOrderStatus(OrderStatusEnum.WAIT_BUYER_PAY.name());
         orders.setMemberId(getCurrentMemberId());
-        //根据时间戳生成订单编号
-        orders.setOrderNo("");
+        //根据时间戳生成订单编号 + 3位随机数
+        SimpleDateFormat sfDate = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String strDate = sfDate.format(new Date());
+        String random = RandomUtil.getRandomNumCode(3);
+        orders.setOrderNo(strDate + random);
         orders.setTotalMoney(goodsSpecification.getPreferentialPrice().multiply(new BigDecimal(Double.valueOf(count))));
 
         //收货人信息
@@ -153,7 +163,7 @@ public class OrdersController extends ABMallFrontBaseController {
 
     /**
      * 订单列表
-     * @return
+     * @return RestResponse
      */
     @ResponseBody
     @RequestMapping(value = "/list")
@@ -189,7 +199,7 @@ public class OrdersController extends ABMallFrontBaseController {
 
     /**
      * 确认收货
-     * @return
+     * @return RestResponse
      */
     @ResponseBody
     @RequestMapping(value = "/confirmReceipt")
@@ -214,7 +224,7 @@ public class OrdersController extends ABMallFrontBaseController {
 
     /**
      * 取消订单
-     * @return
+     * @return RestResponse
      */
     @ResponseBody
     @RequestMapping(value = "/cancelOrder")
@@ -242,7 +252,6 @@ public class OrdersController extends ABMallFrontBaseController {
             if (ordersService.update(orders)) {
 
                 //处理库存和销量
-
                 goods.setStock(goods.getStock() + orderGoods.getGoodNum());
                 goods.setSalesAmount(goods.getSalesAmount() - orderGoods.getGoodNum());
 
@@ -258,7 +267,7 @@ public class OrdersController extends ABMallFrontBaseController {
 
     /**
      * 查看物流
-     * @return
+     * @return RestResponse
      */
     @ResponseBody
     @RequestMapping(value = "/showLogistics")

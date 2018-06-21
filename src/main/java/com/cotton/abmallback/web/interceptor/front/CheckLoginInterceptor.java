@@ -15,6 +15,8 @@ import com.cotton.abmallback.service.MemberService;
 
 import com.cotton.abmallback.web.PermissionContext;
 
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -31,6 +33,8 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    WxMpService wxService;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
@@ -38,32 +42,60 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         //清空context
         PermissionContext.clearThreadVariable();
 
-        //1 从request里获取【APP-SESSION-TICKET】
-        String appSessionTicket = httpServletRequest.getHeader("APP-SESSION-TICKET");
+        //判断是否来自微信公众号的
+        String code = httpServletRequest.getParameter("code");
 
-        //从request里获取【device-type】
-        String deviceType = httpServletRequest.getHeader("DEVICE-TYPE");
+        if(!StringUtils.isEmpty(code)){
+            //通过code换取网页授权access_token
+            WxMpOAuth2AccessToken token = wxService.oauth2getAccessToken(code);
 
-        if ( StringUtils.isEmpty(appSessionTicket) ) {
-            setReLogin(httpServletRequest, httpServletResponse);
-            return false;
+            if(null == token){
+                setReLogin(httpServletRequest, httpServletResponse);
+                return false;
+            }
+
+            //根据openId 获取用户信息
+            Member model = new Member();
+            model.setOpenId(token.getOpenId());
+            model.setIsDeleted(false);
+
+            List<Member> memberList = memberService.queryList(model);
+
+            if (memberList.isEmpty()) {
+                setReLogin(httpServletRequest, httpServletResponse);
+                return false;
+            }
+
+            PermissionContext.setMember(memberList.get(0));
+        }else {
+
+            //1 从request里获取【APP-SESSION-TICKET】
+            String appSessionTicket = httpServletRequest.getHeader("APP-SESSION-TICKET");
+
+            //从request里获取【device-type】
+            String deviceType = httpServletRequest.getHeader("DEVICE-TYPE");
+
+            if (StringUtils.isEmpty(appSessionTicket)) {
+                setReLogin(httpServletRequest, httpServletResponse);
+                return false;
+            }
+            //根据ticket 和 device-type获取用户信息
+            Member model = new Member();
+
+            if (deviceType.equalsIgnoreCase(DeviceType.IOS.name())) {
+                model.setTokenIos(appSessionTicket);
+            } else {
+                model.setTokenAndroid(appSessionTicket);
+            }
+            List<Member> memberList = memberService.queryList(model);
+
+            if (memberList.isEmpty()) {
+                setReLogin(httpServletRequest, httpServletResponse);
+                return false;
+            }
+
+            PermissionContext.setMember(memberList.get(0));
         }
-        //根据ticket 和 device-type获取用户信息
-        Member model = new Member();
-
-        if(deviceType.equalsIgnoreCase(DeviceType.IOS.name())){
-            model.setTokenIos(appSessionTicket);
-        }else{
-            model.setTokenAndroid(appSessionTicket);
-        }
-        List<Member> memberList = memberService.queryList(model);
-
-        if(memberList.isEmpty()){
-            setReLogin(httpServletRequest,httpServletResponse);
-            return false;
-        }
-
-        PermissionContext.setMember(memberList.get(0));
 
         return true;
     }

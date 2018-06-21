@@ -3,6 +3,7 @@ package com.cotton.abmallback.manager;
 import com.cotton.abmallback.model.SmsCaptcha;
 import com.cotton.abmallback.service.SmsCaptchaService;
 import com.cotton.base.third.SmsService;
+import com.cotton.base.utils.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class SmsManager {
     public boolean sendCaptcha(String phoneNum){
 
         //生成验证码
-        String captcha = getRandomNumCode(6);
+        String captcha = RandomUtil.getRandomNumCode(6);
 
         if(sendCheckCode(phoneNum,captcha)){
             SmsCaptcha model = new SmsCaptcha();
@@ -84,22 +85,4 @@ public class SmsManager {
         return smsService.sendSms(phoneNum,signName, captchaTemplateCode,paramMap);
     }
 
-
-    private String getRandomNumCode(int count){
-
-        StringBuilder codeNum = new StringBuilder();
-
-        int [] numbers = {0,1,2,3,4,5,6,7,8,9};
-
-        Random random = new Random();
-
-        for (int i = 0; i < count; i++) {
-
-            int next = random.nextInt(10000);
-
-            codeNum.append(numbers[next % 10]);
-        }
-
-        return codeNum.toString();
-    }
 }

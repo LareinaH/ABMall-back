@@ -1,4 +1,4 @@
-package com.cotton.base.util;
+package com.cotton.base.utils;
 
 import java.security.MessageDigest;
 import java.util.Arrays;
