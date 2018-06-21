@@ -1,9 +1,11 @@
 package com.cotton.abmallback.web.controller.front;
 
 
+import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.base.common.RestResponse;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -57,6 +60,32 @@ public class WechatPayController {
         WxPayUnifiedOrderResult wxPayUnifiedOrderResult= this.wxPayService.unifiedOrder(request);
 
         return RestResponse.getSuccesseResponse(wxPayUnifiedOrderResult);
+    }
+
+
+    @PostMapping("/parseOrderNotifyResult")
+    public RestResponse<Void> parseOrderNotifyResult(@RequestBody String xmlData) throws WxPayException {
+
+        logger.info("微信支付结果通知:" + xmlData);
+
+        WxPayOrderNotifyResult wxPayOrderNotifyResult = this.wxPayService.parseOrderNotifyResult(xmlData);
+
+        //支付成功
+        if(wxPayOrderNotifyResult!= null && wxPayOrderNotifyResult.getReturnCode().equalsIgnoreCase("SUCCESS")
+                && wxPayOrderNotifyResult.getResultCode().equalsIgnoreCase("SUCCESS")){
+
+            String orderNo = wxPayOrderNotifyResult.getOutTradeNo();
+
+            Orders model = new Orders();
+            model.setOrderNo(orderNo);
+            model.setIsDeleted(false);
+            model.setOrderStatus(OrderStatusEnum.WAIT_DELIVER.name());
+
+            ordersService.update(model);
+
+            //TODO:分润
+        }
+        return RestResponse.getSuccesseResponse();
     }
 
 }

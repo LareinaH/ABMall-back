@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
  * @date 2018/6/17
  */
 @Configuration
-public class FrontConfigurer  extends WebConfigurer {
+public class FrontConfigurer extends BaseConfigurer {
 
     @Bean
     CheckLoginInterceptor checkLoginInterceptor(){
