@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.base.controller.BaseController;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/wechat/portal")
-public class WechatMpController {
+public class WechatMpController extends BaseController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

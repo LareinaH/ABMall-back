@@ -22,4 +22,11 @@ public class ErrorController {
     public RestResponse notFound() {
         return RestResponse.getFailedResponse(404,"接口不存在");
     }
+
+
+    @RequestMapping("/500")
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public RestResponse fiveoo() {
+        return RestResponse.getFailedResponse(500,"系统异常");
+    }
 }
