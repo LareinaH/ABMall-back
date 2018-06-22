@@ -33,7 +33,7 @@ public class WechatMpController {
         this.router = router;
     }
 
-    @GetMapping()
+    @GetMapping(produces = "text/plain;charset=utf-8")
     public String authGet(
             @RequestParam(name = "signature",
                     required = false) String signature,

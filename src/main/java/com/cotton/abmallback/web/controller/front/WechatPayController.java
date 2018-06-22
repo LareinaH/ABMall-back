@@ -2,7 +2,9 @@ package com.cotton.abmallback.web.controller.front;
 
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
+import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.base.common.RestResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.net.InetAddress;
 
 
 /**
@@ -41,6 +46,9 @@ public class WechatPayController {
     @Autowired
     private OrdersService ordersService;
 
+    @Autowired
+    private OrderGoodsService orderGoodsService;
+
     /**
      * 统一下单(详见https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1)
      * 在发起微信支付前，需要调用统一下单接口，获取"预支付交易会话标识"
@@ -49,13 +57,27 @@ public class WechatPayController {
      * @param orderId 订单id
      */
     @PostMapping("/unifiedOrder")
-    public RestResponse<WxPayUnifiedOrderResult> unifiedOrder(long orderId) throws WxPayException {
+    public RestResponse<WxPayUnifiedOrderResult> unifiedOrder(HttpServletRequest httpServletRequest,
+                                                              long orderId, String tradeType) throws WxPayException {
 
         //根据orderId 获取订单信息
         Orders orders = ordersService.getById(orderId);
+        OrderGoods model = new OrderGoods();
+        model.setOrderId(orderId);
+        OrderGoods orderGoods = orderGoodsService.selectOne(model);
+
+        String ip = getIpAddr(httpServletRequest);
 
         //构建WxPayUnifiedOrderRequest
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
+        request.setBody(orderGoods.getGoodName());
+        request.setOutTradeNo(orders.getOrderNo());
+        BigDecimal var = new BigDecimal("100");
+        request.setTotalFee(orders.getTotalMoney().multiply(var).intValue());
+        request.setSpbillCreateIp(ip);
+        request.setNotifyUrl("http://47.97.212.22:80/api/v1/wechat/pay/parseOrderNotifyResult");
+        request.setTradeType(tradeType);
+
 
         WxPayUnifiedOrderResult wxPayUnifiedOrderResult= this.wxPayService.unifiedOrder(request);
 
@@ -86,6 +108,40 @@ public class WechatPayController {
             //TODO:分润
         }
         return RestResponse.getSuccesseResponse();
+    }
+
+
+    /**
+     * @Description: 获取客户端IP地址
+     */
+    private String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            if(ip.equals("127.0.0.1")){
+                //根据网卡取本机配置的IP
+                InetAddress inet=null;
+                try {
+                    inet = InetAddress.getLocalHost();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ip= inet.getHostAddress();
+            }
+        }
+        // 多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if(ip != null && ip.length() > 15){
+            if(ip.indexOf(",")>0){
+                ip = ip.substring(0,ip.indexOf(","));
+            }
+        }
+        return ip;
     }
 
 }

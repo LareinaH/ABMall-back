@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
  * @date 2018/6/17
  */
 @Configuration
-public class FrontConfigurer extends BaseConfigurer {
+public class FrontConfigurer extends WebConfigurer {
 
     @Bean
     CheckLoginInterceptor checkLoginInterceptor(){
@@ -24,7 +24,7 @@ public class FrontConfigurer extends BaseConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(checkLoginInterceptor()).addPathPatterns("/**").
-                excludePathPatterns("/un/member/*","/wechat/*","/admin/**","/interface/**");
+                excludePathPatterns("/un/member/*","/wechat/*","/admin/**","/interface/**","/actuator/*","/404");
         super.addInterceptors(registry);
     }
 }
