@@ -51,9 +51,12 @@ public class WechatMpController extends BaseController {
         }
 
         if (this.wxService.checkSignature(timestamp, nonce, signature)) {
+
+            logger.info("\n 输出的参数为: " + echostr);
             return echostr;
         }
 
+        logger.error("\n 校验失败");
         return "非法请求";
     }
 
