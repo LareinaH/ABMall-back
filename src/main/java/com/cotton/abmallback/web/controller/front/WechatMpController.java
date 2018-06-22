@@ -9,7 +9,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * WechatMpController
@@ -18,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  * @date 2018/6/20
  */
-@RestController
+@Controller
 @RequestMapping("/wechat/portal")
 public class WechatMpController extends BaseController {
 
@@ -35,7 +40,7 @@ public class WechatMpController extends BaseController {
     }
 
     @GetMapping(produces = "text/plain;charset=utf-8")
-    public String authGet(
+    public void authGet(HttpServletResponse httpServletResponse,
             @RequestParam(name = "signature",
                     required = false) String signature,
             @RequestParam(name = "timestamp",
@@ -50,14 +55,26 @@ public class WechatMpController extends BaseController {
             throw new IllegalArgumentException("请求参数非法，请核实!");
         }
 
-        if (this.wxService.checkSignature(timestamp, nonce, signature)) {
+        try {
+            PrintWriter printWriter =httpServletResponse.getWriter();
 
-            logger.info("\n 输出的参数为: " + echostr);
-            return echostr;
+
+            if (this.wxService.checkSignature(timestamp, nonce, signature)) {
+
+                logger.info("\n 输出的参数为: " + echostr);
+
+
+                printWriter.write(echostr);
+                return;
+            }
+
+            logger.error("\n 校验失败");
+
+            printWriter.write("校验失败");
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        logger.error("\n 校验失败");
-        return "非法请求";
     }
 
     @PostMapping(produces = "application/xml; charset=UTF-8")
