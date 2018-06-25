@@ -20,6 +20,12 @@ public class Orders extends BaseModel {
     private Long memberId;
 
     /**
+     * 订单会员手机号
+     */
+    @Column(name = "member_phone")
+    private String memberPhone;
+
+    /**
      * 订单状态
      */
     @Column(name = "order_status")
@@ -30,6 +36,18 @@ public class Orders extends BaseModel {
      */
     @Column(name = "total_money")
     private BigDecimal totalMoney;
+
+    /**
+     * 总返利金额
+     */
+    @Column(name = "rebate_money")
+    private BigDecimal rebateMoney;
+
+    /**
+     * 订单来源
+     */
+    @Column(name = "order_source")
+    private String orderSource;
 
     /**
      * 收货人姓名
@@ -103,6 +121,9 @@ public class Orders extends BaseModel {
     @Column(name = "trade_no")
     private String tradeNo;
 
+    /**
+     * 物流编号
+     */
     @Column(name = "logistic_code")
     private String logisticCode;
 
@@ -119,15 +140,15 @@ public class Orders extends BaseModel {
     private Date receiveTime;
 
     /**
-     * 订单备注
-     */
-    private String remarks;
-
-    /**
      * 退货状态
      */
     @Column(name = "return_status")
     private String returnStatus;
+
+    /**
+     * 订单备注
+     */
+    private String remarks;
 
     /**
      * 获取订单编号
@@ -166,6 +187,24 @@ public class Orders extends BaseModel {
     }
 
     /**
+     * 获取订单会员手机号
+     *
+     * @return member_phone - 订单会员手机号
+     */
+    public String getMemberPhone() {
+        return memberPhone;
+    }
+
+    /**
+     * 设置订单会员手机号
+     *
+     * @param memberPhone 订单会员手机号
+     */
+    public void setMemberPhone(String memberPhone) {
+        this.memberPhone = memberPhone == null ? null : memberPhone.trim();
+    }
+
+    /**
      * 获取订单状态
      *
      * @return order_status - 订单状态
@@ -199,6 +238,42 @@ public class Orders extends BaseModel {
      */
     public void setTotalMoney(BigDecimal totalMoney) {
         this.totalMoney = totalMoney;
+    }
+
+    /**
+     * 获取总返利金额
+     *
+     * @return rebate_money - 总返利金额
+     */
+    public BigDecimal getRebateMoney() {
+        return rebateMoney;
+    }
+
+    /**
+     * 设置总返利金额
+     *
+     * @param rebateMoney 总返利金额
+     */
+    public void setRebateMoney(BigDecimal rebateMoney) {
+        this.rebateMoney = rebateMoney;
+    }
+
+    /**
+     * 获取订单来源
+     *
+     * @return order_source - 订单来源
+     */
+    public String getOrderSource() {
+        return orderSource;
+    }
+
+    /**
+     * 设置订单来源
+     *
+     * @param orderSource 订单来源
+     */
+    public void setOrderSource(String orderSource) {
+        this.orderSource = orderSource == null ? null : orderSource.trim();
     }
 
     /**
@@ -418,14 +493,18 @@ public class Orders extends BaseModel {
     }
 
     /**
-     * @return logistic_code
+     * 获取物流编号
+     *
+     * @return logistic_code - 物流编号
      */
     public String getLogisticCode() {
         return logisticCode;
     }
 
     /**
-     * @param logisticCode
+     * 设置物流编号
+     *
+     * @param logisticCode 物流编号
      */
     public void setLogisticCode(String logisticCode) {
         this.logisticCode = logisticCode == null ? null : logisticCode.trim();
@@ -468,24 +547,6 @@ public class Orders extends BaseModel {
     }
 
     /**
-     * 获取订单备注
-     *
-     * @return remarks - 订单备注
-     */
-    public String getRemarks() {
-        return remarks;
-    }
-
-    /**
-     * 设置订单备注
-     *
-     * @param remarks 订单备注
-     */
-    public void setRemarks(String remarks) {
-        this.remarks = remarks == null ? null : remarks.trim();
-    }
-
-    /**
      * 获取退货状态
      *
      * @return return_status - 退货状态
@@ -501,5 +562,23 @@ public class Orders extends BaseModel {
      */
     public void setReturnStatus(String returnStatus) {
         this.returnStatus = returnStatus == null ? null : returnStatus.trim();
+    }
+
+    /**
+     * 获取订单备注
+     *
+     * @return remarks - 订单备注
+     */
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * 设置订单备注
+     *
+     * @param remarks 订单备注
+     */
+    public void setRemarks(String remarks) {
+        this.remarks = remarks == null ? null : remarks.trim();
     }
 }

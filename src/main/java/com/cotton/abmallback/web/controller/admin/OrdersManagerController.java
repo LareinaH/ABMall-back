@@ -118,7 +118,7 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
                 Date date;
                 try {
-                    date = DateUtils.parseDate(conditions.get("timeBegin").toString(),"yyyy-MM-dd HH:mm:ss");
+                    date = DateUtils.parseDate(conditions.get("timeBegin").toString(),"yyyy-MM-dd");
                 } catch (ParseException e) {
                     return RestResponse.getFailedResponse(500,"时间格式错误");
                 }
@@ -129,7 +129,7 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
                 Date date;
                 try {
-                    date = DateUtils.parseDate(conditions.get("timeEnd").toString(),"yyyy-MM-dd HH:mm:ss");
+                    date = DateUtils.parseDate(conditions.get("timeEnd").toString(),"yyyy-MM-dd");
                 } catch (ParseException e) {
                     return RestResponse.getFailedResponse(500,"时间格式错误");
                 }

@@ -44,10 +44,10 @@ public class ConfigController {
                     jo.put("label", x.getDisplayName());
                     return jo;
                 }).collect(Collectors.toList());
-
-                default:
-                    object = null;
-                    break;
+                break;
+            default:
+                object = null;
+                break;
         }
 
         return RestResponse.getSuccesseResponse(object);

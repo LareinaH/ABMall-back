@@ -1,6 +1,10 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.third.wechat.mp.config.WechatMpProperties;
+import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
+import me.chanjar.weixin.common.bean.WxJsapiSignature;
+import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
@@ -33,10 +37,13 @@ public class WechatMpController extends BaseController {
 
     private final WxMpMessageRouter router;
 
+    private final WechatMpProperties wechatMpProperties;
+
     @Autowired
-    public WechatMpController(WxMpService wxService, WxMpMessageRouter router) {
+    public WechatMpController(WxMpService wxService, WxMpMessageRouter router, WechatMpProperties wechatMpProperties) {
         this.wxService = wxService;
         this.router = router;
+        this.wechatMpProperties = wechatMpProperties;
     }
 
     @GetMapping(produces = "text/plain;charset=utf-8")
@@ -123,6 +130,17 @@ public class WechatMpController extends BaseController {
         this.logger.debug("\n组装回复信息：{}", out);
 
         return out;
+    }
+
+    @GetMapping(path = "config", produces = "text/plain;charset=utf-8")
+    public RestResponse<WxJsapiSignature> getConfig(String url){
+        try {
+            WxJsapiSignature signature = wxService.createJsapiSignature(url);
+            return RestResponse.getSuccesseResponse(signature);
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+            return RestResponse.getFailedResponse(500,"获取配置失败");
+        }
     }
 
     private WxMpXmlOutMessage route(WxMpXmlMessage message) {

@@ -69,6 +69,8 @@ public class LoginController extends ABMallFrontBaseController {
             if(StringUtils.isBlank(code)){
                 return RestResponse.getFailedResponse(1, "code不能为空");
             }
+
+            return loginWeChatMp(code);
         }
 
         if(bWechat){
@@ -183,15 +185,16 @@ public class LoginController extends ABMallFrontBaseController {
     private RestResponse<LoginMemberVO> loginWeChatMp(String code){
 
         //通过code换取网页授权access_token
-        WxMpOAuth2AccessToken wxMpOAuth2AccessToken = null;
+        WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
         try {
             wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
         } catch (WxErrorException e) {
-            e.printStackTrace();
-        }
+            logger.error("登录失败" + e);
+            return RestResponse.getFailedResponse(1,"登录失败" + e.getMessage());
 
+        }
         if(null == wxMpOAuth2AccessToken){
-            return RestResponse.getFailedResponse(1,"系统异常,登录失败");
+            return RestResponse.getFailedResponse(1,"登录失败");
         }
 
         String token =  UUID.randomUUID().toString();
@@ -225,15 +228,14 @@ public class LoginController extends ABMallFrontBaseController {
             newMember.setIsDeleted(false);
             newMember.setLevel(MemberLevelEnum.WHITE.name());
             newMember.setPhoto(wxMpUser.getHeadImgUrl());
+            newMember.setTokenWechatMp(token);
 
-            //TODO: 设置tocken
             if(memberService.insert(newMember)){
 
                 return RestResponse.getSuccesseResponse(translateLoginVO(newMember,token));
             }
         }else {
-
-            //TODO: 设置tocken
+            memberList.get(0).setTokenWechatMp(token);
             memberService.update(memberList.get(0));
             return RestResponse.getSuccesseResponse(translateLoginVO(memberList.get(0),token));
         }

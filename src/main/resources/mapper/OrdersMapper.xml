@@ -7,8 +7,11 @@
     -->
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="member_phone" jdbcType="VARCHAR" property="memberPhone" />
     <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
     <result column="total_money" jdbcType="DECIMAL" property="totalMoney" />
+    <result column="rebate_money" jdbcType="DECIMAL" property="rebateMoney" />
+    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
     <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
     <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
     <result column="receiver_province_name" jdbcType="VARCHAR" property="receiverProvinceName" />
@@ -24,7 +27,7 @@
     <result column="logistic_code" jdbcType="VARCHAR" property="logisticCode" />
     <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
-    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="return_status" jdbcType="VARCHAR" property="returnStatus" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
   </resultMap>
 </mapper>
