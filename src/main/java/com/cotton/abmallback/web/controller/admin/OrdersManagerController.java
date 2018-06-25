@@ -1,45 +1,177 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.web.controller.ABMallAdminBaseController;
 import com.cotton.base.common.RestResponse;
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Example;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Orders
+ * OrdersManager
  *
  * @author lareina_h
  * @version 1.0
- * @date 2018/5/9
+ * @date 2018/6/25
  */
 @Controller
-@RequestMapping("/ordersManager")
+@RequestMapping("/admin/orders")
 public class OrdersManagerController extends ABMallAdminBaseController {
 
     private Logger logger = LoggerFactory.getLogger(OrdersManagerController.class);
 
-    @Autowired
     private OrdersService ordersService;
 
-
+    @Autowired
+    public OrdersManagerController(OrdersService ordersService) {
+        this.ordersService = ordersService;
+    }
 
     @ResponseBody
     @RequestMapping(value = "/example")
     public RestResponse<Map<String, Object>> example() {
 
-
         Map<String, Object> map = new HashMap<>(2);
 
         return RestResponse.getSuccesseResponse(map);
-
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/add", method = {RequestMethod.POST})
+    public RestResponse<Void> add(@RequestBody Orders orders) {
+
+        if (ordersService.insert(orders)) {
+            return RestResponse.getSuccesseResponse();
+        } else {
+            return RestResponse.getFailedResponse(500, "增加失败");
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/update", method = {RequestMethod.POST})
+    public RestResponse<Void> update(@RequestBody Orders orders) {
+
+        if (!ordersService.update(orders)) {
+            return RestResponse.getFailedResponse(500, "更新数据失败,Orders为:" + orders.toString());
+        }
+
+        return RestResponse.getSuccesseResponse();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/get", method = {RequestMethod.GET})
+    public RestResponse<Orders> get(long ordersId) {
+
+        Orders orders = ordersService.getById(ordersId);
+
+        if (null == orders) {
+            return RestResponse.getFailedResponse(500, "无法查找数据,请检查ordersId是否正确");
+
+        }
+        return RestResponse.getSuccesseResponse(orders);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/queryList", method = {RequestMethod.GET})
+    public RestResponse<List<Orders>> queryList() {
+
+        Example example = new Example(Orders.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDeleted", false);
+
+        List<Orders> ordersList = ordersService.queryList(example);
+
+        if (ordersList == null) {
+            logger.error("读取列表失败");
+            return RestResponse.getSystemInnerErrorResponse();
+        }
+        return RestResponse.getSuccesseResponse(ordersList);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
+    public RestResponse<PageInfo<Orders>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
+                                                        @RequestParam(defaultValue = "4") int pageSize,
+                                                        @RequestParam(name = "conditions")Map<String,Object> conditions) {
+
+        Example example = new Example(Orders.class);
+        example.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDeleted", false);
+
+        if(null != conditions){
+            if(null != conditions.get("timeBegin")){
+
+                Date date;
+                try {
+                    date = DateUtils.parseDate(conditions.get("timeBegin").toString(),"yyyy-MM-dd HH:mm:ss");
+                } catch (ParseException e) {
+                    return RestResponse.getFailedResponse(500,"时间格式错误");
+                }
+                criteria.andGreaterThanOrEqualTo("gmtCreate",date);
+            }
+
+            if(null != conditions.get("timeEnd")){
+
+                Date date;
+                try {
+                    date = DateUtils.parseDate(conditions.get("timeEnd").toString(),"yyyy-MM-dd HH:mm:ss");
+                } catch (ParseException e) {
+                    return RestResponse.getFailedResponse(500,"时间格式错误");
+                }
+                criteria.andLessThanOrEqualTo("gmtCreate",date);
+            }
+
+            if(null != conditions.get("orderStatus")){
+                criteria.andEqualTo("orderStatus",conditions.get("orderStatus").toString());
+            }
+
+            if(null != conditions.get("returnStatus")){
+                criteria.andEqualTo("returnStatus",conditions.get("returnStatus").toString());
+            }
+        }
+
+        PageInfo<Orders> ordersPageInfo = ordersService.query(pageNum, pageSize, example);
+
+        if (ordersPageInfo == null) {
+            logger.error("读取列表失败");
+            return RestResponse.getSystemInnerErrorResponse();
+        }
+        return RestResponse.getSuccesseResponse(ordersPageInfo);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/delete", method = {RequestMethod.DELETE})
+    public RestResponse<Map<String, Object>> delete(long ordersId) {
+
+        Orders orders = ordersService.getById(ordersId);
+
+        if (null == orders) {
+            return RestResponse.getFailedResponse(500, "无法查找数据,请检查ordersId 是否正确");
+
+        }
+
+        orders.setIsDeleted(true);
+
+        if (!ordersService.update(orders)) {
+            return RestResponse.getFailedResponse(500, "删除数据失败,ordersId为:" + ordersId);
+        }
+
+        return RestResponse.getSuccesseResponse();
+    }
 }

@@ -9,17 +9,24 @@ package com.cotton.abmallback.enumeration;
  */
 public enum OrderStatusEnum {
 
+    /**
+     * 待付款
+     */
     WAIT_BUYER_PAY("待付款"),
     WAIT_DELIVER("待发货"),
     WAIT_CONFIRM("待收货"),
     CONFIRMED("确认收货"),
     REPLENISHMENT("补货"),
-    CANCLE("取消");
+    CANCEL("取消");
 
-    private String name;
+    private String displayName;
 
-    OrderStatusEnum(String name){
+    OrderStatusEnum(String displayName){
 
-        this.name = name;
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }

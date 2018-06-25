@@ -124,6 +124,12 @@ public class Orders extends BaseModel {
     private String remarks;
 
     /**
+     * 退货状态
+     */
+    @Column(name = "return_status")
+    private String returnStatus;
+
+    /**
      * 获取订单编号
      *
      * @return order_no - 订单编号
@@ -477,5 +483,23 @@ public class Orders extends BaseModel {
      */
     public void setRemarks(String remarks) {
         this.remarks = remarks == null ? null : remarks.trim();
+    }
+
+    /**
+     * 获取退货状态
+     *
+     * @return return_status - 退货状态
+     */
+    public String getReturnStatus() {
+        return returnStatus;
+    }
+
+    /**
+     * 设置退货状态
+     *
+     * @param returnStatus 退货状态
+     */
+    public void setReturnStatus(String returnStatus) {
+        this.returnStatus = returnStatus == null ? null : returnStatus.trim();
     }
 }

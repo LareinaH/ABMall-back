@@ -8,6 +8,10 @@ import com.cotton.abmallback.model.vo.front.LoginMemberVO;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,15 +39,19 @@ public class LoginController extends ABMallFrontBaseController {
 
     private SmsManager smsManager;
 
+    private WxMpService wxService;
+
     @Autowired
-    public LoginController(MemberService memberService, SmsManager smsManager) {
+    public LoginController(MemberService memberService, SmsManager smsManager, WxMpService wxService) {
         this.memberService = memberService;
         this.smsManager = smsManager;
+        this.wxService = wxService;
     }
 
     @ResponseBody
     @RequestMapping(value = "un/member/login",method = {RequestMethod.GET})
-    public RestResponse<LoginMemberVO> login(@RequestParam(defaultValue = "false") boolean bWechat,
+    public RestResponse<LoginMemberVO> login(@RequestParam(defaultValue = "false") boolean bMp,
+                                             @RequestParam(defaultValue = "false") boolean bWechat,
                                       @RequestParam(required = false)  String phoneNum,
                                       @RequestParam(required = false)  String code,
                                       @RequestParam(required = false)  String unionId,
@@ -54,6 +63,12 @@ public class LoginController extends ABMallFrontBaseController {
         if(!DeviceType.IOS.name().equalsIgnoreCase(deviceType) && !DeviceType.ANDROID.name().equalsIgnoreCase(deviceType)){
 
             return RestResponse.getFailedResponse(500,"请填入正确的设备类型");
+        }
+
+        if(bMp){
+            if(StringUtils.isBlank(code)){
+                return RestResponse.getFailedResponse(1, "code不能为空");
+            }
         }
 
         if(bWechat){
@@ -74,7 +89,7 @@ public class LoginController extends ABMallFrontBaseController {
      * 手机登录
      * @return RestResponse
      */
-    private RestResponse<LoginMemberVO> loginMobile(String phoneNum,String code,String deviceType) {
+    private RestResponse<LoginMemberVO> loginMobile(String phoneNum, String code, String deviceType) {
 
         //校验验证码
     /*    if(!smsManager.checkCaptcha(phoneNum,code)){
@@ -161,6 +176,69 @@ public class LoginController extends ABMallFrontBaseController {
 
     }
 
+    /**
+     * 微信公众号登录
+     * @return RestResponse
+     */
+    private RestResponse<LoginMemberVO> loginWeChatMp(String code){
+
+        //通过code换取网页授权access_token
+        WxMpOAuth2AccessToken wxMpOAuth2AccessToken = null;
+        try {
+            wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        }
+
+        if(null == wxMpOAuth2AccessToken){
+            return RestResponse.getFailedResponse(1,"系统异常,登录失败");
+        }
+
+        String token =  UUID.randomUUID().toString();
+
+        //根据openId 获取用户信息
+
+        Member model = new Member();
+        model.setOpenId(wxMpOAuth2AccessToken.getOpenId());
+        model.setIsDeleted(false);
+
+        List<Member> memberList = memberService.queryList(model);
+
+        if (memberList.isEmpty()) {
+
+            //说明不存在这个用户,创建用户并返回
+            //获取用户信息
+            WxMpUser wxMpUser = null;
+            try {
+                wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken,"");
+            } catch (WxErrorException e) {
+                e.printStackTrace();
+                return RestResponse.getFailedResponse(1,"系统异常,登录失败");
+
+            }
+            //如果member不存在,根据微信自动驻车一个member
+            Member newMember = new Member();
+            newMember.setUnionId(wxMpUser.getUnionId());
+            newMember.setOpenId(wxMpUser.getOpenId());
+            newMember.setName(wxMpUser.getNickname());
+            newMember.setWechatName(wxMpUser.getNickname());
+            newMember.setIsDeleted(false);
+            newMember.setLevel(MemberLevelEnum.WHITE.name());
+            newMember.setPhoto(wxMpUser.getHeadImgUrl());
+
+            //TODO: 设置tocken
+            if(memberService.insert(newMember)){
+
+                return RestResponse.getSuccesseResponse(translateLoginVO(newMember,token));
+            }
+        }else {
+
+            //TODO: 设置tocken
+            memberService.update(memberList.get(0));
+            return RestResponse.getSuccesseResponse(translateLoginVO(memberList.get(0),token));
+        }
+        return RestResponse.getFailedResponse(1,"系统异常,登录失败");
+    }
 
     /**
      * 退出登录

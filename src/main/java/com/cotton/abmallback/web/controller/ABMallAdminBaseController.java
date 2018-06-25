@@ -10,4 +10,6 @@ import com.cotton.base.controller.BaseController;
  * @date 2018/5/10
  */
 public class ABMallAdminBaseController extends BaseController {
+
+
 }

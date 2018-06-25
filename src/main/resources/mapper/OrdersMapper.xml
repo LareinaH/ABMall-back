@@ -25,5 +25,6 @@
     <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="return_status" jdbcType="VARCHAR" property="returnStatus" />
   </resultMap>
 </mapper>

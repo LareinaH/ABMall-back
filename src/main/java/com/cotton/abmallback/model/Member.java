@@ -3,6 +3,7 @@ package com.cotton.abmallback.model;
 import com.cotton.base.model.BaseModel;
 import java.math.BigDecimal;
 import javax.persistence.*;
+
 @Table(name = "member")
 public class Member extends BaseModel {
     /**
@@ -119,6 +120,12 @@ public class Member extends BaseModel {
      */
     @Column(name = "token_ios")
     private String tokenIos;
+
+    /**
+     * 微信公众号登录凭证
+     */
+    @Column(name = "token_wechat_mp")
+    private String tokenWechatMp;
 
     /**
      * 引荐人id
@@ -484,6 +491,24 @@ public class Member extends BaseModel {
      */
     public void setTokenIos(String tokenIos) {
         this.tokenIos = tokenIos == null ? null : tokenIos.trim();
+    }
+
+    /**
+     * 获取微信公众号登录凭证
+     *
+     * @return token_wechat_mp - 微信公众号登录凭证
+     */
+    public String getTokenWechatMp() {
+        return tokenWechatMp;
+    }
+
+    /**
+     * 设置微信公众号登录凭证
+     *
+     * @param tokenWechatMp 微信公众号登录凭证
+     */
+    public void setTokenWechatMp(String tokenWechatMp) {
+        this.tokenWechatMp = tokenWechatMp == null ? null : tokenWechatMp.trim();
     }
 
     /**

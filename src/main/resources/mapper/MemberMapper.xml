@@ -25,6 +25,7 @@
     <result column="token_ios_wechat" jdbcType="VARCHAR" property="tokenIosWechat" />
     <result column="token_android" jdbcType="VARCHAR" property="tokenAndroid" />
     <result column="token_ios" jdbcType="VARCHAR" property="tokenIos" />
+    <result column="token_wechat_mp" jdbcType="VARCHAR" property="tokenWechatMp" />
     <result column="referrer_id" jdbcType="LONGVARCHAR" property="referrerId" />
   </resultMap>
 </mapper>

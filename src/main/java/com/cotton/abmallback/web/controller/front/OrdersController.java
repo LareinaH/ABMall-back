@@ -2,7 +2,6 @@ package com.cotton.abmallback.web.controller.front;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.model.*;
-import com.cotton.abmallback.model.vo.GoodsVO;
 import com.cotton.abmallback.model.vo.OrdersVO;
 import com.cotton.abmallback.service.*;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
@@ -235,7 +234,7 @@ public class OrdersController extends ABMallFrontBaseController {
             return RestResponse.getFailedResponse(500,"订单编号不存在");
         }
 
-        orders.setOrderStatus(OrderStatusEnum.CANCLE.name());
+        orders.setOrderStatus(OrderStatusEnum.CANCEL.name());
 
         OrderGoods model = new OrderGoods();
         model.setOrderId(orderId);
