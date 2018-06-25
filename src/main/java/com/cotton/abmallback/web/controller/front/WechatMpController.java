@@ -132,13 +132,15 @@ public class WechatMpController extends BaseController {
         return out;
     }
 
-    @GetMapping(path = "config", produces = "text/plain;charset=utf-8")
+
+    @ResponseBody
+    @RequestMapping(value = "/config", method = {RequestMethod.GET})
     public RestResponse<WxJsapiSignature> getConfig(String url){
         try {
             WxJsapiSignature signature = wxService.createJsapiSignature(url);
             return RestResponse.getSuccesseResponse(signature);
         } catch (WxErrorException e) {
-            e.printStackTrace();
+            this.logger.error(e.getMessage(), e);
             return RestResponse.getFailedResponse(500,"获取配置失败");
         }
     }
