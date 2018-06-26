@@ -1,14 +1,7 @@
 package com.cotton.abmallback.web.timer;
 
-import com.dingtalk.chatbot.DingtalkChatbotClient;
-import com.dingtalk.chatbot.SendResult;
-import com.dingtalk.chatbot.demo.TestConfig;
-import com.dingtalk.chatbot.message.TextMessage;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * ABMallTimmer
@@ -25,7 +18,7 @@ public class ABMallTimer {
     //@Scheduled(cron = "0 47 10 ? * *")
     public void reportCurrentTime() {
 
-        DingtalkChatbotClient client = new DingtalkChatbotClient();
+ /*       DingtalkChatbotClient client = new DingtalkChatbotClient();
 
         TextMessage message = new TextMessage("吃饭啦,吃饭啦!吃饭不积极,态度有问题!");
 
@@ -37,7 +30,7 @@ public class ABMallTimer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(result);
+        System.out.println(result);*/
 
     }
 

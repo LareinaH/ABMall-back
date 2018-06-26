@@ -24,7 +24,7 @@ public class FrontConfigurer extends WebConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(checkLoginInterceptor()).addPathPatterns("/**").
-                excludePathPatterns("/un/member/*","/wechat/**","/admin/**","/interface/**","/actuator/*","/404","/error");
+                excludePathPatterns("/un/member/*","/wechat/**","/alipay/**","/admin/**","/interface/**","/actuator/*","/404","/error");
         super.addInterceptors(registry);
     }
 }
