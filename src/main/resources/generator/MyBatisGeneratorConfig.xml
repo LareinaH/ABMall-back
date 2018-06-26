@@ -58,7 +58,7 @@
 		</table>
 
 		-->
-
+<!--
 		<table tableName="member">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -66,7 +66,7 @@
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 <!--		<table tableName="member_address">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -224,6 +224,15 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>-->
+
+		<table tableName="distribution_config">
+			<property name="useActualColumnNames" value="false" />
+			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+			<ignoreColumn column="id" />
+			<ignoreColumn column="is_deleted" />
+			<ignoreColumn column="gmt_create" />
+			<ignoreColumn column="gmt_modify" />
+		</table>
 	</context>
 
 </generatorConfiguration>

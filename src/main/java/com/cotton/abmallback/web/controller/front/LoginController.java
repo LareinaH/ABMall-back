@@ -60,17 +60,18 @@ public class LoginController extends ABMallFrontBaseController {
                                       @RequestParam(required = false)  String nickname,
                                       @RequestHeader(value = "DEVICE-TYPE", defaultValue = "IOS") String deviceType){
 
-        if(!DeviceType.IOS.name().equalsIgnoreCase(deviceType) && !DeviceType.ANDROID.name().equalsIgnoreCase(deviceType)){
-
-            return RestResponse.getFailedResponse(500,"请填入正确的设备类型");
-        }
-
-        if(bMp){
+        if(bMp && DeviceType.WECHAT.name().equalsIgnoreCase(deviceType)){
             if(StringUtils.isBlank(code)){
                 return RestResponse.getFailedResponse(1, "code不能为空");
             }
 
             return loginWeChatMp(code);
+        }
+
+        if(!DeviceType.IOS.name().equalsIgnoreCase(deviceType) &&
+                !DeviceType.ANDROID.name().equalsIgnoreCase(deviceType)){
+
+            return RestResponse.getFailedResponse(500,"请填入正确的设备类型");
         }
 
         if(bWechat){

@@ -15,6 +15,11 @@ public enum MemberLevelEnum {
     WHITE("小白"),
 
     /**
+     * 代理人
+     */
+    AGENT("代理人"),
+
+    /**
      * V1
      */
     V1("V1"),
@@ -29,10 +34,10 @@ public enum MemberLevelEnum {
      */
     V3("V3");
 
-    private String name;
+    private String displayName;
 
-    MemberLevelEnum(String name){
+    MemberLevelEnum(String displayName){
 
-        this.name = name;
+        this.displayName = displayName;
     }
 }
