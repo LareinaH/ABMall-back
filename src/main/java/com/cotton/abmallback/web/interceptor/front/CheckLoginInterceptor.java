@@ -7,6 +7,7 @@ package com.cotton.abmallback.web.interceptor.front;
  * @version 1.0
  * @date 2018/5/25
  */
+
 import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.enumeration.DeviceType;
 import com.cotton.base.common.RestResponse;
@@ -42,60 +43,36 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         //清空context
         PermissionContext.clearThreadVariable();
 
-        //判断是否来自微信公众号的
-        String code = httpServletRequest.getParameter("code");
+        //1 从request里获取【APP-SESSION-TICKET】
+        String appSessionTicket = httpServletRequest.getHeader("APP-SESSION-TICKET");
 
-        if(!StringUtils.isEmpty(code)){
-            //通过code换取网页授权access_token
-            WxMpOAuth2AccessToken token = wxService.oauth2getAccessToken(code);
+        //从request里获取【device-type】
+        String deviceType = httpServletRequest.getHeader("DEVICE-TYPE");
 
-            if(null == token){
-                setReLogin(httpServletRequest, httpServletResponse);
-                return false;
-            }
 
-            //根据openId 获取用户信息
-            Member model = new Member();
-            model.setOpenId(token.getOpenId());
-            model.setIsDeleted(false);
-
-            List<Member> memberList = memberService.queryList(model);
-
-            if (memberList.isEmpty()) {
-                setReLogin(httpServletRequest, httpServletResponse);
-                return false;
-            }
-
-            PermissionContext.setMember(memberList.get(0));
-        }else {
-
-            //1 从request里获取【APP-SESSION-TICKET】
-            String appSessionTicket = httpServletRequest.getHeader("APP-SESSION-TICKET");
-
-            //从request里获取【device-type】
-            String deviceType = httpServletRequest.getHeader("DEVICE-TYPE");
-
-            if (StringUtils.isEmpty(appSessionTicket)) {
-                setReLogin(httpServletRequest, httpServletResponse);
-                return false;
-            }
-            //根据ticket 和 device-type获取用户信息
-            Member model = new Member();
-
-            if (deviceType.equalsIgnoreCase(DeviceType.IOS.name())) {
-                model.setTokenIos(appSessionTicket);
-            } else {
-                model.setTokenAndroid(appSessionTicket);
-            }
-            List<Member> memberList = memberService.queryList(model);
-
-            if (memberList.isEmpty()) {
-                setReLogin(httpServletRequest, httpServletResponse);
-                return false;
-            }
-
-            PermissionContext.setMember(memberList.get(0));
+        if (StringUtils.isEmpty(appSessionTicket)) {
+            setReLogin(httpServletRequest, httpServletResponse);
+            return false;
         }
+        //根据ticket 和 device-type获取用户信息
+        Member model = new Member();
+
+        if (deviceType.equalsIgnoreCase(DeviceType.IOS.name())) {
+            model.setTokenIos(appSessionTicket);
+        } else if(deviceType.equalsIgnoreCase(DeviceType.ANDROID.name())){
+            model.setTokenAndroid(appSessionTicket);
+        }else {
+            model.setTokenWechatMp(appSessionTicket);
+        }
+        List<Member> memberList = memberService.queryList(model);
+
+        if (memberList.isEmpty()) {
+            setReLogin(httpServletRequest, httpServletResponse);
+            return false;
+        }
+
+        PermissionContext.setMember(memberList.get(0));
+
 
         return true;
     }

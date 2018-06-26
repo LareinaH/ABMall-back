@@ -11,4 +11,9 @@ import com.cotton.abmallback.model.Orders;
  * @date 2018/5/9
  */
 public interface OrdersService extends BaseService<Orders> {
+
+    /**
+     * 付款成功
+     */
+    boolean paySuccess(String orderNo,String tradeNo,String payMode);
 }

@@ -1,7 +1,6 @@
 package com.cotton.abmallback.web.controller.front;
 
 
-import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrderGoodsService;
@@ -98,12 +97,9 @@ public class WechatPayController {
 
             String orderNo = wxPayOrderNotifyResult.getOutTradeNo();
 
-            Orders model = new Orders();
-            model.setOrderNo(orderNo);
-            model.setIsDeleted(false);
-            model.setOrderStatus(OrderStatusEnum.WAIT_DELIVER.name());
+            String tradeNo = wxPayOrderNotifyResult.getTransactionId();
 
-            ordersService.update(model);
+            ordersService.paySuccess(orderNo,tradeNo,"wechat");
 
             //TODO:分润
         }
