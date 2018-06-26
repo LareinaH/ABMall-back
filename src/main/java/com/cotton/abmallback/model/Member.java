@@ -44,6 +44,12 @@ public class Member extends BaseModel {
     private String level;
 
     /**
+     * 引荐人id
+     */
+    @Column(name = "referrer_id")
+    private Long referrerId;
+
+    /**
      * 直推人数
      */
     @Column(name = "refer_total_count")
@@ -126,12 +132,6 @@ public class Member extends BaseModel {
      */
     @Column(name = "token_wechat_mp")
     private String tokenWechatMp;
-
-    /**
-     * 引荐人id
-     */
-    @Column(name = "referrer_id")
-    private String referrerId;
 
     /**
      * 获取会员名
@@ -257,6 +257,24 @@ public class Member extends BaseModel {
      */
     public void setLevel(String level) {
         this.level = level == null ? null : level.trim();
+    }
+
+    /**
+     * 获取引荐人id
+     *
+     * @return referrer_id - 引荐人id
+     */
+    public Long getReferrerId() {
+        return referrerId;
+    }
+
+    /**
+     * 设置引荐人id
+     *
+     * @param referrerId 引荐人id
+     */
+    public void setReferrerId(Long referrerId) {
+        this.referrerId = referrerId;
     }
 
     /**
@@ -509,23 +527,5 @@ public class Member extends BaseModel {
      */
     public void setTokenWechatMp(String tokenWechatMp) {
         this.tokenWechatMp = tokenWechatMp == null ? null : tokenWechatMp.trim();
-    }
-
-    /**
-     * 获取引荐人id
-     *
-     * @return referrer_id - 引荐人id
-     */
-    public String getReferrerId() {
-        return referrerId;
-    }
-
-    /**
-     * 设置引荐人id
-     *
-     * @param referrerId 引荐人id
-     */
-    public void setReferrerId(String referrerId) {
-        this.referrerId = referrerId == null ? null : referrerId.trim();
     }
 }

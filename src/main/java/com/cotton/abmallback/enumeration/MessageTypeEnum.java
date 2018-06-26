@@ -30,10 +30,19 @@ public enum MessageTypeEnum {
      */
     ACTIVITY_AWARD("活动奖励");
 
-    private String name;
 
-    MessageTypeEnum(String name){
+    private String displayName;
 
-        this.name = name;
+    MessageTypeEnum(String displayName){
+
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

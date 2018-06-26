@@ -12,6 +12,7 @@
     <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
     <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="referrer_id" jdbcType="BIGINT" property="referrerId" />
     <result column="refer_total_count" jdbcType="INTEGER" property="referTotalCount" />
     <result column="wechat_no" jdbcType="VARCHAR" property="wechatNo" />
     <result column="wechat_name" jdbcType="VARCHAR" property="wechatName" />
@@ -26,6 +27,5 @@
     <result column="token_android" jdbcType="VARCHAR" property="tokenAndroid" />
     <result column="token_ios" jdbcType="VARCHAR" property="tokenIos" />
     <result column="token_wechat_mp" jdbcType="VARCHAR" property="tokenWechatMp" />
-    <result column="referrer_id" jdbcType="LONGVARCHAR" property="referrerId" />
   </resultMap>
 </mapper>

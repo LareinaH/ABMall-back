@@ -22,13 +22,13 @@ import java.util.List;
 @Component
 public class GeTuiService {
 
-    @Value("getui.appId")
+    @Value("${getui.appId}")
     private  String appId = "";
-    @Value("getui.appKey")
+    @Value("${getui.appKey}")
     private  String appKey = "";
-    @Value("getui.masterSecret")
+    @Value("${getui.masterSecret}")
     private  String masterSecret = "";
-    @Value("getui.url")
+    @Value("${getui.url}")
     private  String url = "http://sdk.open.api.igexin.com/apiex.htm";
 
     public  void pushMessage(String title,String text) {
