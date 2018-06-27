@@ -55,5 +55,4 @@ public enum DistributionItemEnum {
      */
     V3_AWARD_MONEY
 
-
 }

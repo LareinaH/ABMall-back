@@ -1,5 +1,7 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.alibaba.alipay.AlipayServiceImpl;
@@ -101,10 +103,10 @@ public class AlipayController {
             return RestResponse.getFailedResponse(500,"订单不存在");
         }
 
-        AppPayDetail detail = new AppPayDetail(orders.getOrderNo(), "", String.valueOf(orders.getTotalMoney()),"");
+        AppPayDetail detail = new AppPayDetail(orders.getOrderNo(), "订单", String.valueOf(orders.getTotalMoney()),"商品详情");
         String form = alipayService.appPay(detail);
         logger.info("wap pay form: {}", form);
-
+        
         return RestResponse.getSuccesseResponse(form);
     }
 
@@ -140,8 +142,6 @@ public class AlipayController {
                 logger.info("backend notify success");
                 return "SUCCESS";
             }
-
-
         }
 
         return "FAIL";

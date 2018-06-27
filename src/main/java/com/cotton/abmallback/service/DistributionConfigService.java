@@ -11,4 +11,6 @@ import com.cotton.abmallback.model.DistributionConfig;
  * @date 2018/6/26
  */
 public interface DistributionConfigService extends BaseService<DistributionConfig> {
+
+
 }
