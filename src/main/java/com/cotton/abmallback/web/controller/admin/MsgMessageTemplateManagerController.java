@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.model.DistributionConfig;
 import com.cotton.abmallback.model.MsgMessageTemplate;
 import com.cotton.abmallback.service.MsgMessageTemplateService;
 import com.cotton.base.common.RestResponse;
@@ -42,6 +43,29 @@ public class MsgMessageTemplateManagerController extends BaseController {
 
         Map<String, Object> map = new HashMap<>(2);
 
+        return RestResponse.getSuccesseResponse(map);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/config")
+    public RestResponse<Map<String, Object>> getConfig(String namespace) {
+
+        Map<String, Object> map = new HashMap<>(2);
+
+        MsgMessageTemplate model = new MsgMessageTemplate();
+        model.setType(namespace);
+        model.setIsDeleted(false);
+
+        List<MsgMessageTemplate> msgMessageTemplateList =  msgMessageTemplateService.queryList(model);
+
+        for(MsgMessageTemplate msgMessageTemplate : msgMessageTemplateList){
+
+            Map<String,String> obj = new HashMap<>(5);
+            obj.put("item",msgMessageTemplate.getItem());
+            obj.put("value",msgMessageTemplate.getValue());
+            obj.put("defaultValue",msgMessageTemplate.getDefaultValue());
+            map.put(msgMessageTemplate.getItem(),obj);
+        }
         return RestResponse.getSuccesseResponse(map);
     }
 

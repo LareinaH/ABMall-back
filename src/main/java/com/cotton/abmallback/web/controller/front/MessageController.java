@@ -1,6 +1,7 @@
 package com.cotton.abmallback.web.controller.front;
 
 import com.cotton.abmallback.enumeration.MessageTypeEnum;
+import com.cotton.abmallback.manager.MessageManager;
 import com.cotton.abmallback.model.MsgMemberMessage;
 import com.cotton.abmallback.model.MsgPlatformMessage;
 import com.cotton.abmallback.service.MsgMemberMessageService;
@@ -36,10 +37,13 @@ public class MessageController extends ABMallFrontBaseController {
 
     private final MsgPlatformMessageService msgPlatformMessageService;
 
+    private final MessageManager messageManager;
+
     @Autowired
-    public MessageController(MsgMemberMessageService msgMemberMessageService, MsgPlatformMessageService msgPlatformMessageService) {
+    public MessageController(MsgMemberMessageService msgMemberMessageService, MsgPlatformMessageService msgPlatformMessageService, MessageManager messageManager) {
         this.msgMemberMessageService = msgMemberMessageService;
         this.msgPlatformMessageService = msgPlatformMessageService;
+        this.messageManager = messageManager;
     }
 
     @ResponseBody
@@ -47,6 +51,7 @@ public class MessageController extends ABMallFrontBaseController {
     public RestResponse<Map<String, Object>> example() {
 
         Map<String, Object> map = new HashMap<>(2);
+        messageManager.sendShareAward(1);
 
         return RestResponse.getSuccesseResponse(map);
     }

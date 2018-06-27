@@ -34,6 +34,8 @@ public class MessageManagerImpl implements MessageManager {
     @Override
     public void sendShareAward(long memberId) {
 
+        geTuiService.pushMessage("分享奖励","hahah",memberId);
+
     }
 
     @Override
@@ -66,7 +68,7 @@ public class MessageManagerImpl implements MessageManager {
         msgMemberMessageService.insert(msgMemberMessage);
 
         //发送个推消息
-        geTuiService.pushMessage(title,content);
+        geTuiService.pushMessage(title,content,memberId);
 
     }
 }

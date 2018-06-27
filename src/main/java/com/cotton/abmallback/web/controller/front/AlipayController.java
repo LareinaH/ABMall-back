@@ -1,7 +1,5 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.alibaba.alipay.AlipayServiceImpl;
@@ -27,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * AlipayContoller
+ * AlipayController
  *
  * @author lareina_h
  * @version 1.0
@@ -106,7 +104,7 @@ public class AlipayController {
         AppPayDetail detail = new AppPayDetail(orders.getOrderNo(), "订单", String.valueOf(orders.getTotalMoney()),"商品详情");
         String form = alipayService.appPay(detail);
         logger.info("wap pay form: {}", form);
-        
+
         return RestResponse.getSuccesseResponse(form);
     }
 
