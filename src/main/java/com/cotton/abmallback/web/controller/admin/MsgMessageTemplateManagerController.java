@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.model.DistributionConfig;
 import com.cotton.abmallback.model.MsgMessageTemplate;
+import com.cotton.abmallback.model.vo.ConfigObject;
 import com.cotton.abmallback.service.MsgMessageTemplateService;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
@@ -60,24 +61,30 @@ public class MsgMessageTemplateManagerController extends BaseController {
 
         for(MsgMessageTemplate msgMessageTemplate : msgMessageTemplateList){
 
-            Map<String,String> obj = new HashMap<>(5);
-            obj.put("item",msgMessageTemplate.getItem());
-            obj.put("value",msgMessageTemplate.getValue());
-            obj.put("defaultValue",msgMessageTemplate.getDefaultValue());
+            ConfigObject.ConfigItem obj = ConfigObject.createConfigItem();
+            obj.setId(msgMessageTemplate.getId());
+            obj.setItem(msgMessageTemplate.getItem());
+            obj.setValue(msgMessageTemplate.getValue());
+            obj.setDefaultVaule(msgMessageTemplate.getDefaultValue());
             map.put(msgMessageTemplate.getItem(),obj);
         }
         return RestResponse.getSuccesseResponse(map);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/add", method = {RequestMethod.POST})
-    public RestResponse<Void> add(@RequestBody MsgMessageTemplate msgMessageTemplate) {
 
-        if (msgMessageTemplateService.insert(msgMessageTemplate)) {
-            return RestResponse.getSuccesseResponse();
-        } else {
-            return RestResponse.getFailedResponse(500, "增加失败");
+    @ResponseBody
+    @RequestMapping(value = "/updateConfig", method = {RequestMethod.POST})
+    public RestResponse<Void> updateConfig(@RequestBody ConfigObject configObject) {
+
+        for(ConfigObject.ConfigItem configItem : configObject.getDataList()) {
+
+            MsgMessageTemplate msgMessageTemplate = new MsgMessageTemplate();
+            msgMessageTemplate.setValue(configItem.getValue());
+            msgMessageTemplate.setId(configItem.getId());
+            msgMessageTemplateService.update(msgMessageTemplate);
         }
+
+        return RestResponse.getSuccesseResponse();
     }
 
 
@@ -91,6 +98,18 @@ public class MsgMessageTemplateManagerController extends BaseController {
 
         return RestResponse.getSuccesseResponse();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/add", method = {RequestMethod.POST})
+    public RestResponse<Void> add(@RequestBody MsgMessageTemplate msgMessageTemplate) {
+
+        if (msgMessageTemplateService.insert(msgMessageTemplate)) {
+            return RestResponse.getSuccesseResponse();
+        } else {
+            return RestResponse.getFailedResponse(500, "增加失败");
+        }
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/get", method = {RequestMethod.GET})
