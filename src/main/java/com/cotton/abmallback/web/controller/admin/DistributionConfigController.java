@@ -34,12 +34,11 @@ public class DistributionConfigController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/config")
-    public RestResponse<Map<String, Object>> getConfig(String namespace) {
+    public RestResponse<Map<String, Object>> getConfig() {
 
         Map<String, Object> map = new HashMap<>(2);
 
         DistributionConfig model = new DistributionConfig();
-        model.setType(namespace);
         model.setIsDeleted(false);
 
         List<DistributionConfig> distributionConfigList =  distributionConfigService.queryList(model);

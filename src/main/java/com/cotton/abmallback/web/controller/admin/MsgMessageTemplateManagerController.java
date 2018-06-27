@@ -49,12 +49,11 @@ public class MsgMessageTemplateManagerController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/config")
-    public RestResponse<Map<String, Object>> getConfig(String namespace) {
+    public RestResponse<Map<String, Object>> getConfig() {
 
         Map<String, Object> map = new HashMap<>(2);
 
         MsgMessageTemplate model = new MsgMessageTemplate();
-        model.setType(namespace);
         model.setIsDeleted(false);
 
         List<MsgMessageTemplate> msgMessageTemplateList =  msgMessageTemplateService.queryList(model);
