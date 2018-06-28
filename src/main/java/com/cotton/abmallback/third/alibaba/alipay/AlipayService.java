@@ -1,8 +1,7 @@
 package com.cotton.abmallback.third.alibaba.alipay;
 
-import me.hao0.alipay.model.pay.AppPayDetail;
-import me.hao0.alipay.model.pay.WapPayDetail;
-import me.hao0.alipay.model.pay.WebPayDetail;
+import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * AlipayService
@@ -13,24 +12,8 @@ import me.hao0.alipay.model.pay.WebPayDetail;
  */
 public interface AlipayService {
 
-    /**
-     * webPay
-     * @param detail 入参
-     * @return string
-     */
-     String webPay(WebPayDetail detail);
+     Boolean notifyVerify(Map<String, String> params);
 
-    /**
-     * wapPay
-     * @param detail 入参
-     * @return string
-     */
-     String wapPay(WapPayDetail detail);
+     Map<String, Object> payWithAlipay(String tradeNo, BigDecimal amount);
 
-    /**
-     * appPay
-     * @param detail 入参
-     * @return string
-     */
-     String appPay(AppPayDetail detail);
 }

@@ -3,8 +3,10 @@ package com.cotton.abmallback.third.alibaba.alipay;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.AlipayConstants;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.cotton.abmallback.web.controller.admin.AdsManagerController;
@@ -56,6 +58,9 @@ public class AlipayServiceImpl implements AlipayService{
     @Value("${alipay.wapReturnUrl}")
     private String wapReturnUrl;
 
+    AlipayClient alipayClient;
+
+
     private String appPrikey = "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDqSizbURHRoDmC\n"
             + "ma0vgqFfyRxXrM+bs1z+erGd7PvGLURWWS3hiGol0k69CiL1vza17SzIi4kLDC4V\n"
             + "4K9ApwAsyD9/tHq3Eg+YvY2jkZuBV98lJt1wJDKJkF7HcKopq73wdV1RpK5oO8RZ\n"
@@ -91,65 +96,33 @@ public class AlipayServiceImpl implements AlipayService{
             + "2uHpQ5ekYm28U0KR/eT05t8c9fNwoP3pQvBqIkJfr7EZmBXLLJyCfR/j/qHLGxri\n"
             + "MQIDAQAB";
 
-    private Alipay alipay;
 
     @PostConstruct
     public void initAlipay(){
-        alipay = AlipayBuilder
-                .newBuilder(merchantId, secret).appPriKey(appPrikey).appPubKey(appPubKey)
-                .build();
+        alipayClient = new DefaultAlipayClient(
+                "https://openapi.alipay.com/gateway.do", appId,appPrikey,
+                "json", "utf-8", appPubKey, "RSA2");
 
 
-        System.err.println(alipay);
+        System.err.println(alipayClient);
     }
 
-    /**
-     * web支付
-     */
-    @Override
-    public String webPay(WebPayDetail detail){
-        detail.setNotifyUrl(payNotifyUrl);
-        detail.setReturnUrl(webReturnUrl);
-        return alipay.pay().webPay(detail);
-    }
-
-    /**
-     * wap支付
-     */
-    @Override
-    public String wapPay(WapPayDetail detail) {
-        detail.setNotifyUrl(payNotifyUrl);
-        detail.setReturnUrl(wapReturnUrl);
-        return alipay.pay().wapPay(detail);
-    }
-
-
-    /**
-     * app支付
-     */
-    @Override
-    public String appPay(AppPayDetail detail) {
-        detail.setAppId(appId);
-        detail.setNotifyUrl(payNotifyUrl);
-        detail.setReturnUrl(wapReturnUrl);
-        return alipay.pay().appPay(detail);
-    }
 
     /**
      * MD5验证
      */
-    public Boolean notifyVerifyMd5(Map<String, String> params){
-        return alipay.verify().md5(params);
-    }
+    @Override
+    public Boolean notifyVerify(Map<String, String> params){
+        try {
+            return AlipaySignature.rsaCheckV1(params, appPubKey,
+                    AlipayConstants.CHARSET_UTF8);
+        } catch (AlipayApiException e) {
+            logger.error("支付宝回调参数校验错误",e);
+        }
 
-    /**
-     * 退款申请
-     */
-    public Boolean refund(RefundDetail detail){
-        detail.setNotifyUrl(refundNotifyUrl);
-        return alipay.refund().refund(detail);
-    }
+        return false;
 
+    }
 
 
     /**
@@ -158,11 +131,10 @@ public class AlipayServiceImpl implements AlipayService{
      * @param amount
      * @return
      */
+    @Override
     public Map<String, Object> payWithAlipay(String tradeNo, BigDecimal amount) {
         //实例化客户端
-        AlipayClient alipayClient = new DefaultAlipayClient(
-                "https://openapi.alipay.com/gateway.do", appId,appPrikey,
-                "json", "utf-8", appPubKey, "RSA2");
+
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。

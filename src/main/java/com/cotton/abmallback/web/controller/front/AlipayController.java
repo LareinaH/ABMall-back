@@ -4,6 +4,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
+import com.cotton.abmallback.third.alibaba.alipay.AlipayService;
 import com.cotton.abmallback.third.alibaba.alipay.AlipayServiceImpl;
 import com.cotton.base.common.RestResponse;
 import me.hao0.alipay.model.AlipayFields;
@@ -40,53 +41,15 @@ public class AlipayController {
 
     private static final Logger logger = LoggerFactory.getLogger(AlipayController.class);
 
-    private final AlipayServiceImpl alipayService;
+    private final AlipayService alipayService;
 
     private final OrdersService ordersService;
 
 
     @Autowired
-    public AlipayController(AlipayServiceImpl alipayService, OrdersService ordersService) {
+    public AlipayController(AlipayService alipayService, OrdersService ordersService) {
         this.alipayService = alipayService;
         this.ordersService = ordersService;
-    }
-
-    /**
-     * WEB支付
-     */
-    @RequestMapping("/web")
-    public void webPay(@RequestParam("orderNumber") String orderNumber, HttpServletResponse resp){
-
-        WebPayDetail detail = new WebPayDetail(orderNumber, "测试订单-" + orderNumber, "0.01");
-        String form = alipayService.webPay(detail);
-        logger.info("web pay form: {}", form);
-        try {
-            resp.setContentType("text/html;charset=UTF-8");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(form);
-            resp.setStatus(HttpServletResponse.SC_OK);
-        } catch (IOException e) {
-            logger.error("支付异常",e);
-        }
-    }
-
-    /**
-     * WAP支付
-     */
-    @RequestMapping("/wap")
-    public void wapPay(@RequestParam("orderNumber") String orderNumber, HttpServletResponse resp){
-
-        WapPayDetail detail = new WapPayDetail(orderNumber, "测试订单-" + orderNumber, "0.01");
-        String form = alipayService.wapPay(detail);
-        logger.info("wap pay form: {}", form);
-        try {
-            resp.setContentType("text/html;charset=UTF-8");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(form);
-            resp.setStatus(HttpServletResponse.SC_OK);
-        } catch (IOException e) {
-            logger.error("支付异常",e);
-        }
     }
 
 
@@ -95,28 +58,6 @@ public class AlipayController {
      */
     @ResponseBody
     @RequestMapping("/app")
-    public RestResponse<Object> appPay(@RequestParam("orderId") long orderId){
-
-        //根据订单号获取订单信息
-        Orders orders = ordersService.getById(orderId);
-
-        if(null == orders){
-            return RestResponse.getFailedResponse(500,"订单不存在");
-        }
-
-        AppPayDetail detail = new AppPayDetail(orders.getOrderNo(), "订单", String.valueOf(orders.getTotalMoney()),"商品详情");
-        String form = alipayService.appPay(detail);
-        logger.info("wap pay form: {}", form);
-
-        return RestResponse.getSuccesseResponse(form);
-    }
-
-
-    /**
-     * APP支付
-     */
-    @ResponseBody
-    @RequestMapping("/app2")
     public RestResponse<Object> appPay2(@RequestParam("orderId") long orderId){
 
         //根据订单号获取订单信息
@@ -144,7 +85,7 @@ public class AlipayController {
             notifyParams.put(f.field(), request.getParameter(f.field()));
         }
         logger.info("backend notify params: {}", notifyParams);
-        if (!alipayService.notifyVerifyMd5(notifyParams)){
+        if (!alipayService.notifyVerify(notifyParams)){
             logger.error("backend sign verify failed");
             return "FAIL";
         }
