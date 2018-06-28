@@ -115,7 +115,7 @@ public class AlipayServiceImpl implements AlipayService{
     public Boolean notifyVerify(Map<String, String> params){
         try {
             return AlipaySignature.rsaCheckV1(params, appPubKey,
-                    AlipayConstants.CHARSET_UTF8);
+                    AlipayConstants.CHARSET_UTF8,"RSA2");
         } catch (AlipayApiException e) {
             logger.error("支付宝回调参数校验错误",e);
         }

@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.front;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.alibaba.alipay.AlipayService;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -79,40 +81,45 @@ public class AlipayController {
      */
     @RequestMapping("/backend")
     public String backend(HttpServletRequest request){
-        Map<String, String> notifyParams = new HashMap<>(10);
 
-        for (AlipayField f : AlipayFields.APP_PAY_NOTIFY){
-            notifyParams.put(f.field(), request.getParameter(f.field()));
+        Map<String,String> params = new HashMap<>(10);
+        Map requestParams = request.getParameterMap();
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            //乱码解决，这段代码在出现乱码时使用。
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            params.put(name, valueStr);
         }
-        logger.info("backend notify params: {}", notifyParams);
-        if (!alipayService.notifyVerify(notifyParams)){
-            logger.error("backend sign verify failed");
-            return "FAIL";
-        }
 
-        String tradeStatus = notifyParams.get(AlipayField.TRADE_STATUS.field());
-        if (TradeStatus.TRADE_FINISHED.value().equals(tradeStatus)
-                || TradeStatus.TRADE_SUCCESS.value().equals(tradeStatus)){
+        boolean flag = alipayService.notifyVerify(params);
 
-            //获取订单号
-            String orderNo = notifyParams.get(AlipayField.OUT_TRADE_NO.field());
+        if(flag) {
 
-            String tradeNo = notifyParams.get(AlipayField.TRADE_NO.field());
+            String tradeStatus = params.get(AlipayField.TRADE_STATUS.field());
+            if (TradeStatus.TRADE_FINISHED.value().equals(tradeStatus) || TradeStatus.TRADE_SUCCESS.value().equals(tradeStatus)) {
 
-            if(ordersService.paySuccess(orderNo,tradeNo,"Alipay")){
-                //TODO:分润
+                //获取订单号
+                String orderNo = params.get(AlipayField.OUT_TRADE_NO.field());
 
+                String tradeNo = params.get(AlipayField.TRADE_NO.field());
 
-                logger.info("backend notify success");
-                return "SUCCESS";
+                if (ordersService.paySuccess(orderNo, tradeNo, "Alipay")) {
+                    //TODO:分润
+                    
+                    logger.info("backend notify success");
+                    return "SUCCESS";
+                }
             }
         }
 
         return "FAIL";
     }
-
-
-
 
 }
 
