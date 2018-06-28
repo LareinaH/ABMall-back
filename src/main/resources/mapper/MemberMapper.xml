@@ -27,5 +27,6 @@
     <result column="token_android" jdbcType="VARCHAR" property="tokenAndroid" />
     <result column="token_ios" jdbcType="VARCHAR" property="tokenIos" />
     <result column="token_wechat_mp" jdbcType="VARCHAR" property="tokenWechatMp" />
+    <result column="recommend_code_url" jdbcType="VARCHAR" property="recommendCodeUrl" />
   </resultMap>
 </mapper>

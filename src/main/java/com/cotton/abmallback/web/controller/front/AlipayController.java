@@ -73,13 +73,12 @@ public class AlipayController {
 
         Map<String,String> params = new HashMap<>(10);
         Map requestParams = request.getParameterMap();
-        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
-            String name = (String) iter.next();
+        for (Object o : requestParams.keySet()) {
+            String name = (String) o;
             String[] values = (String[]) requestParams.get(name);
             String valueStr = "";
             for (int i = 0; i < values.length; i++) {
-                valueStr = (i == values.length - 1) ? valueStr + values[i]
-                        : valueStr + values[i] + ",";
+                valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
             }
             //乱码解决，这段代码在出现乱码时使用。
             //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");

@@ -1,11 +1,17 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.model.*;
 import com.cotton.abmallback.model.vo.GoodsVO;
 import com.cotton.abmallback.service.*;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpQrcodeService;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.result.WxMpQrCodeTicket;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -44,13 +50,16 @@ public class ShopController extends ABMallFrontBaseController {
 
     private final MemberService memberService;
 
+    private final WxMpService wxService;
+
     @Autowired
-    public ShopController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService, AdsService adsService, ShopActivitiesService shopActivitiesService, MemberService memberService) {
+    public ShopController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService, AdsService adsService, ShopActivitiesService shopActivitiesService, MemberService memberService, WxMpService wxService) {
         this.goodsService = goodsService;
         this.goodsSpecificationService = goodsSpecificationService;
         this.adsService = adsService;
         this.shopActivitiesService = shopActivitiesService;
         this.memberService = memberService;
+        this.wxService = wxService;
     }
 
     /**
@@ -95,9 +104,30 @@ public class ShopController extends ABMallFrontBaseController {
             return RestResponse.getFailedResponse(101,"邀请码不存在",null);
         }
 
+        if(StringUtils.isBlank(member.getRecommendCodeUrl())){
+
+            WxMpQrCodeTicket wxMpQrCodeTicket = null;
+            //生成二维码
+            try {
+
+                JSONObject param = new JSONObject();
+                param.put("referrerId",member.getId());
+                wxMpQrCodeTicket =  wxService.getQrcodeService().qrCodeCreateLastTicket(param.toJSONString());
+
+            } catch (WxErrorException e) {
+                logger.error("生成推荐二维码失败",e);
+            }
+
+            if(null != wxMpQrCodeTicket){
+                member.setRecommendCodeUrl( wxMpQrCodeTicket.getUrl());
+                memberService.update(member);
+            }
+        }
+
         Map<String, Object> map = new HashMap<>(2);
         map.put("invitingCode",ads.getAdUrl());
-        map.put("uuid",member.getId());
+        map.put("uuid",member.getRecommendCodeUrl());
+
 
         return RestResponse.getSuccesseResponse(map);
 

@@ -134,6 +134,12 @@ public class Member extends BaseModel {
     private String tokenWechatMp;
 
     /**
+     * 推荐二维码地址
+     */
+    @Column(name = "recommend_code_url")
+    private String recommendCodeUrl;
+
+    /**
      * 获取会员名
      *
      * @return name - 会员名
@@ -527,5 +533,23 @@ public class Member extends BaseModel {
      */
     public void setTokenWechatMp(String tokenWechatMp) {
         this.tokenWechatMp = tokenWechatMp == null ? null : tokenWechatMp.trim();
+    }
+
+    /**
+     * 获取推荐二维码地址
+     *
+     * @return recommend_code_url - 推荐二维码地址
+     */
+    public String getRecommendCodeUrl() {
+        return recommendCodeUrl;
+    }
+
+    /**
+     * 设置推荐二维码地址
+     *
+     * @param recommendCodeUrl 推荐二维码地址
+     */
+    public void setRecommendCodeUrl(String recommendCodeUrl) {
+        this.recommendCodeUrl = recommendCodeUrl == null ? null : recommendCodeUrl.trim();
     }
 }
