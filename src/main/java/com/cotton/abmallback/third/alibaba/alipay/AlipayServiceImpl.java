@@ -35,7 +35,7 @@ import java.util.Map;
 @Service
 public class AlipayServiceImpl implements AlipayService{
 
-    private Logger logger = LoggerFactory.getLogger(AdsManagerController.class);
+    private Logger logger = LoggerFactory.getLogger(AlipayServiceImpl.class);
 
     @Value("${alipay.appId}")
     private String appId;
@@ -96,6 +96,8 @@ public class AlipayServiceImpl implements AlipayService{
             + "2uHpQ5ekYm28U0KR/eT05t8c9fNwoP3pQvBqIkJfr7EZmBXLLJyCfR/j/qHLGxri\n"
             + "MQIDAQAB";
 
+    private  String xx = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6kos21ER0aA5gpmtL4KhX8kcV6zPm7Nc/nqxnez7xi1EVlkt4YhqJdJOvQoi9b82te0syIuJCwwuFeCvQKcALMg/f7R6txIPmL2No5GbgVffJSbdcCQyiZBex3CqKau98HVdUaSuaDvEWSLFGba1uSiff6f26pRSEQbKJcWlAWT2+loCmjftbdYTv3OBbpNF4YZhUGGDfL+/fviIpPqyhfYbsz58RvL67h6uoW0qVYSiNWDpzyKI3hX4EIjz9wGOqn9H9GasDTtYneEtG8zK2uHpQ5ekYm28U0KR/eT05t8c9fNwoP3pQvBqIkJfr7EZmBXLLJyCfR/j/qHLGxriMQIDAQAB";
+
 
     @PostConstruct
     public void initAlipay(){
@@ -109,12 +111,12 @@ public class AlipayServiceImpl implements AlipayService{
 
 
     /**
-     * MD5验证
+     * 验证
      */
     @Override
     public Boolean notifyVerify(Map<String, String> params){
         try {
-            return AlipaySignature.rsaCheckV1(params, appPubKey,
+            return AlipaySignature.rsaCheckV1(params, xx,
                     AlipayConstants.CHARSET_UTF8,"RSA2");
         } catch (AlipayApiException e) {
             logger.error("支付宝回调参数校验错误",e);

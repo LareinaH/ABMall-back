@@ -70,7 +70,7 @@ public class AlipayController {
         }
 
         Map<String, Object> result = alipayService.payWithAlipay(orders.getOrderNo(),orders.getTotalMoney());
-        logger.info("wap pay form: {}", result);
+        logger.info("app pay form: {}", result);
 
         return RestResponse.getSuccesseResponse(result);
     }
@@ -97,26 +97,30 @@ public class AlipayController {
             params.put(name, valueStr);
         }
 
-        boolean flag = alipayService.notifyVerify(params);
 
-        if(flag) {
+        if(!alipayService.notifyVerify(params)) {
 
-            String tradeStatus = params.get(AlipayField.TRADE_STATUS.field());
-            if (TradeStatus.TRADE_FINISHED.value().equals(tradeStatus) || TradeStatus.TRADE_SUCCESS.value().equals(tradeStatus)) {
+            logger.info("backend notify failed");
+            return "FAIL";
 
-                //获取订单号
-                String orderNo = params.get(AlipayField.OUT_TRADE_NO.field());
+        }
 
-                String tradeNo = params.get(AlipayField.TRADE_NO.field());
+        String tradeStatus = params.get(AlipayField.TRADE_STATUS.field());
+        if (TradeStatus.TRADE_FINISHED.value().equals(tradeStatus) || TradeStatus.TRADE_SUCCESS.value().equals(tradeStatus)) {
 
-                if (ordersService.paySuccess(orderNo, tradeNo, "Alipay")) {
-                    //TODO:分润
-                    
-                    logger.info("backend notify success");
-                    return "SUCCESS";
-                }
+            //获取订单号
+            String orderNo = params.get(AlipayField.OUT_TRADE_NO.field());
+
+            String tradeNo = params.get(AlipayField.TRADE_NO.field());
+
+            if (ordersService.paySuccess(orderNo, tradeNo, "Alipay")) {
+                //TODO:分润
+
+                logger.info("backend notify success");
+                return "SUCCESS";
             }
         }
+        logger.info("backend notify failed");
 
         return "FAIL";
     }
