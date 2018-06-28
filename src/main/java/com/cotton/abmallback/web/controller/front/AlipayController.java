@@ -1,5 +1,7 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.alibaba.alipay.AlipayServiceImpl;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,6 +111,28 @@ public class AlipayController {
         return RestResponse.getSuccesseResponse(form);
     }
 
+
+    /**
+     * APP支付
+     */
+    @ResponseBody
+    @RequestMapping("/app2")
+    public RestResponse<Object> appPay2(@RequestParam("orderId") long orderId){
+
+        //根据订单号获取订单信息
+        Orders orders = ordersService.getById(orderId);
+
+        if(null == orders){
+            return RestResponse.getFailedResponse(500,"订单不存在");
+        }
+
+        Map<String, Object> result = alipayService.payWithAlipay(orders.getOrderNo(),orders.getTotalMoney());
+        logger.info("wap pay form: {}", result);
+
+        return RestResponse.getSuccesseResponse(result);
+    }
+
+
     /**
      * 支付宝服务器通知
      */
@@ -144,6 +169,8 @@ public class AlipayController {
 
         return "FAIL";
     }
+
+
 
 
 }

@@ -1,14 +1,26 @@
 package com.cotton.abmallback.third.alibaba.alipay;
 
+import com.alibaba.fastjson.JSON;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.cotton.abmallback.web.controller.admin.AdsManagerController;
 import me.hao0.alipay.core.Alipay;
 import me.hao0.alipay.core.AlipayBuilder;
 import me.hao0.alipay.model.pay.AppPayDetail;
 import me.hao0.alipay.model.pay.WapPayDetail;
 import me.hao0.alipay.model.pay.WebPayDetail;
 import me.hao0.alipay.model.refund.RefundDetail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,6 +33,7 @@ import java.util.Map;
 @Service
 public class AlipayServiceImpl implements AlipayService{
 
+    private Logger logger = LoggerFactory.getLogger(AdsManagerController.class);
 
     @Value("${alipay.appId}")
     private String appId;
@@ -135,5 +148,43 @@ public class AlipayServiceImpl implements AlipayService{
     public Boolean refund(RefundDetail detail){
         detail.setNotifyUrl(refundNotifyUrl);
         return alipay.refund().refund(detail);
+    }
+
+
+
+    /**
+     * 支付宝支付
+     * @param tradeNo
+     * @param amount
+     * @return
+     */
+    public Map<String, Object> payWithAlipay(String tradeNo, BigDecimal amount) {
+        //实例化客户端
+        AlipayClient alipayClient = new DefaultAlipayClient(
+                "https://openapi.alipay.com/gateway.do", appId,appPrikey,
+                "json", "utf-8", appPubKey, "RSA");
+        //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
+        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+        //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody("这事商品");
+        model.setSubject("商品描述");
+        model.setOutTradeNo(tradeNo);
+        model.setTimeoutExpress("30m");
+        model.setTotalAmount(amount.toString());
+        model.setProductCode("QUICK_MSECURITY_PAY");
+        request.setBizModel(model);
+        request.setNotifyUrl(payNotifyUrl);
+        try {
+            //这里和普通的接口调用不同，使用的是sdkExecute
+            AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+            logger.info("【支付宝APP支付】返回报文，response=" + JSON.toJSONString(response));
+            Map<String, Object> payParam = new HashMap<String, Object>();
+            payParam.put("body", response.getBody());
+            return payParam;
+        } catch (AlipayApiException e) {
+            logger.warn("【支付宝APP支付】执行异常,result=" + JSON.toJSONString(e));
+        }
+        return null;
     }
 }
