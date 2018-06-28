@@ -162,7 +162,7 @@ public class AlipayServiceImpl implements AlipayService{
         //实例化客户端
         AlipayClient alipayClient = new DefaultAlipayClient(
                 "https://openapi.alipay.com/gateway.do", appId,appPrikey,
-                "json", "utf-8", appPubKey, "RSA");
+                "json", "utf-8", appPubKey, "RSA2");
         //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
