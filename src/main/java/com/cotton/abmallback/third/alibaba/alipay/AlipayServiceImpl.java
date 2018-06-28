@@ -97,7 +97,7 @@ public class AlipayServiceImpl implements AlipayService{
             + "MQIDAQAB";
 
     private  String xx = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6kos21ER0aA5gpmtL4KhX8kcV6zPm7Nc/nqxnez7xi1EVlkt4YhqJdJOvQoi9b82te0syIuJCwwuFeCvQKcALMg/f7R6txIPmL2No5GbgVffJSbdcCQyiZBex3CqKau98HVdUaSuaDvEWSLFGba1uSiff6f26pRSEQbKJcWlAWT2+loCmjftbdYTv3OBbpNF4YZhUGGDfL+/fviIpPqyhfYbsz58RvL67h6uoW0qVYSiNWDpzyKI3hX4EIjz9wGOqn9H9GasDTtYneEtG8zK2uHpQ5ekYm28U0KR/eT05t8c9fNwoP3pQvBqIkJfr7EZmBXLLJyCfR/j/qHLGxriMQIDAQAB";
-
+    private String  yy = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgam4AlGgkuezeCjdmwWn4x6Dm3RXQS+xEUq3drkIFrzhMDuZUDnqGB/1dh4xRP6QIKKbobXywRa7uR/hWPx5taw/Zco1gFypYa9HkbC8Ts3zzJSliGY6PL0q0yAaxVt6e2iGKW1MBMjrBhWGGAdjykiorBraogtu1Wwc47zwl92Pr/fRhZXfos9fnRa+iv/hdRwRm01xUdM5N+kBlIQOoCh20huM3LkWirjeIPBjNETDbz4kVsNigY8RkaGSGIYuV/p/7djVROC5ZtpXQp0EYUeNgiIwcp/qD7cRZItcizsWe4uWZ1WaHYGI9yZoAZaTToCP90aa9YmJzOgwGR7PjQIDAQAB";
 
     @PostConstruct
     public void initAlipay(){
@@ -116,7 +116,7 @@ public class AlipayServiceImpl implements AlipayService{
     @Override
     public Boolean notifyVerify(Map<String, String> params){
         try {
-            return AlipaySignature.rsaCheckV1(params, xx,
+            return AlipaySignature.rsaCheckV1(params, yy,
                     AlipayConstants.CHARSET_UTF8,"RSA2");
         } catch (AlipayApiException e) {
             logger.error("支付宝回调参数校验错误",e);

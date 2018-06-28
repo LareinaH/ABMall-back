@@ -1,19 +1,11 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.alibaba.alipay.AlipayService;
-import com.cotton.abmallback.third.alibaba.alipay.AlipayServiceImpl;
 import com.cotton.base.common.RestResponse;
-import me.hao0.alipay.model.AlipayFields;
 import me.hao0.alipay.model.enums.AlipayField;
 import me.hao0.alipay.model.enums.TradeStatus;
-import me.hao0.alipay.model.pay.AppPayDetail;
-import me.hao0.alipay.model.pay.WapPayDetail;
-import me.hao0.alipay.model.pay.WebPayDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -97,6 +86,7 @@ public class AlipayController {
             params.put(name, valueStr);
         }
 
+        logger.info("backend notify params: {}", params);
 
         if(!alipayService.notifyVerify(params)) {
 
