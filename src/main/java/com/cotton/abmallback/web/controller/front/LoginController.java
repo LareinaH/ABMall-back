@@ -290,6 +290,7 @@ public class LoginController extends ABMallFrontBaseController {
     private LoginMemberVO translateLoginVO(Member member,String token){
         LoginMemberVO loginMemberVO = new LoginMemberVO();
 
+        loginMemberVO.setId(member.getId());
         loginMemberVO.setName(member.getName());
         loginMemberVO.setLevel(member.getLevel());
         loginMemberVO.setPhoto(member.getPhoto());

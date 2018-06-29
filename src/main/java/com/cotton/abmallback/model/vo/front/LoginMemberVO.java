@@ -10,6 +10,11 @@ package com.cotton.abmallback.model.vo.front;
 public class LoginMemberVO {
 
     /**
+     * 用户id
+     */
+    private Long id;
+
+    /**
      * 会员名
      */
     private String name;
@@ -43,6 +48,15 @@ public class LoginMemberVO {
      * 登录凭证
      */
     private String ticket;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
