@@ -15,4 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysUserService {
+
+    @Override
+    public SysUser findByUserName(String username) {
+
+        SysUser model = new SysUser();
+        model.setUsername(username);
+        model.setIsDeleted(false);
+        return selectOne(model);
+    }
 }

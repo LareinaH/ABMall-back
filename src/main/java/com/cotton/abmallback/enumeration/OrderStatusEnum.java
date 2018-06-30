@@ -17,7 +17,8 @@ public enum OrderStatusEnum {
     WAIT_CONFIRM("待收货"),
     CONFIRMED("确认收货"),
     REPLENISHMENT("补货"),
-    CANCEL("取消");
+    CANCEL("用户取消"),
+    SYSTEM_CANCEL("系统取消");
 
     private String displayName;
 

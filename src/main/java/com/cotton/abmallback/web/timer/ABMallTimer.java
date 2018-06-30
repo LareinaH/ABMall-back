@@ -18,19 +18,13 @@ public class ABMallTimer {
     //@Scheduled(cron = "0 47 10 ? * *")
     public void reportCurrentTime() {
 
- /*       DingtalkChatbotClient client = new DingtalkChatbotClient();
 
-        TextMessage message = new TextMessage("吃饭啦,吃饭啦!吃饭不积极,态度有问题!");
+    }
 
-        message.setIsAtAll(true);
 
-        SendResult result = null;
-        try {
-            result = client.send("https://oapi.dingtalk.com/robot/send?access_token=ff34b543367e3c66a035126d521f692f99aa75ad985bf814064fb5725489eaf2", message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(result);*/
+    @Scheduled(cron = "0 0 12 * * ?" )
+    public void systemCancelOrder() {
+
 
     }
 

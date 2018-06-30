@@ -4,9 +4,11 @@ import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.AppMessage;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
 import com.gexin.rp.sdk.base.impl.Target;
+import com.gexin.rp.sdk.dto.GtReq;
 import com.gexin.rp.sdk.http.IGtPush;
 import com.gexin.rp.sdk.template.LinkTemplate;
 import com.gexin.rp.sdk.template.NotificationTemplate;
+import com.gexin.rp.sdk.template.style.AbstractNotifyStyle;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
@@ -43,6 +45,7 @@ public class GeTuiService {
         template.setAppkey(appKey);
         template.setTitle(title);
         template.setText(text);
+        template.setTransmissionType(1);
 
         List<String> appIds = new ArrayList<>();
         appIds.add(String.valueOf(appId));
@@ -55,8 +58,7 @@ public class GeTuiService {
 
         Target target = new Target();
         target.setAppId(appId);
-       // target.setClientId();
-        target.setAlias(String.valueOf(memberId));
+        target.setAlias("7"/*String.valueOf(memberId)*/);
 
 
         IPushResult ret = push.pushMessageToSingle(message,target);

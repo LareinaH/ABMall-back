@@ -3,7 +3,7 @@ package com.cotton.abmallback.web.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.cotton.abmallback.web.interceptor.LogInterceptor;
+import com.cotton.abmallback.web.interceptor.admin.CheckAdminLoginInterceptor;
 import com.cotton.abmallback.web.interceptor.front.CheckLoginInterceptor;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * WebConfigurer
@@ -26,7 +25,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfigurer extends BaseConfigurer{
-
 
     /**
      * 覆盖方法configureMessageConverters，使用fastJson
@@ -72,18 +70,6 @@ public class WebConfigurer extends BaseConfigurer{
         return new CorsFilter(configSource);
     }
 
-//    @Bean
-//    LogInterceptor logInterceptor(){
-//        return new LogInterceptor();
-//    }
-//
-//
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//
-//        registry.addInterceptor(logInterceptor()).addPathPatterns("/**");
-//        super.addInterceptors(registry);
-//    }
 
     @Bean
     public CommonsRequestLoggingFilter requestLoggingFilter() {
@@ -92,6 +78,28 @@ public class WebConfigurer extends BaseConfigurer{
         loggingFilter.setIncludeQueryString(true);
         loggingFilter.setIncludePayload(true);
         return loggingFilter;
+    }
+
+
+    @Bean
+    CheckLoginInterceptor checkLoginInterceptor(){
+        return new CheckLoginInterceptor();
+    }
+
+    @Bean
+    CheckAdminLoginInterceptor checkAdminLoginInterceptor(){
+        return new CheckAdminLoginInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(checkLoginInterceptor()).addPathPatterns("/**").
+                excludePathPatterns("/un/member/*","/wechat/**","/alipay/**","/admin/**","/interface/**","/actuator/*","/404","/error");
+
+        registry.addInterceptor(checkAdminLoginInterceptor()).addPathPatterns("/admin/**").
+                excludePathPatterns("/admin/un/**");
+        super.addInterceptors(registry);
     }
 
 }

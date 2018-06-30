@@ -11,4 +11,7 @@ import com.cotton.base.service.BaseService;
  */
 
 public interface SysUserService extends BaseService<SysUser> {
+
+    SysUser findByUserName(String username);
+
 }
