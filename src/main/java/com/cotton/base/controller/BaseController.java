@@ -41,13 +41,4 @@ public class BaseController {
 		}
 	}
 
-
-	@ResponseBody
-	@RequestMapping(value = "/example")
-	public RestResponse<Map<String, Object>> example() {
-
-		Map<String, Object> map = new HashMap<>(2);
-
-		return RestResponse.getSuccesseResponse(map);
-	}
 }
