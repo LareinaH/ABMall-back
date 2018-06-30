@@ -1,6 +1,6 @@
 package com.cotton.abmallback.web.controller;
 
-import com.cotton.abmallback.model.SysUser;
+import com.cotton.abmallback.model.vo.admin.SysUserVo;
 import com.cotton.abmallback.web.PermissionContext;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
@@ -22,14 +22,14 @@ public class ABMallAdminBaseController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/getLoginUser")
-    public RestResponse<SysUser> getLoginUser() {
+    public RestResponse<SysUserVo> getLoginUser() {
 
         return RestResponse.getSuccesseResponse(getCurrentUser());
     }
 
 
 
-    protected SysUser getCurrentUser(){
+    protected SysUserVo getCurrentUser(){
         return  PermissionContext.getSysUser();
     }
 

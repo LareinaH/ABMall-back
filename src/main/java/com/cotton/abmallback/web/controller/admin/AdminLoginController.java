@@ -1,6 +1,9 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.model.SysRole;
 import com.cotton.abmallback.model.SysUser;
+import com.cotton.abmallback.model.vo.admin.SysUserVo;
+import com.cotton.abmallback.service.SysRoleService;
 import com.cotton.abmallback.service.SysUserService;
 import com.cotton.base.common.RestResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * AdminLoginController
@@ -24,13 +28,16 @@ public class AdminLoginController {
 
     private final SysUserService sysUserService;
 
-    public AdminLoginController(SysUserService sysUserService) {
+    private final SysRoleService sysRoleService;
+
+    public AdminLoginController(SysUserService sysUserService, SysRoleService sysRoleService) {
         this.sysUserService = sysUserService;
+        this.sysRoleService = sysRoleService;
     }
 
     @ResponseBody
     @RequestMapping(value = "/login")
-    public RestResponse<SysUser> login(String username, String password, HttpServletResponse httpResponse, HttpSession session) {
+    public RestResponse<SysUserVo> login(String username, String password, HttpServletResponse httpResponse, HttpSession session) {
 
 
         if (StringUtils.isBlank(username)) {
@@ -55,9 +62,13 @@ public class AdminLoginController {
             return RestResponse.getFailedResponse(300, "用户名或密码不正确");
         }
 
-        session.setAttribute("user", sysUser);
+        List<SysRole> sysRoles = sysRoleService.getRolesBySysUserId(sysUser.getId());
 
-        return RestResponse.getSuccesseResponse(sysUser);
+        SysUserVo sysUserVo = new SysUserVo(sysUser,sysRoles);
+
+        session.setAttribute("user", sysUserVo);
+
+        return RestResponse.getSuccesseResponse(sysUserVo);
 
     }
 
@@ -68,4 +79,7 @@ public class AdminLoginController {
         return RestResponse.getSuccesseResponse();
 
     }
+
+
+
 }

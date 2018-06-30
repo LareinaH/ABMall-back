@@ -9,7 +9,7 @@ package com.cotton.abmallback.web.interceptor.admin;
  */
 
 import com.alibaba.fastjson.JSONObject;
-import com.cotton.abmallback.model.SysUser;
+import com.cotton.abmallback.model.vo.admin.SysUserVo;
 import com.cotton.abmallback.service.SysUserService;
 import com.cotton.abmallback.web.PermissionContext;
 import com.cotton.base.common.RestResponse;
@@ -37,7 +37,7 @@ public class CheckAdminLoginInterceptor implements HandlerInterceptor {
 
         HttpSession session = httpServletRequest.getSession();
 
-        SysUser sysUser = (SysUser)session.getAttribute("user");
+        SysUserVo sysUser = (SysUserVo)session.getAttribute("user");
 
         if (sysUser!= null) {
             PermissionContext.setSysUser(sysUser);

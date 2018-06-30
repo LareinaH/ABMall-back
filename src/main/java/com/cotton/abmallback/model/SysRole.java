@@ -6,6 +6,11 @@ import javax.persistence.*;
 @Table(name = "sys_role")
 public class SysRole extends BaseModel {
     /**
+     * 角色名称
+     */
+    private String name;
+
+    /**
      * 角色显示名
      */
     @Column(name = "display_name")
@@ -13,6 +18,24 @@ public class SysRole extends BaseModel {
 
     @Column(name = "parent_id")
     private Long parentId;
+
+    /**
+     * 获取角色名称
+     *
+     * @return name - 角色名称
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * 设置角色名称
+     *
+     * @param name 角色名称
+     */
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
     /**
      * 获取角色显示名

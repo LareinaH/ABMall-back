@@ -2,8 +2,10 @@ package com.cotton.abmallback.manager.impl;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.manager.DistributionManager;
+import com.cotton.abmallback.model.DistributionConfig;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.model.Orders;
+import com.cotton.abmallback.service.DistributionConfigService;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrdersService;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * DistributionManagerImpl
@@ -30,9 +33,12 @@ public class DistributionManagerImpl implements DistributionManager {
 
     private final MemberService memberService;
 
-    public DistributionManagerImpl(OrdersService ordersService, MemberService memberService) {
+    private final DistributionConfigService distributionConfigService;
+
+    public DistributionManagerImpl(OrdersService ordersService, MemberService memberService, DistributionConfigService distributionConfigService) {
         this.ordersService = ordersService;
         this.memberService = memberService;
+        this.distributionConfigService = distributionConfigService;
     }
 
 
@@ -70,15 +76,14 @@ public class DistributionManagerImpl implements DistributionManager {
         }
 
         //获取参与分销的人员
-
         Member first = null;
         Member second = null;
         Member third = null;
 
-        Member member = memberService.getById(orders.getMemberId());
+        Member self = memberService.getById(orders.getMemberId());
 
-        if(null != member.getReferrerId()){
-            first = memberService.getById(member.getReferrerId());
+        if(null != self.getReferrerId()){
+            first = memberService.getById(self.getReferrerId());
         }
 
         if(null != first && null != first.getReferrerId()){
@@ -89,14 +94,27 @@ public class DistributionManagerImpl implements DistributionManager {
             third = memberService.getById(second.getReferrerId());
         }
 
-        //分享奖励
+        //获取全部分销配置
+        Map<String,DistributionConfig> map = distributionConfigService.getAllDistributionConfig();
+
+        //1 分享奖励
+
+        //1.1 自己
+        String percent = "";
+        String level = self.getLevel();
+        //if()
+
+        //1.2 第一层
+
+        //1.3 第二层
+
+        //1.4 第三层
 
 
 
 
 
         //高管奖励
-
 
 
 

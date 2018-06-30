@@ -3,6 +3,8 @@ package com.cotton.abmallback.service;
 import com.cotton.base.service.BaseService;
 import com.cotton.abmallback.model.SysRole;
 
+import java.util.List;
+
 /**
  *
  * @author lareina_h
@@ -11,4 +13,6 @@ import com.cotton.abmallback.model.SysRole;
  */
 
 public interface SysRoleService extends BaseService<SysRole> {
+
+    List<SysRole> getRolesBySysUserId(long userId);
 }

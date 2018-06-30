@@ -1,12 +1,16 @@
 package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.model.Goods;
+import com.cotton.abmallback.model.GoodsSpecification;
+import com.cotton.abmallback.model.vo.GoodsVO;
 import com.cotton.abmallback.service.GoodsService;
+import com.cotton.abmallback.service.GoodsSpecificationService;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +35,12 @@ public class GoodsManagerController extends BaseController {
 
     private GoodsService goodsService;
 
+    private GoodsSpecificationService goodsSpecificationService;
+
     @Autowired
-    public GoodsManagerController(GoodsService goodsService) {
+    public GoodsManagerController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService) {
         this.goodsService = goodsService;
+        this.goodsSpecificationService = goodsSpecificationService;
     }
 
     @ResponseBody
@@ -47,9 +54,22 @@ public class GoodsManagerController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
-    public RestResponse<Void> add(@RequestBody Goods goods) {
+    public RestResponse<Void> add(@RequestBody GoodsVO goodsVO) {
 
+        Goods goods = new Goods();
+        BeanUtils.copyProperties(goodsVO,goods);
         if (goodsService.insert(goods)) {
+
+            if(null != goodsVO.getGoodsSpecificationList() &&
+                    goodsVO.getGoodsSpecificationList().size()>0){
+
+                for (GoodsSpecification goodsSpecification: goodsVO.getGoodsSpecificationList()) {
+
+                    goodsSpecification.setGoodsId(goods.getId());
+                    goodsSpecificationService.insert(goodsSpecification);
+                }
+
+            }
             return RestResponse.getSuccesseResponse();
         } else {
             return RestResponse.getFailedResponse(500, "增加失败");

@@ -31,6 +31,7 @@ public class SysUserManagerController extends BaseController {
 
     private SysUserService sysUserService;
 
+
     @Autowired
     public SysUserManagerController(SysUserService sysUserService) {
         this.sysUserService = sysUserService;

@@ -2,7 +2,7 @@ package com.cotton.abmallback.web;
 
 
 import com.cotton.abmallback.model.Member;
-import com.cotton.abmallback.model.SysUser;
+import com.cotton.abmallback.model.vo.admin.SysUserVo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class PermissionContext {
         return null;
     }
 
-    public static void setSysUser(SysUser sysUser) {
+    public static void setSysUser(SysUserVo sysUser) {
         Map map = (Map) threadLocal.get();
         if (map == null) {
             map = new HashMap();
@@ -52,10 +52,10 @@ public class PermissionContext {
         threadLocal.set(map);
     }
 
-    public static SysUser getSysUser() {
+    public static SysUserVo getSysUser() {
         Map map = (Map) threadLocal.get();
         if (map != null) {
-            return (SysUser) map.get(LOGIN_SESSION_ID_USER);
+            return (SysUserVo) map.get(LOGIN_SESSION_ID_USER);
         }
         return null;
     }

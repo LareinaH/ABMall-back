@@ -5,6 +5,7 @@
     <!--
       WARNING - @mbggenerated
     -->
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="display_name" jdbcType="VARCHAR" property="displayName" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
   </resultMap>

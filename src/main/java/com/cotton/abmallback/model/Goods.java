@@ -67,6 +67,12 @@ public class Goods extends BaseModel {
     private Boolean isOnSell;
 
     /**
+     * 虚拟销量
+     */
+    @Column(name = "virtual_sales_amount")
+    private Integer virtualSalesAmount;
+
+    /**
      * 销量
      */
     @Column(name = "sales_amount")
@@ -290,6 +296,24 @@ public class Goods extends BaseModel {
      */
     public void setIsOnSell(Boolean isOnSell) {
         this.isOnSell = isOnSell;
+    }
+
+    /**
+     * 获取虚拟销量
+     *
+     * @return virtual_sales_amount - 虚拟销量
+     */
+    public Integer getVirtualSalesAmount() {
+        return virtualSalesAmount;
+    }
+
+    /**
+     * 设置虚拟销量
+     *
+     * @param virtualSalesAmount 虚拟销量
+     */
+    public void setVirtualSalesAmount(Integer virtualSalesAmount) {
+        this.virtualSalesAmount = virtualSalesAmount;
     }
 
     /**

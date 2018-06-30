@@ -16,6 +16,7 @@
     <result column="price" jdbcType="VARCHAR" property="price" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
     <result column="is_on_sell" jdbcType="BIT" property="isOnSell" />
+    <result column="virtual_sales_amount" jdbcType="INTEGER" property="virtualSalesAmount" />
     <result column="sales_amount" jdbcType="INTEGER" property="salesAmount" />
     <result column="is_in_activities" jdbcType="BIT" property="isInActivities" />
     <result column="is_recycled" jdbcType="BIT" property="isRecycled" />
