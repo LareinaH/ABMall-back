@@ -52,7 +52,7 @@ public class PermissionContext {
         threadLocal.set(map);
     }
 
-    public static SysUser getSystem() {
+    public static SysUser getSysUser() {
         Map map = (Map) threadLocal.get();
         if (map != null) {
             return (SysUser) map.get(LOGIN_SESSION_ID_USER);

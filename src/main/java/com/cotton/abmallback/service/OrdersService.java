@@ -16,4 +16,8 @@ public interface OrdersService extends BaseService<Orders> {
      * 付款成功
      */
     boolean paySuccess(String orderNo,String tradeNo,String payMode);
+
+    void  systemCancelOrder();
+
+    void  systemConfirmedOrder();
 }
