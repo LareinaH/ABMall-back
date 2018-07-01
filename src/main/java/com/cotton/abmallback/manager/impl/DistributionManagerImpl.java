@@ -1,5 +1,7 @@
 package com.cotton.abmallback.manager.impl;
 
+import com.cotton.abmallback.enumeration.DistributionItemEnum;
+import com.cotton.abmallback.enumeration.MemberLevelEnum;
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.manager.DistributionManager;
 import com.cotton.abmallback.model.DistributionConfig;
@@ -51,7 +53,7 @@ public class DistributionManagerImpl implements DistributionManager {
         model.setIsDeleted(false);
         Orders orders = ordersService.selectOne(model);
 
-        if(null == orders){
+        if (null == orders) {
 
             logger.error("分销错误,订单不存在!");
             return;
@@ -60,17 +62,16 @@ public class DistributionManagerImpl implements DistributionManager {
         //查找该订单用户的 订单个数.
         Example example = new Example(Orders.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("memberId",orders.getMemberId());
-        criteria.andEqualTo("isDelete",false);
+        criteria.andEqualTo("memberId", orders.getMemberId());
+        criteria.andEqualTo("isDelete", false);
 
         List<String> orderStatusList = new ArrayList<>();
         orderStatusList.add(OrderStatusEnum.CANCEL.name());
-        criteria.andNotIn("orderStauts",orderStatusList);
+        criteria.andNotIn("orderStauts", orderStatusList);
 
         long count = ordersService.count(example);
 
-        if(count <= 1){
-
+        if (count <= 1) {
             //首次购物 不需要分销
             return;
         }
@@ -82,26 +83,55 @@ public class DistributionManagerImpl implements DistributionManager {
 
         Member self = memberService.getById(orders.getMemberId());
 
-        if(null != self.getReferrerId()){
+        if (null != self.getReferrerId()) {
             first = memberService.getById(self.getReferrerId());
         }
 
-        if(null != first && null != first.getReferrerId()){
+        if (null != first && null != first.getReferrerId()) {
             second = memberService.getById(first.getReferrerId());
         }
 
-        if(null != second && null != second.getReferrerId()){
+        if (null != second && null != second.getReferrerId()) {
             third = memberService.getById(second.getReferrerId());
         }
 
         //获取全部分销配置
-        Map<String,DistributionConfig> map = distributionConfigService.getAllDistributionConfig();
+        Map<String, DistributionConfig> map = distributionConfigService.getAllDistributionConfig();
 
         //1 分享奖励
 
         //1.1 自己
         String percent = "";
+
         String level = self.getLevel();
+
+        MemberLevelEnum memberLevelEnum = MemberLevelEnum.valueOf(level);
+        switch (memberLevelEnum) {
+            case WHITE:
+                percent = map.get(DistributionItemEnum.SHARE_AWARD_WHITE.name()).getValue();
+                break;
+            case AGENT:
+                percent = map.get(DistributionItemEnum.SHARE_AWARD_AGENT.name()).getValue();
+                break;
+            case V1:
+                percent = map.get(DistributionItemEnum.SHARE_AWARD_V1.name()).getValue();
+                break;
+            case V2:
+                percent = map.get(DistributionItemEnum.SHARE_AWARD_V2.name()).getValue();
+                break;
+            case V3:
+                percent = map.get(DistributionItemEnum.SHARE_AWARD_V3.name()).getValue();
+                break;
+            default:
+                break;
+        }
+
+        //计算分润钱数
+
+        //创建流水
+
+        //
+
         //if()
 
         //1.2 第一层
@@ -111,11 +141,7 @@ public class DistributionManagerImpl implements DistributionManager {
         //1.4 第三层
 
 
-
-
-
         //高管奖励
-
 
 
     }

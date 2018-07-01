@@ -24,6 +24,8 @@ public enum DistributionItemEnum {
     /**
      * 分享奖励
      */
+    SHARE_AWARD_WHITE,
+    SHARE_AWARD_AGENT,
     SHARE_AWARD_V1,
     SHARE_AWARD_V2,
     SHARE_AWARD_V3,
