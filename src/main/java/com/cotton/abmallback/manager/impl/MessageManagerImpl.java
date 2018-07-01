@@ -4,6 +4,7 @@ import com.cotton.abmallback.enumeration.MessageTypeEnum;
 import com.cotton.abmallback.manager.MessageManager;
 import com.cotton.abmallback.model.MsgMemberMessage;
 import com.cotton.abmallback.service.MsgMemberMessageService;
+import com.cotton.abmallback.service.MsgMessageTemplateService;
 import com.cotton.base.third.GeTuiService;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,13 @@ public class MessageManagerImpl implements MessageManager {
 
     private final MsgMemberMessageService msgMemberMessageService;
 
+    private final MsgMessageTemplateService msgMessageTemplateService;
+
     private final GeTuiService geTuiService;
 
-    public MessageManagerImpl(MsgMemberMessageService msgMemberMessageService, GeTuiService geTuiService) {
+    public MessageManagerImpl(MsgMemberMessageService msgMemberMessageService, MsgMessageTemplateService msgMessageTemplateService, GeTuiService geTuiService) {
         this.msgMemberMessageService = msgMemberMessageService;
+        this.msgMessageTemplateService = msgMessageTemplateService;
         this.geTuiService = geTuiService;
     }
 
@@ -69,6 +73,8 @@ public class MessageManagerImpl implements MessageManager {
 
         //发送个推消息
         geTuiService.pushMessage(title,content,memberId);
+
+        //TODO:发送微信消息
 
     }
 }

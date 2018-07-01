@@ -9,7 +9,6 @@ package com.cotton.abmallback.manager;
  */
 public interface MessageManager {
 
-
     /**
      * 发送平台消息
      * @param systemMessageId

@@ -102,10 +102,10 @@ public class OrdersManagerController extends ABMallAdminBaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
+    @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
     public RestResponse<PageInfo<Orders>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
                                                         @RequestParam(defaultValue = "4") int pageSize,
-                                                        @RequestParam(name = "conditions")Map<String,Object> conditions) {
+                                                        @RequestBody()Map<String,Object> conditions) {
 
         Example example = new Example(Orders.class);
         example.setOrderByClause("gmt_create desc");
@@ -118,7 +118,8 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
                 Date date;
                 try {
-                    date = DateUtils.parseDate(conditions.get("timeBegin").toString(),"yyyy-MM-dd");
+                    String begin = conditions.get("timeBegin").toString() + " 00:00:00";
+                    date = DateUtils.parseDate(begin,"yyyy-MM-dd hh:mm:ss");
                 } catch (ParseException e) {
                     return RestResponse.getFailedResponse(500,"时间格式错误");
                 }
@@ -129,7 +130,8 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
                 Date date;
                 try {
-                    date = DateUtils.parseDate(conditions.get("timeEnd").toString(),"yyyy-MM-dd");
+                    String end = conditions.get("timeEnd").toString() + " 23:59:59";
+                    date = DateUtils.parseDate(end,"yyyy-MM-dd hh:mm:ss");
                 } catch (ParseException e) {
                     return RestResponse.getFailedResponse(500,"时间格式错误");
                 }

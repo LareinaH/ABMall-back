@@ -172,10 +172,10 @@ public class GoodsManagerController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
+    @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
     public RestResponse<PageInfo<GoodsVO>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
                                                          @RequestParam(defaultValue = "4") int pageSize,
-                                                         @RequestParam(required = false)Map<String,Object> conditions) {
+                                                         @RequestBody(required = false)Map<String,Object> conditions) {
 
         Example example = new Example(Goods.class);
         example.setOrderByClause("gmt_create desc");
