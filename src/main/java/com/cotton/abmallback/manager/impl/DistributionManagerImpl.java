@@ -54,7 +54,6 @@ public class DistributionManagerImpl implements DistributionManager {
         this.messageManager = messageManager;
     }
 
-
     @Override
     public void orderDistribute(String orderNo) {
 
@@ -133,7 +132,6 @@ public class DistributionManagerImpl implements DistributionManager {
             }
         }
 
-
         BigDecimal totalDistrubtionMoney = new BigDecimal(0);
 
         //1 分享奖励
@@ -153,11 +151,27 @@ public class DistributionManagerImpl implements DistributionManager {
             totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, third, thirdSharePercent));
         }
 
-        //高管奖励
+        //高管奖励 级别高于才分高管奖励
+        //2.1 第一层
+        if(first != null && compareLevel(first.getLevel(),self.getLevel()) > 0){
 
+            totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders,first,firstExecutivePercent));
+        }
+        //2.2 第二层
+        if(second != null && compareLevel(second.getLevel(),self.getLevel()) > 0
+                && compareLevel(second.getLevel(),first.getLevel()) > 0){
+
+            totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders,second,secondExecutivePercent));
+        }
+        //2.3 第三层
+        if(third != null && compareLevel(third.getLevel(),self.getLevel()) > 0
+                && compareLevel(third.getLevel(),first.getLevel()) > 0
+                && compareLevel(third.getLevel(),second.getLevel()) > 0){
+
+            totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders,third,thirdExecutivePercent));
+        }
 
         //更新订单信息
-
         orders.setRebateMoney(totalDistrubtionMoney);
 
         ordersService.update(orders);
@@ -177,6 +191,26 @@ public class DistributionManagerImpl implements DistributionManager {
 
         //发送消息
         messageManager.sendShareAward(member.getId());
+        //可提现余额增加
+        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(selfShareMoney));
+
+        return selfShareMoney;
+    }
+
+    private BigDecimal distributionExecutiveAward(Orders orders, Member member, String sharePercent) {
+        //计算分润钱数 = 订单总数 * 分润比例 / 100
+        BigDecimal selfShareMoney = orders.getTotalMoney().multiply(new BigDecimal(sharePercent)).divide(new BigDecimal(100));
+
+        //创建流水
+        AccountMoneyFlow accountMoneyFlow = new AccountMoneyFlow();
+        accountMoneyFlow.setOrderId(orders.getId());
+        accountMoneyFlow.setAccountMoneyType(MessageTypeEnum.EXECUTIVE_AWARD.name());
+        accountMoneyFlow.setDistributMoney(selfShareMoney);
+        accountMoneyFlow.setMemberId(member.getId());
+        accountMoneyFlowService.insert(accountMoneyFlow);
+
+        //发送消息
+        messageManager.sendExecutiveAward(member.getId());
         //可提现余额增加
         member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(selfShareMoney));
 
@@ -232,5 +266,11 @@ public class DistributionManagerImpl implements DistributionManager {
                 break;
         }
         return percent;
+    }
+
+    private int compareLevel(String level1,String level2){
+
+        return 0;
+
     }
 }

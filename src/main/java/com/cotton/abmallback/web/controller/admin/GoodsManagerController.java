@@ -10,6 +10,7 @@ import com.cotton.abmallback.service.GoodsSpecificationService;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -18,10 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * GoodsManager
@@ -175,13 +174,29 @@ public class GoodsManagerController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
     public RestResponse<PageInfo<GoodsVO>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
-                                                       @RequestParam(defaultValue = "4") int pageSize) {
+                                                         @RequestParam(defaultValue = "4") int pageSize,
+                                                         @RequestParam(required = false)Map<String,Object> conditions) {
 
         Example example = new Example(Goods.class);
         example.setOrderByClause("gmt_create desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
+
+        if(null != conditions){
+            if(null != conditions.get("groupId")){
+                criteria.andEqualTo("groupId",conditions.get("groupId"));
+            }
+
+            if(null != conditions.get("isOnSell")){
+                criteria.andEqualTo("isOnSell",conditions.get("isOnSell"));
+            }
+
+            if(null != conditions.get("goodsName")){
+                criteria.andLike("goodsName","%" + conditions.get("goodsName").toString() + "%");
+            }
+        }
+
 
         PageInfo<Goods> goodsPageInfo = goodsService.query(pageNum, pageSize, example);
 
