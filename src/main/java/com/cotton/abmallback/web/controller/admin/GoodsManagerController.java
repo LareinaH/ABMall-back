@@ -1,6 +1,7 @@
 package com.cotton.abmallback.web.controller.admin;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.cotton.abmallback.model.Goods;
 import com.cotton.abmallback.model.GoodsSpecification;
 import com.cotton.abmallback.model.vo.GoodsVO;
@@ -78,9 +79,9 @@ public class GoodsManagerController extends BaseController {
         }
 
         //缩略图
-        List<String> images = (List<String>) JSON.parse(goodsVO.getImages());
+        JSONArray images =  JSON.parseArray(goodsVO.getImages());
         if(images != null && images.size() >0) {
-            goods.setThums(images.get(0));
+            goods.setThums(images.get(0).toString());
         }
 
         if (goodsService.insert(goods)) {
