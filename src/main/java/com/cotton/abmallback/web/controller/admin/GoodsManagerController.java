@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.alibaba.fastjson.JSON;
 import com.cotton.abmallback.model.Goods;
 import com.cotton.abmallback.model.GoodsSpecification;
 import com.cotton.abmallback.model.vo.GoodsVO;
@@ -59,6 +60,29 @@ public class GoodsManagerController extends BaseController {
 
         Goods goods = new Goods();
         BeanUtils.copyProperties(goodsVO,goods);
+
+        //补全信息
+
+        if(null != goodsVO.getGoodsSpecificationList() && goodsVO.getGoodsSpecificationList().size() > 0) {
+            //库存
+            Integer stock = 0;
+            for (GoodsSpecification goodsSpecification : goodsVO.getGoodsSpecificationList()) {
+                stock += goodsSpecification.getStock();
+
+            }
+            goods.setStock(stock);
+
+            goods.setUnit(goodsVO.getGoodsSpecificationList().get(0).getGoodsSpecificationName());
+            goods.setPrice(goodsVO.getGoodsSpecificationList().get(0).getPrice().toString());
+            goods.setPreferentialPrice(goodsVO.getGoodsSpecificationList().get(0).getPreferentialPrice());
+        }
+
+        //缩略图
+        List<String> images = (List<String>) JSON.parse(goodsVO.getImages());
+        if(images != null && images.size() >0) {
+            goods.setThums(images.get(0));
+        }
+
         if (goodsService.insert(goods)) {
 
             if(null != goodsVO.getGoodsSpecificationList() &&

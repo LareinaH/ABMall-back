@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -101,9 +102,34 @@ public class DistributionManagerImpl implements DistributionManager {
         //1 分享奖励
 
         //1.1 自己
-        String percent = "";
+        String percent = getLevelSharePercent(self.getLevel(), map);
 
-        String level = self.getLevel();
+        //计算分润钱数 = 订单总数 * 分润比例 / 100
+        BigDecimal decimal = orders.getTotalMoney().multiply(new BigDecimal(percent)).divide(new BigDecimal(100));
+
+        //创建流水
+
+
+
+
+        //
+
+        //if()
+
+        //1.2 第一层
+
+        //1.3 第二层
+
+        //1.4 第三层
+
+
+        //高管奖励
+
+
+    }
+
+    private String getLevelSharePercent(String level, Map<String, DistributionConfig> map) {
+        String percent = "0";
 
         MemberLevelEnum memberLevelEnum = MemberLevelEnum.valueOf(level);
         switch (memberLevelEnum) {
@@ -125,24 +151,31 @@ public class DistributionManagerImpl implements DistributionManager {
             default:
                 break;
         }
+        return percent;
+    }
 
-        //计算分润钱数
+    private String getLevelExecutivePercent(String level, Map<String, DistributionConfig> map) {
 
-        //创建流水
+        String percent = "0";
 
-        //
-
-        //if()
-
-        //1.2 第一层
-
-        //1.3 第二层
-
-        //1.4 第三层
-
-
-        //高管奖励
-
-
+        MemberLevelEnum memberLevelEnum = MemberLevelEnum.valueOf(level);
+        switch (memberLevelEnum) {
+            case WHITE:
+                break;
+            case AGENT:
+                break;
+            case V1:
+                percent = map.get(DistributionItemEnum.EXECUTIVE_AWARD_V1.name()).getValue();
+                break;
+            case V2:
+                percent = map.get(DistributionItemEnum.EXECUTIVE_AWARD_V2.name()).getValue();
+                break;
+            case V3:
+                percent = map.get(DistributionItemEnum.EXECUTIVE_AWARD_V3.name()).getValue();
+                break;
+            default:
+                break;
+        }
+        return percent;
     }
 }
