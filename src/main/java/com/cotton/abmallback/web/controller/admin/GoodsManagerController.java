@@ -225,4 +225,10 @@ public class GoodsManagerController extends BaseController {
         }
         return RestResponse.getSuccesseResponse();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/getSpecUnitList", method = {RequestMethod.GET})
+    public RestResponse<List> getSpecUnitList() {
+        return RestResponse.getSuccesseResponse(goodsSpecificationService.getSpecUnitList());
+    }
 }

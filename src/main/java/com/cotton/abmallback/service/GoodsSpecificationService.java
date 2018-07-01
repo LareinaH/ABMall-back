@@ -1,7 +1,9 @@
 package com.cotton.abmallback.service;
 
-import com.cotton.base.service.BaseService;
 import com.cotton.abmallback.model.GoodsSpecification;
+import com.cotton.base.service.BaseService;
+
+import java.util.List;
 
 /**
  * GoodsSpecification
@@ -11,4 +13,5 @@ import com.cotton.abmallback.model.GoodsSpecification;
  * @date 2018/5/22
  */
 public interface GoodsSpecificationService extends BaseService<GoodsSpecification> {
+    public List<String> getSpecUnitList();
 }
