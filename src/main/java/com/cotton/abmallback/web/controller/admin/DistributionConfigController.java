@@ -50,6 +50,8 @@ public class DistributionConfigController extends ABMallAdminBaseController {
             obj.setItem(distributionConfig.getItem());
             obj.setValue(distributionConfig.getValue());
             obj.setDefaultVaule(distributionConfig.getDefaultValue());
+
+            map.put(obj.getItem(),obj);
         }
         return RestResponse.getSuccesseResponse(map);
     }
