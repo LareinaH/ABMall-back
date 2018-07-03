@@ -1,8 +1,7 @@
 package com.cotton.abmallback.enumeration;
 
 /**
- * MessageTypeEnum
- *
+ *  PlatformMessageLevelEnum
  * @author lareina_h
  * @version 1.0
  * @date 2018/6/1
@@ -10,30 +9,27 @@ package com.cotton.abmallback.enumeration;
 public enum PlatformMessageLevelEnum {
 
     /**
-     * 晋级奖励
+     * 重要紧急
      */
-    PROMOTION_AWARD("晋级奖励"),
+    IMPORTANT_EMERGENCY("重要紧急"),
     /**
-     * 分享奖励
+     * 重要非紧急
      */
-    SHARE_AWARD("分享奖励"),
+    IMPORTANT_NOT_EMERGENCY("重要非紧急"),
     /**
-     * 高管奖励
+     * 非重要紧急
      */
-    EXECUTIVE_AWARD("高管奖励"),
+    NOT_IMPORTANT_EMERGENCY("非重要紧急"),
     /**
-     * 平台通知
+     * 非紧急非重要
      */
-    SYSTEM_NOTICE("平台通知"),
-    /**
-     * 活动奖励
-     */
-    ACTIVITY_AWARD("活动奖励");
+    NOT_IMPORTANT_NOT_EMERGENCY("非紧急非重要");
 
-    private String name;
 
-    PlatformMessageLevelEnum(String name){
+    private String displayName;
 
-        this.name = name;
+    PlatformMessageLevelEnum(String displayName){
+
+        this.displayName = displayName;
     }
 }
