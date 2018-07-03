@@ -122,6 +122,12 @@ public class Orders extends BaseModel {
     private String tradeNo;
 
     /**
+     * 订单是否分润
+     */
+    @Column(name = "is_distrubuted")
+    private Boolean isDistrubuted;
+
+    /**
      * 物流编号
      */
     @Column(name = "logistic_code")
@@ -490,6 +496,24 @@ public class Orders extends BaseModel {
      */
     public void setTradeNo(String tradeNo) {
         this.tradeNo = tradeNo == null ? null : tradeNo.trim();
+    }
+
+    /**
+     * 获取订单是否分润
+     *
+     * @return is_distrubuted - 订单是否分润
+     */
+    public Boolean getIsDistrubuted() {
+        return isDistrubuted;
+    }
+
+    /**
+     * 设置订单是否分润
+     *
+     * @param isDistrubuted 订单是否分润
+     */
+    public void setIsDistrubuted(Boolean isDistrubuted) {
+        this.isDistrubuted = isDistrubuted;
     }
 
     /**

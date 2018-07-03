@@ -20,4 +20,5 @@ public interface OrdersService extends BaseService<Orders> {
     void  systemCancelOrder();
 
     void  systemConfirmedOrder();
+
 }

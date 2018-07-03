@@ -31,7 +31,7 @@ public interface MessageManager {
      * 发送升级消息
      * @param memberId
      */
-    void sendPromotionAward(long memberId);
+    void sendPromotionAward(long memberId,String promotionLevel);
 
 
 }

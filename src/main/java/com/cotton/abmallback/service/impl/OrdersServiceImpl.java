@@ -38,6 +38,7 @@ public class OrdersServiceImpl extends BaseServiceImpl<Orders> implements Orders
         //更新状态
         orders.setTradeNo(tradeNo);
         orders.setPayMode(payMode);
+        orders.setIsPaid(true);
         orders.setOrderStatus(OrderStatusEnum.WAIT_DELIVER.name());
 
         return update(orders);

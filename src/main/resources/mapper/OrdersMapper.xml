@@ -24,6 +24,7 @@
     <result column="pay_mode" jdbcType="VARCHAR" property="payMode" />
     <result column="is_paid" jdbcType="BIT" property="isPaid" />
     <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="is_distrubuted" jdbcType="BIT" property="isDistrubuted" />
     <result column="logistic_code" jdbcType="VARCHAR" property="logisticCode" />
     <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />

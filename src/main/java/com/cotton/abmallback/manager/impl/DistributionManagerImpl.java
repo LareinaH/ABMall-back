@@ -270,7 +270,8 @@ public class DistributionManagerImpl implements DistributionManager {
 
     private int compareLevel(String level1,String level2){
 
-        return 0;
-
+        MemberLevelEnum levelEnum = MemberLevelEnum.valueOf(level1);
+        MemberLevelEnum levelEnum2 = MemberLevelEnum.valueOf(level2);
+        return levelEnum.compareTo(levelEnum2);
     }
 }

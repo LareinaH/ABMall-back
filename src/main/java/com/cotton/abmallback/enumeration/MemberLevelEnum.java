@@ -40,4 +40,19 @@ public enum MemberLevelEnum {
 
         this.displayName = displayName;
     }
+
+    public static MemberLevelEnum getNextLevel(MemberLevelEnum levelEnum){
+        switch (levelEnum){
+            case WHITE:
+                return MemberLevelEnum.AGENT;
+            case AGENT:
+                return MemberLevelEnum.V1;
+            case V1:
+                return MemberLevelEnum.V2;
+            case V2:
+                return MemberLevelEnum.V3;
+            default:
+                return null;
+        }
+    }
 }

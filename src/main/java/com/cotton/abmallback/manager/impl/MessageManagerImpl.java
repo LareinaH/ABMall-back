@@ -3,11 +3,15 @@ package com.cotton.abmallback.manager.impl;
 import com.cotton.abmallback.enumeration.MessageTypeEnum;
 import com.cotton.abmallback.manager.MessageManager;
 import com.cotton.abmallback.model.MsgMemberMessage;
+import com.cotton.abmallback.model.MsgMessageTemplate;
+import com.cotton.abmallback.service.DistributionConfigService;
 import com.cotton.abmallback.service.MsgMemberMessageService;
 import com.cotton.abmallback.service.MsgMessageTemplateService;
 import com.cotton.base.third.GeTuiService;
 import me.chanjar.weixin.mp.api.WxMpService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * MessageManagerImpl
@@ -23,13 +27,16 @@ public class MessageManagerImpl implements MessageManager {
 
     private final MsgMessageTemplateService msgMessageTemplateService;
 
+    private final DistributionConfigService distributionConfigService;
+
     private final GeTuiService geTuiService;
 
     private final WxMpService wxMpService;
 
-    public MessageManagerImpl(MsgMemberMessageService msgMemberMessageService, MsgMessageTemplateService msgMessageTemplateService, GeTuiService geTuiService, WxMpService wxMpService) {
+    public MessageManagerImpl(MsgMemberMessageService msgMemberMessageService, MsgMessageTemplateService msgMessageTemplateService, DistributionConfigService distributionConfigService, GeTuiService geTuiService, WxMpService wxMpService) {
         this.msgMemberMessageService = msgMemberMessageService;
         this.msgMessageTemplateService = msgMessageTemplateService;
+        this.distributionConfigService = distributionConfigService;
         this.geTuiService = geTuiService;
         this.wxMpService = wxMpService;
     }
@@ -37,23 +44,31 @@ public class MessageManagerImpl implements MessageManager {
     @Override
     public void sendSystemNotice(long systemMessageId) {
 
+
     }
 
     @Override
     public void sendShareAward(long memberId) {
 
-        geTuiService.pushMessage("分享奖励","hahah",memberId);
+        String context = "";
+        insertMessage(memberId,"分享奖励",context,MessageTypeEnum.SHARE_AWARD,1,null);
 
     }
 
     @Override
     public void sendExecutiveAward(long memberId) {
 
+        String context = "";
+        insertMessage(memberId,"高管奖励",context,MessageTypeEnum.EXECUTIVE_AWARD,1,null);
+
+
     }
 
     @Override
-    public void sendPromotionAward(long memberId) {
+    public void sendPromotionAward(long memberId,String promotionLevel) {
 
+        String context = "";
+        insertMessage(memberId,"高管奖励",context,MessageTypeEnum.PROMOTION_AWARD,1,promotionLevel);
     }
 
 
@@ -80,5 +95,15 @@ public class MessageManagerImpl implements MessageManager {
 
         //TODO:发送微信消息
 
+    }
+
+    private String buildContext(MessageTypeEnum messageTypeEnum){
+
+        MsgMessageTemplate model = new MsgMessageTemplate();
+        model.setType(messageTypeEnum.name());
+        model.setIsDeleted(false);
+        List<MsgMessageTemplate> msgMessageTemplates = msgMessageTemplateService.queryList(model);
+
+        return "";
     }
 }

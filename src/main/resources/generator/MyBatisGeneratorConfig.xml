@@ -31,14 +31,14 @@
 
 		<javaClientGenerator targetPackage="com.cotton.abmallback.mapper" targetProject="${basedir.src.main.java}" type="XMLMAPPER" />
 
-		<table tableName="goods" domainObjectName="Goods">
+<!--		<table tableName="goods" domainObjectName="Goods">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 <!--
 		<table tableName="goods_group">
 			<property name="useActualColumnNames" value="false" />
@@ -83,14 +83,14 @@
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
 		</table>-->
-<!--		<table tableName="orders" domainObjectName="Orders">
+		<table tableName="orders" domainObjectName="Orders">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>-->
+		</table>
 
 		<!--
 		<table tableName="sys_user">
@@ -102,14 +102,14 @@
 			<ignoreColumn column="gmt_modify" />
 		</table>
 		-->
-		<table tableName="sys_role">
+<!--		<table tableName="sys_role">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
 			<ignoreColumn column="is_deleted" />
 			<ignoreColumn column="gmt_create" />
 			<ignoreColumn column="gmt_modify" />
-		</table>
+		</table>-->
 
 		<!--
 		<table tableName="sys_menu">
