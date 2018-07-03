@@ -99,14 +99,20 @@ public class MsgPlatformMessageManagerController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
-    public RestResponse<PageInfo<MsgPlatformMessage>> queryPageList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "4") int pageSize) {
+    @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
+    public RestResponse<PageInfo<MsgPlatformMessage>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
+                                                                    @RequestParam(defaultValue = "4") int pageSize,
+                                                                    @RequestBody(required = false)Map<String,Object> conditions) {
 
         Example example = new Example(MsgPlatformMessage.class);
         example.setOrderByClause("gmt_create desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
+
+        if(null != conditions){
+
+        }
 
         PageInfo<MsgPlatformMessage> msgPlatformMessagePageInfo = msgPlatformMessageService.query(pageNum, pageSize, example);
 
