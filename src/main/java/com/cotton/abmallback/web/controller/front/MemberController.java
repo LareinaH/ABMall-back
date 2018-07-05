@@ -86,7 +86,7 @@ public class MemberController extends ABMallFrontBaseController {
         model.setIsDeleted(false);
 
         if(memberService.count(model) > 0){
-            return RestResponse.getFailedResponse(500,"改手机号已经存在");
+            return RestResponse.getFailedResponse(500,"该手机号已经存在");
         }
 
         //更新手机号
@@ -130,7 +130,7 @@ public class MemberController extends ABMallFrontBaseController {
         model.setIsDeleted(false);
 
         if(memberService.count(model) > 0){
-            return RestResponse.getFailedResponse(500,"改手机号已经存在");
+            return RestResponse.getFailedResponse(500,"该手机号已经存在");
         }
 
         member.setPhoneNum(phoneNum);

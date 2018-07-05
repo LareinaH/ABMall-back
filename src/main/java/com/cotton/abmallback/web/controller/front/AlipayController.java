@@ -1,6 +1,9 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
+import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.alibaba.alipay.AlipayService;
 import com.cotton.base.common.RestResponse;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -36,11 +38,14 @@ public class AlipayController {
 
     private final OrdersService ordersService;
 
+    private final OrderGoodsService orderGoodsService;
+
 
     @Autowired
-    public AlipayController(AlipayService alipayService, OrdersService ordersService) {
+    public AlipayController(AlipayService alipayService, OrdersService ordersService, OrderGoodsService orderGoodsService) {
         this.alipayService = alipayService;
         this.ordersService = ordersService;
+        this.orderGoodsService = orderGoodsService;
     }
 
 
@@ -54,9 +59,18 @@ public class AlipayController {
         //根据订单号获取订单信息
         Orders orders = ordersService.getById(orderId);
 
-        if(null == orders){
-            return RestResponse.getFailedResponse(500,"订单不存在");
+        OrderGoods model = new OrderGoods();
+        model.setOrderId(orderId);
+        OrderGoods orderGoods = orderGoodsService.selectOne(model);
+
+        if(null == orders || null == orderGoods){
+            return RestResponse.getFailedResponse(500,"订单编号不存在");
         }
+
+        if(OrderStatusEnum.WAIT_BUYER_PAY.equals(OrderStatusEnum.valueOf(orders.getOrderStatus()))){
+            return RestResponse.getFailedResponse(500,"订单状态错误");
+        }
+
 
         Map<String, Object> result = alipayService.payWithAlipay(orders.getOrderNo(),orders.getTotalMoney());
         logger.info("app pay form: {}", result);

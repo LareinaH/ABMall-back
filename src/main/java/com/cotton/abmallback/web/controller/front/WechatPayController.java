@@ -1,6 +1,7 @@
 package com.cotton.abmallback.web.controller.front;
 
 
+import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrderGoodsService;
@@ -21,6 +22,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -55,14 +58,22 @@ public class WechatPayController {
      */
     @GetMapping("/unifiedOrder")
     @ResponseBody
-    public RestResponse<WxPayUnifiedOrderResult> unifiedOrder(HttpServletRequest httpServletRequest,
-                                                              long orderId, String tradeType) throws WxPayException {
+    public RestResponse<Map<String,String>> unifiedOrder(HttpServletRequest httpServletRequest,
+                                                         long orderId, String tradeType) throws WxPayException {
 
         //根据orderId 获取订单信息
         Orders orders = ordersService.getById(orderId);
         OrderGoods model = new OrderGoods();
         model.setOrderId(orderId);
         OrderGoods orderGoods = orderGoodsService.selectOne(model);
+
+        if(null == orders || null == orderGoods){
+            return RestResponse.getFailedResponse(500,"订单编号不存在");
+        }
+
+        if(OrderStatusEnum.WAIT_BUYER_PAY.equals(OrderStatusEnum.valueOf(orders.getOrderStatus()))){
+            return RestResponse.getFailedResponse(500,"订单状态错误");
+        }
 
         String ip = getIpAddr(httpServletRequest);
 
@@ -81,7 +92,15 @@ public class WechatPayController {
 
         if(wxPayUnifiedOrderResult.getResultCode().equalsIgnoreCase("SUCCESS")) {
 
-            return RestResponse.getSuccesseResponse(wxPayUnifiedOrderResult);
+            Map<String,String> result = new HashMap<>(10);
+            result.put("appid",wxPayUnifiedOrderResult.getAppid());
+            result.put("partnerid",wxPayUnifiedOrderResult.getMchId());
+            result.put("prepayid",wxPayUnifiedOrderResult.getPrepayId());
+            result.put("noncestr",wxPayUnifiedOrderResult.getNonceStr());
+            result.put("package","Sign=WXPay");
+            result.put("timestamp",String.valueOf(System.currentTimeMillis()));
+
+            return RestResponse.getSuccesseResponse(result);
         }else {
             return RestResponse.getFailedResponse(500,wxPayUnifiedOrderResult.getReturnMsg());
         }
