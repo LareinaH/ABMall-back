@@ -8,6 +8,7 @@ import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.base.common.RestResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -90,22 +91,22 @@ public class WechatPayController {
         request.setTradeType(tradeType);
 
 
-        WxPayUnifiedOrderResult wxPayUnifiedOrderResult= this.wxPayService.createOrder(request);
+        WxPayAppOrderResult wxPayAppOrderResult= this.wxPayService.createOrder(request);
 
-        if(wxPayUnifiedOrderResult.getResultCode().equalsIgnoreCase("SUCCESS")) {
+        if(null != wxPayAppOrderResult) {
 
             Map<String,Object> result = new HashMap<>(10);
-            result.put("appid",wxPayUnifiedOrderResult.getAppid());
-            result.put("partnerid",wxPayUnifiedOrderResult.getMchId());
-            result.put("prepayid",wxPayUnifiedOrderResult.getPrepayId());
-            result.put("noncestr",wxPayUnifiedOrderResult.getNonceStr());
+            result.put("appid",wxPayAppOrderResult.getAppId());
+            result.put("partnerid",wxPayAppOrderResult.getPartnerId());
+            result.put("prepayid",wxPayAppOrderResult.getPrepayId());
+            result.put("noncestr",wxPayAppOrderResult.getNonceStr());
             result.put("package","Sign=WXPay");
-            result.put("sign",wxPayUnifiedOrderResult.getSign());
+            result.put("sign",wxPayAppOrderResult.getSign());
             result.put("timestamp",System.currentTimeMillis()/1000);
 
             return RestResponse.getSuccesseResponse(result);
         }else {
-            return RestResponse.getFailedResponse(500,wxPayUnifiedOrderResult.getReturnMsg());
+            return RestResponse.getFailedResponse(500,"微信支付失败");
         }
     }
 
