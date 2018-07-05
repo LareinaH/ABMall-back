@@ -58,7 +58,7 @@ public class WechatPayController {
      */
     @GetMapping("/unifiedOrder")
     @ResponseBody
-    public RestResponse<Map<String,String>> unifiedOrder(HttpServletRequest httpServletRequest,
+    public RestResponse<Map<String,Object>> unifiedOrder(HttpServletRequest httpServletRequest,
                                                          long orderId, String tradeType) throws WxPayException {
 
         //根据orderId 获取订单信息
@@ -92,13 +92,13 @@ public class WechatPayController {
 
         if(wxPayUnifiedOrderResult.getResultCode().equalsIgnoreCase("SUCCESS")) {
 
-            Map<String,String> result = new HashMap<>(10);
+            Map<String,Object> result = new HashMap<>(10);
             result.put("appid",wxPayUnifiedOrderResult.getAppid());
             result.put("partnerid",wxPayUnifiedOrderResult.getMchId());
             result.put("prepayid",wxPayUnifiedOrderResult.getPrepayId());
             result.put("noncestr",wxPayUnifiedOrderResult.getNonceStr());
             result.put("package","Sign=WXPay");
-            result.put("timestamp",String.valueOf(System.currentTimeMillis()));
+            result.put("timestamp",System.currentTimeMillis()/1000);
 
             return RestResponse.getSuccesseResponse(result);
         }else {
