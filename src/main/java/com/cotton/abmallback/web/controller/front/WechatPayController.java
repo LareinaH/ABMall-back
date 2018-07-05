@@ -98,6 +98,7 @@ public class WechatPayController {
             result.put("prepayid",wxPayUnifiedOrderResult.getPrepayId());
             result.put("noncestr",wxPayUnifiedOrderResult.getNonceStr());
             result.put("package","Sign=WXPay");
+            result.put("sign",wxPayUnifiedOrderResult.getSign());
             result.put("timestamp",System.currentTimeMillis()/1000);
 
             return RestResponse.getSuccesseResponse(result);
