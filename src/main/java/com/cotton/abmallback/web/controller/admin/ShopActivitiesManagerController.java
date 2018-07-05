@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.model.ShopActivities;
 import com.cotton.abmallback.service.ShopActivitiesService;
+import com.cotton.abmallback.service.ShopActivityGoodsService;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import com.github.pagehelper.PageInfo;
@@ -31,9 +32,12 @@ public class ShopActivitiesManagerController extends BaseController {
 
     private ShopActivitiesService shopActivitiesService;
 
+    private ShopActivityGoodsService shopActivityGoodsService;
+
     @Autowired
-    public ShopActivitiesManagerController(ShopActivitiesService shopActivitiesService) {
+    public ShopActivitiesManagerController(ShopActivitiesService shopActivitiesService, ShopActivityGoodsService shopActivityGoodsService) {
         this.shopActivitiesService = shopActivitiesService;
+        this.shopActivityGoodsService = shopActivityGoodsService;
     }
 
     @ResponseBody

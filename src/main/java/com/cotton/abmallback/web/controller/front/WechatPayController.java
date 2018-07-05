@@ -77,6 +77,8 @@ public class WechatPayController {
 
         String ip = getIpAddr(httpServletRequest);
 
+        logger.info(ip);
+
         //构建WxPayUnifiedOrderRequest
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setBody(orderGoods.getGoodName());
@@ -88,7 +90,7 @@ public class WechatPayController {
         request.setTradeType(tradeType);
 
 
-        WxPayUnifiedOrderResult wxPayUnifiedOrderResult= this.wxPayService.unifiedOrder(request);
+        WxPayUnifiedOrderResult wxPayUnifiedOrderResult= this.wxPayService.createOrder(request);
 
         if(wxPayUnifiedOrderResult.getResultCode().equalsIgnoreCase("SUCCESS")) {
 
