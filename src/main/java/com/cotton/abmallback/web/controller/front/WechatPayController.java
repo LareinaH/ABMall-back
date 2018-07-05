@@ -71,7 +71,7 @@ public class WechatPayController {
             return RestResponse.getFailedResponse(500,"订单编号不存在");
         }
 
-        if(OrderStatusEnum.WAIT_BUYER_PAY.equals(OrderStatusEnum.valueOf(orders.getOrderStatus()))){
+        if(!OrderStatusEnum.WAIT_BUYER_PAY.equals(OrderStatusEnum.valueOf(orders.getOrderStatus()))){
             return RestResponse.getFailedResponse(500,"订单状态错误");
         }
 
