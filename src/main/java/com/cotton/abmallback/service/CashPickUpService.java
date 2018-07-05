@@ -11,4 +11,9 @@ import com.cotton.abmallback.model.CashPickUp;
  * @date 2018/5/10
  */
 public interface CashPickUpService extends BaseService<CashPickUp> {
+
+    /**
+     * 发红包
+     */
+    void sendRedpack();
 }

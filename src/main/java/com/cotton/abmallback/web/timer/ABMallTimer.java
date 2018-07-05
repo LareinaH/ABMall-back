@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.timer;
 
+import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.OrdersService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,16 +18,14 @@ public class ABMallTimer {
 
     private final OrdersService ordersService;
 
-    public ABMallTimer(OrdersService ordersService) {
+    private final CashPickUpService cashPickUpService;
+
+
+    public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService) {
         this.ordersService = ordersService;
+        this.cashPickUpService = cashPickUpService;
     }
 
-    @Scheduled(cron = "0 0 12 * * ?" )
-    //@Scheduled(cron = "0 47 10 ? * *")
-    public void reportCurrentTime() {
-
-
-    }
 
     /**
      * 定时取消已经超时的订单
@@ -46,5 +45,13 @@ public class ABMallTimer {
         ordersService.systemConfirmedOrder();
     }
 
+    /**
+     * 提现到账（通过发红包的方式）
+     */
+    @Scheduled(cron = "0 */30 * * * ?" )
+    public void sendRedpack() {
 
+        cashPickUpService.sendRedpack();
+
+    }
 }
