@@ -3,8 +3,8 @@ package com.cotton.abmallback.model;
 import com.cotton.base.model.BaseModel;
 import javax.persistence.*;
 
-@Table(name = "shop_activites_config")
-public class ShopActivitesConfig extends BaseModel {
+@Table(name = "shop_activity_config")
+public class ShopActivityConfig extends BaseModel {
     /**
      * 活动id
      */

@@ -106,13 +106,13 @@ public class WechatPayController {
 
             return RestResponse.getSuccesseResponse(result);
         }else {
-            return RestResponse.getFailedResponse(500,"微信支付失败");
+            return RestResponse.getFailedResponse(500,"微信支付zhi'b");
         }
     }
 
 
     @PostMapping("/parseOrderNotifyResult")
-    public RestResponse<Void> parseOrderNotifyResult(@RequestBody String xmlData) throws WxPayException {
+    public RestResponse<Void> parseOrderNotifyResult(String xmlData) throws WxPayException {
 
         logger.info("微信支付结果通知:" + xmlData);
 

@@ -1,7 +1,10 @@
 package com.cotton.abmallback.model.vo.admin;
 
 import com.cotton.abmallback.model.ShopActivities;
+import com.cotton.abmallback.model.ShopActivityConfig;
 import com.cotton.abmallback.model.ShopActivityGoods;
+
+import java.util.List;
 
 /**
  * ShopActiviesVO
@@ -12,5 +15,9 @@ import com.cotton.abmallback.model.ShopActivityGoods;
  */
 public class ShopActiviesVO extends ShopActivities {
 
-    ShopActivityGoods shopActivityGoods;
+    private ShopActivityGoods shopActivityGoods;
+
+    private List<ShopActivityConfig> shopActivityConfigList;
+
+
 }

@@ -218,7 +218,7 @@
 			<ignoreColumn column="gmt_modify" />
 		</table>-->
 
-		<table tableName="shop_activites_config">
+		<table tableName="shop_activity_config">
 			<property name="useActualColumnNames" value="false" />
 			<generatedKey column="id" sqlStatement="Mysql" identity="true" />
 			<ignoreColumn column="id" />
