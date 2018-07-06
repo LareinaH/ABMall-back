@@ -9,6 +9,7 @@ import com.cotton.abmallback.service.OrdersService;
 import com.cotton.base.common.RestResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -90,33 +93,63 @@ public class WechatPayController {
         request.setNotifyUrl("http://47.97.212.22:80/api/v1/wechat/pay/parseOrderNotifyResult");
         request.setTradeType(tradeType);
 
+        if("APP".equalsIgnoreCase(tradeType)) {
 
-        WxPayAppOrderResult wxPayAppOrderResult= this.wxPayService.createOrder(request);
 
-        if(null != wxPayAppOrderResult) {
+            WxPayAppOrderResult wxPayAppOrderResult = this.wxPayService.createOrder(request);
 
-            Map<String,Object> result = new HashMap<>(10);
-            result.put("appid",wxPayAppOrderResult.getAppId());
-            result.put("partnerid",wxPayAppOrderResult.getPartnerId());
-            result.put("prepayid",wxPayAppOrderResult.getPrepayId());
-            result.put("noncestr",wxPayAppOrderResult.getNonceStr());
-            result.put("package","Sign=WXPay");
-            result.put("sign",wxPayAppOrderResult.getSign());
-            result.put("timestamp",System.currentTimeMillis()/1000);
+            if (null != wxPayAppOrderResult) {
 
-            return RestResponse.getSuccesseResponse(result);
+                Map<String, Object> result = new HashMap<>(10);
+                result.put("appid", wxPayAppOrderResult.getAppId());
+                result.put("partnerid", wxPayAppOrderResult.getPartnerId());
+                result.put("prepayid", wxPayAppOrderResult.getPrepayId());
+                result.put("noncestr", wxPayAppOrderResult.getNonceStr());
+                result.put("package", "Sign=WXPay");
+                result.put("sign", wxPayAppOrderResult.getSign());
+                result.put("timestamp", System.currentTimeMillis() / 1000);
+
+                return RestResponse.getSuccesseResponse(result);
+            } else {
+                return RestResponse.getFailedResponse(500, "微信支付失败");
+            }
+        }else if("JSAPI".equalsIgnoreCase(tradeType)){
+
+            WxPayMpOrderResult wxPayMpOrderResult =  this.wxPayService.createOrder(request);
+
+            if (null != wxPayMpOrderResult) {
+
+                Map<String, Object> result = new HashMap<>(10);
+                result.put("nonceStr", wxPayMpOrderResult.getNonceStr());
+                result.put("package",wxPayMpOrderResult.getPackageValue());
+                result.put("signType",wxPayMpOrderResult.getSignType());
+                result.put("paySign", wxPayMpOrderResult.getPaySign());
+                result.put("timestamp", System.currentTimeMillis() / 1000);
+
+                return RestResponse.getSuccesseResponse(result);
+            } else {
+                return RestResponse.getFailedResponse(500, "微信支付失败");
+            }
+
         }else {
-            return RestResponse.getFailedResponse(500,"微信支付zhi'b");
+            return RestResponse.getFailedResponse(500, "支付方式错误");
         }
     }
 
 
     @PostMapping("/parseOrderNotifyResult")
-    public RestResponse<Void> parseOrderNotifyResult(String xmlData) throws WxPayException {
+    public RestResponse<Void> parseOrderNotifyResult(HttpServletRequest httpServletRequest) throws WxPayException, IOException {
+
+        BufferedReader br = httpServletRequest.getReader();
+        String str;
+        StringBuilder xmlData = new StringBuilder();
+        while((str = br.readLine()) != null){
+            xmlData.append(str);
+        }
 
         logger.info("微信支付结果通知:" + xmlData);
 
-        WxPayOrderNotifyResult wxPayOrderNotifyResult = this.wxPayService.parseOrderNotifyResult(xmlData);
+        WxPayOrderNotifyResult wxPayOrderNotifyResult = this.wxPayService.parseOrderNotifyResult(xmlData.toString());
 
         //支付成功
         if(wxPayOrderNotifyResult!= null && wxPayOrderNotifyResult.getReturnCode().equalsIgnoreCase("SUCCESS")
