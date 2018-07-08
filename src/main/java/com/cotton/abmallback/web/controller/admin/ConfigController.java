@@ -1,6 +1,7 @@
 package com.cotton.abmallback.web.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cotton.abmallback.enumeration.OrderReturnStatusEnum;
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.enumeration.PlatformMessageLevelEnum;
 import com.cotton.abmallback.enumeration.ReturnStatus;
@@ -48,6 +49,14 @@ public class ConfigController {
                 break;
             case "platformMessageLevel":
                 object = Arrays.stream(PlatformMessageLevelEnum.values()).map(x -> {
+                    JSONObject jo = new JSONObject();
+                    jo.put("value", x.name());
+                    jo.put("label", x.getDisplayName());
+                    return jo;
+                }).collect(Collectors.toList());
+                break;
+            case "orderReturnStatusEnum":
+                object = Arrays.stream(OrderReturnStatusEnum.values()).map(x -> {
                     JSONObject jo = new JSONObject();
                     jo.put("value", x.name());
                     jo.put("label", x.getDisplayName());

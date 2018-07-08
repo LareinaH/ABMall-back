@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.enumeration.OrderReturnStatusEnum;
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.model.OrderReplenish;
 import com.cotton.abmallback.model.Orders;
@@ -102,10 +103,15 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/replenish", method = {RequestMethod.POST})
-    public RestResponse<Void> replenish(long ordersId,String logisticCode) {
+    public RestResponse<Void> replenish(long orderId,String logisticCode) {
+
+        Orders orders = ordersService.getById(orderId);
+        if(null == orders){
+            return RestResponse.getFailedResponse(500,"订单编号不存在");
+        }
 
         OrderReplenish model = new OrderReplenish();
-        model.setOrderId(ordersId);
+        model.setOrderId(orderId);
         model.setLogisticCode(logisticCode);
 
         if(replenishService.queryList(model).size() > 0){
@@ -113,6 +119,15 @@ public class OrdersManagerController extends ABMallAdminBaseController {
             return RestResponse.getFailedResponse(500,"该补货运单号已经存在");
         }
 
+        if(!orders.getReturnStatus().equalsIgnoreCase(OrderReturnStatusEnum.REPLENISHMENT.name())) {
+
+            orders.setReturnStatus(OrderReturnStatusEnum.REPLENISHMENT.name());
+
+            if (!ordersService.update(orders)) {
+                return RestResponse.getFailedResponse(500, "补货失败,Orders为:" + orders.toString());
+            }
+
+        }
         if(replenishService.insert(model)) {
 
             return RestResponse.getSuccesseResponse();

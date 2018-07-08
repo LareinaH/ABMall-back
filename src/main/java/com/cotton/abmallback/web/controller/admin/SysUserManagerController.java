@@ -71,6 +71,33 @@ public class SysUserManagerController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/editPassword" ,method = {RequestMethod.POST})
+    public RestResponse<Void> editPassword(@RequestParam long sysUserId,
+                                           @RequestParam String oldPwd,
+                                           @RequestParam String newPwd) {
+
+
+        SysUser sysUser = sysUserService.getById(sysUserId);
+
+        if(null == sysUser){
+            return RestResponse.getFailedResponse(500,"无法查找数据,请检查sysUserId是否正确");
+
+        }
+
+        if(!sysUser.getPassword().equals(oldPwd)){
+            return RestResponse.getFailedResponse(500,"原密码不正确！");
+        }
+
+        sysUser.setPassword(newPwd);
+
+        if(!sysUserService.update(sysUser)){
+            return RestResponse.getFailedResponse(500,"修改密码失败"+sysUser.toString());
+        }
+
+        return RestResponse.getSuccesseResponse();
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/get",method = {RequestMethod.GET})
     public RestResponse<SysUser> get(@RequestParam long sysUserId) {
 
