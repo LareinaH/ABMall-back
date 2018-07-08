@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +42,10 @@ public class ShopActivitiesManagerController extends BaseController {
     private ShopActivityConfigService shopActivityConfigService;
 
     @Autowired
-    public ShopActivitiesManagerController(ShopActivitiesService shopActivitiesService, ShopActivityGoodsService shopActivityGoodsService) {
+    public ShopActivitiesManagerController(ShopActivitiesService shopActivitiesService, ShopActivityGoodsService shopActivityGoodsService, ShopActivityConfigService shopActivityConfigService) {
         this.shopActivitiesService = shopActivitiesService;
         this.shopActivityGoodsService = shopActivityGoodsService;
+        this.shopActivityConfigService = shopActivityConfigService;
     }
 
     @ResponseBody
@@ -73,7 +73,7 @@ public class ShopActivitiesManagerController extends BaseController {
 
             //插入配置
             for(ShopActivityConfig shopActivityConfig:shopActivitiesVO.getShopActivityConfigList()){
-                shopActivityConfig.setShopActivitesId( shopActivities.getId());
+                shopActivityConfig.setShopActivitesId(shopActivities.getId());
                 shopActivityConfigService.insert(shopActivityConfig);
             }
 

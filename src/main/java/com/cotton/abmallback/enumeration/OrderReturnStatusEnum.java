@@ -9,6 +9,9 @@ package com.cotton.abmallback.enumeration;
  */
 public enum  OrderReturnStatusEnum {
 
+    /**
+     * 正常
+     */
     NORMAL("正常"),
     REPLENISHMENT("补货");
 

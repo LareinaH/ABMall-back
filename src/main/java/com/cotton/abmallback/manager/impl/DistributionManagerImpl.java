@@ -77,11 +77,12 @@ public class DistributionManagerImpl implements DistributionManager {
 
         List<String> orderStatusList = new ArrayList<>();
         orderStatusList.add(OrderStatusEnum.CANCEL.name());
-        criteria.andNotIn("orderStauts", orderStatusList);
+        orderStatusList.add(OrderStatusEnum.WAIT_BUYER_PAY.name());
+        criteria.andNotIn("orderStatus", orderStatusList);
 
         long count = ordersService.count(example);
 
-        if (count <= 1) {
+        if (count <= 0) {
             //首次购物 不需要分销
             return;
         }
@@ -173,6 +174,7 @@ public class DistributionManagerImpl implements DistributionManager {
 
         //更新订单信息
         orders.setRebateMoney(totalDistrubtionMoney);
+        orders.setIsDistrubuted(true);
 
         ordersService.update(orders);
     }
