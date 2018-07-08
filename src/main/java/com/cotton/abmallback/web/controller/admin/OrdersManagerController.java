@@ -81,7 +81,7 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/delivery", method = {RequestMethod.POST})
-    public RestResponse<Void> delivery(@RequestParam long orderId) {
+    public RestResponse<Void> delivery(@RequestParam long orderId,@RequestParam String logisticCode) {
 
         Orders orders = ordersService.getById(orderId);
         if(null == orders){
@@ -93,6 +93,7 @@ public class OrdersManagerController extends ABMallAdminBaseController {
         }
 
         orders.setOrderStatus(OrderStatusEnum.WAIT_CONFIRM.name());
+        orders.setLogisticCode(logisticCode);
         orders.setDeliveryTime(new Date());
 
         if (!ordersService.update(orders)) {
@@ -103,7 +104,7 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/replenish", method = {RequestMethod.POST})
-    public RestResponse<Void> replenish(long orderId,String logisticCode) {
+    public RestResponse<Void> replenish(@RequestParam long orderId,@RequestParam String logisticCode) {
 
         Orders orders = ordersService.getById(orderId);
         if(null == orders){

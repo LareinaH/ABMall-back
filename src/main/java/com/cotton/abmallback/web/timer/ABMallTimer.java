@@ -54,4 +54,25 @@ public class ABMallTimer {
         cashPickUpService.sendRedpack();
 
     }
+
+
+    /**
+     * 开始活动
+     */
+    @Scheduled(cron = "0 */30 * * * ?" )
+    public void beginActivities() {
+
+        cashPickUpService.sendRedpack();
+
+    }
+
+    /**
+     * 开始活动
+     */
+    @Scheduled(cron = "0 */30 * * * ?" )
+    public void finishActivities() {
+
+        cashPickUpService.sendRedpack();
+
+    }
 }

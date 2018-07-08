@@ -103,9 +103,10 @@ public class ShopActivitiesManagerController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
+    @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
     public RestResponse<PageInfo<ShopActivities>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
-                                                                @RequestParam(defaultValue = "4") int pageSize) {
+                                                                @RequestParam(defaultValue = "4") int pageSize,
+                                                                @RequestBody()Map<String,Object> conditions) {
 
         Example example = new Example(ShopActivities.class);
         example.setOrderByClause("gmt_create desc");
