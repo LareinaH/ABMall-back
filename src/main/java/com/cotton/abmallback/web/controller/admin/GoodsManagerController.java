@@ -62,12 +62,15 @@ public class GoodsManagerController extends BaseController {
         BeanUtils.copyProperties(goodsVO,goods);
 
         //补全信息
-
         if(null != goodsVO.getGoodsSpecificationList() && goodsVO.getGoodsSpecificationList().size() > 0) {
+
+            //判断是否上架 如果存在规格上架，默认商品上架，如果所有规格都不上架 默认商品不上架
+            boolean isOnSale = false;
             //库存
             Integer stock = 0;
             for (GoodsSpecification goodsSpecification : goodsVO.getGoodsSpecificationList()) {
                 stock += goodsSpecification.getStock();
+                isOnSale = isOnSale || goodsSpecification.getIsOnSell();
 
             }
             goods.setStock(stock);
@@ -82,6 +85,7 @@ public class GoodsManagerController extends BaseController {
         if(images != null && images.size() >0) {
             goods.setThums(images.get(0).toString());
         }
+
 
         if (goodsService.insert(goods)) {
 
@@ -109,6 +113,31 @@ public class GoodsManagerController extends BaseController {
 
         Goods goods = new Goods();
         BeanUtils.copyProperties(goodsVO,goods);
+
+        //补全信息
+        if(null != goodsVO.getGoodsSpecificationList() && goodsVO.getGoodsSpecificationList().size() > 0) {
+
+            //判断是否上架 如果存在规格上架，默认商品上架，如果所有规格都不上架 默认商品不上架
+            boolean isOnSale = false;
+            //库存
+            Integer stock = 0;
+            for (GoodsSpecification goodsSpecification : goodsVO.getGoodsSpecificationList()) {
+                stock += goodsSpecification.getStock();
+                isOnSale = isOnSale || goodsSpecification.getIsOnSell();
+
+            }
+            goods.setStock(stock);
+
+            goods.setUnit(goodsVO.getGoodsSpecificationList().get(0).getGoodsSpecificationName());
+            goods.setPrice(goodsVO.getGoodsSpecificationList().get(0).getPrice().toString());
+            goods.setPreferentialPrice(goodsVO.getGoodsSpecificationList().get(0).getPreferentialPrice());
+        }
+
+        //缩略图
+        JSONArray images =  JSON.parseArray(goodsVO.getImages());
+        if(images != null && images.size() >0) {
+            goods.setThums(images.get(0).toString());
+        }
 
         if (!goodsService.update(goods)) {
             return RestResponse.getFailedResponse(500, "更新数据失败,Goods为:" + goods.toString());

@@ -99,14 +99,24 @@ public class GoodsGroupManagerController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/queryPageList", method = {RequestMethod.GET})
-    public RestResponse<PageInfo<GoodsGroup>> queryPageList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "4") int pageSize) {
+    @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
+    public RestResponse<PageInfo<GoodsGroup>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
+                                                            @RequestParam(defaultValue = "4") int pageSize,
+                                                            @RequestBody()Map<String,Object> conditions) {
 
         Example example = new Example(GoodsGroup.class);
         example.setOrderByClause("gmt_create desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
+
+
+        if(null != conditions){
+
+            if(null != conditions.get("goodsGroupName")){
+                criteria.andLike("goodsGroupName","%" + conditions.get("goodsGroupName").toString()+ "%");
+            }
+        }
 
         PageInfo<GoodsGroup> goodsGroupPageInfo = goodsGroupService.query(pageNum, pageSize, example);
 

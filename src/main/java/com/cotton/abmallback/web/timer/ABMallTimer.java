@@ -4,6 +4,8 @@ import com.cotton.abmallback.manager.MessageManager;
 import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.service.ShopActivitiesService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,9 @@ public class ABMallTimer {
 
     private final MessageManager messageManager;
 
+    private Logger logger = LoggerFactory.getLogger(ABMallTimer.class);
+
+
 
     public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService, ShopActivitiesService shopActivitiesService, MessageManager messageManager) {
         this.ordersService = ordersService;
@@ -41,6 +46,8 @@ public class ABMallTimer {
     @Scheduled(cron = "0 */5 * * * ?" )
     public void systemCancelOrder() {
 
+        logger.info("定时取消已经超时的订单定时器benin");
+
         ordersService.systemCancelOrder();
     }
 
@@ -50,6 +57,7 @@ public class ABMallTimer {
     @Scheduled(cron = "0 */30 * * * ?" )
     public void systemConfirmedOrder() {
 
+        logger.info("定时确认收货定时器benin");
         ordersService.systemConfirmedOrder();
     }
 
@@ -71,6 +79,7 @@ public class ABMallTimer {
     @Scheduled(cron = "0 */5 * * * ?" )
     public void sendPlatformMessage() {
 
+        logger.info("发送平台消息定时器benin");
         messageManager.sendSystemNotice();
     }
 
@@ -81,15 +90,17 @@ public class ABMallTimer {
     @Scheduled(cron = "0 */1 * * * ?" )
     public void beginActivities() {
 
+        logger.info("开始活动定时器benin");
         shopActivitiesService.beginActivities();
     }
 
     /**
-     * 开始活动
+     * 关闭已经结束的活动
      */
     @Scheduled(cron = "0 */1 * * * ?" )
     public void finishActivities() {
 
+        logger.info("关闭已经结束的活动定时器benin");
         shopActivitiesService.finishActivities();
     }
 }

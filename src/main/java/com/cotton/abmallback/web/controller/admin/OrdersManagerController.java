@@ -212,6 +212,10 @@ public class OrdersManagerController extends ABMallAdminBaseController {
             if(null != conditions.get("returnStatus")){
                 criteria.andEqualTo("returnStatus",conditions.get("returnStatus").toString());
             }
+
+            if(null != conditions.get("orderNo")){
+                criteria.andEqualTo("orderNo",conditions.get("orderNo").toString());
+            }
         }
 
         PageInfo<Orders> ordersPageInfo = ordersService.query(pageNum, pageSize, example);
