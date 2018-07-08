@@ -1,6 +1,9 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.model.OrderReplenish;
 import com.cotton.abmallback.model.Orders;
+import com.cotton.abmallback.service.OrderReplenishService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.web.controller.ABMallAdminBaseController;
 import com.cotton.base.common.RestResponse;
@@ -34,9 +37,12 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     private OrdersService ordersService;
 
+    private OrderReplenishService replenishService;
+
     @Autowired
-    public OrdersManagerController(OrdersService ordersService) {
+    public OrdersManagerController(OrdersService ordersService, OrderReplenishService replenishService) {
         this.ordersService = ordersService;
+        this.replenishService = replenishService;
     }
 
     @ResponseBody
@@ -69,6 +75,51 @@ public class OrdersManagerController extends ABMallAdminBaseController {
         }
 
         return RestResponse.getSuccesseResponse();
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/delivery", method = {RequestMethod.POST})
+    public RestResponse<Void> delivery(@RequestParam long orderId) {
+
+        Orders orders = ordersService.getById(orderId);
+        if(null == orders){
+            return RestResponse.getFailedResponse(500,"订单编号不存在");
+        }
+
+        if(!orders.getOrderStatus().equalsIgnoreCase(OrderStatusEnum.WAIT_DELIVER.name())){
+            return RestResponse.getFailedResponse(500,"该订单不处于待发货状态");
+        }
+
+        orders.setOrderStatus(OrderStatusEnum.WAIT_CONFIRM.name());
+        orders.setDeliveryTime(new Date());
+
+        if (!ordersService.update(orders)) {
+            return RestResponse.getFailedResponse(500, "发货失败,Orders为:" + orders.toString());
+        }
+        return RestResponse.getSuccesseResponse();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/replenish", method = {RequestMethod.POST})
+    public RestResponse<Void> replenish(long ordersId,String logisticCode) {
+
+        OrderReplenish model = new OrderReplenish();
+        model.setOrderId(ordersId);
+        model.setLogisticCode(logisticCode);
+
+        if(replenishService.queryList(model).size() > 0){
+
+            return RestResponse.getFailedResponse(500,"该补货运单号已经存在");
+        }
+
+        if(replenishService.insert(model)) {
+
+            return RestResponse.getSuccesseResponse();
+        }else {
+
+            return RestResponse.getFailedResponse(500,"补货失败");
+        }
     }
 
     @ResponseBody
