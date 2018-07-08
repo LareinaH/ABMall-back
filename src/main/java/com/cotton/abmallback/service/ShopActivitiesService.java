@@ -11,4 +11,14 @@ import com.cotton.abmallback.model.ShopActivities;
  * @date 2018/5/24
  */
 public interface ShopActivitiesService extends BaseService<ShopActivities> {
+
+    /**
+     * 启动活动
+     */
+    void beginActivities();
+
+    /**
+     * 结束活动
+     */
+    void finishActivities();
 }

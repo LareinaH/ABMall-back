@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.timer;
 
 import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.OrdersService;
+import com.cotton.abmallback.service.ShopActivitiesService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +21,13 @@ public class ABMallTimer {
 
     private final CashPickUpService cashPickUpService;
 
+    private final ShopActivitiesService shopActivitiesService;
 
-    public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService) {
+
+    public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService, ShopActivitiesService shopActivitiesService) {
         this.ordersService = ordersService;
         this.cashPickUpService = cashPickUpService;
+        this.shopActivitiesService = shopActivitiesService;
     }
 
 
@@ -59,20 +63,18 @@ public class ABMallTimer {
     /**
      * 开始活动
      */
-    @Scheduled(cron = "0 */30 * * * ?" )
+    @Scheduled(cron = "0 */1 * * * ?" )
     public void beginActivities() {
 
-        cashPickUpService.sendRedpack();
-
+        shopActivitiesService.beginActivities();
     }
 
     /**
      * 开始活动
      */
-    @Scheduled(cron = "0 */30 * * * ?" )
+    @Scheduled(cron = "0 */1 * * * ?" )
     public void finishActivities() {
 
-        cashPickUpService.sendRedpack();
-
+        shopActivitiesService.finishActivities();
     }
 }
