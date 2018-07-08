@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.timer;
 
+import com.cotton.abmallback.manager.MessageManager;
 import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.service.ShopActivitiesService;
@@ -23,11 +24,14 @@ public class ABMallTimer {
 
     private final ShopActivitiesService shopActivitiesService;
 
+    private final MessageManager messageManager;
 
-    public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService, ShopActivitiesService shopActivitiesService) {
+
+    public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService, ShopActivitiesService shopActivitiesService, MessageManager messageManager) {
         this.ordersService = ordersService;
         this.cashPickUpService = cashPickUpService;
         this.shopActivitiesService = shopActivitiesService;
+        this.messageManager = messageManager;
     }
 
 
@@ -55,8 +59,19 @@ public class ABMallTimer {
     @Scheduled(cron = "0 */30 * * * ?" )
     public void sendRedpack() {
 
-        cashPickUpService.sendRedpack();
+        //cashPickUpService.sendRedpack();
 
+    }
+
+
+    /**
+     * 发送平台消息
+     */
+
+    @Scheduled(cron = "0 */5 * * * ?" )
+    public void sendPlatformMessage() {
+
+        messageManager.sendSystemNotice();
     }
 
 

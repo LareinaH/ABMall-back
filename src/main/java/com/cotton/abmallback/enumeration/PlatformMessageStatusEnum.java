@@ -14,18 +14,26 @@ public enum PlatformMessageStatusEnum {
      */
     WAIT_PUBLISH("待发布"),
     /**
-     * 发布中
+     * 已发布
      */
-    PUBLISHED("发布中"),
+    PUBLISHED("已发布"),
     /**
      * 取消
      */
     CANCEL("取消");
 
-    private String name;
+    private String displayName;
 
-    PlatformMessageStatusEnum(String name){
+    PlatformMessageStatusEnum(String displayName){
 
-        this.name = name;
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

@@ -93,14 +93,14 @@
                 <ignoreColumn column="gmt_modify" />
             </table>-->
 
-        <table tableName="order_replenish" >
+ <!--       <table tableName="order_replenish" >
             <property name="useActualColumnNames" value="false"/>
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
             <ignoreColumn column="id"/>
             <ignoreColumn column="is_deleted"/>
             <ignoreColumn column="gmt_create"/>
             <ignoreColumn column="gmt_modify"/>
-        </table>
+        </table>-->
 
         <!--
         <table tableName="sys_user">
@@ -193,7 +193,7 @@
                     <ignoreColumn column="gmt_create" />
                     <ignoreColumn column="gmt_modify" />
                 </table>-->
-        <!--		<table tableName="msg_platform_message">
+        		<table tableName="msg_platform_message">
                     <property name="useActualColumnNames" value="false" />
                     <generatedKey column="id" sqlStatement="Mysql" identity="true" />
                     <ignoreColumn column="id" />
@@ -201,7 +201,6 @@
                     <ignoreColumn column="gmt_create" />
                     <ignoreColumn column="gmt_modify" />
                 </table>
-                -->
         <!--		<table tableName="account_money_flow">
                     <property name="useActualColumnNames" value="false" />
                     <generatedKey column="id" sqlStatement="Mysql" identity="true" />

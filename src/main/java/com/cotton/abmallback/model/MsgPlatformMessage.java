@@ -12,6 +12,11 @@ public class MsgPlatformMessage extends BaseModel {
     private String title;
 
     /**
+     * 消息简介
+     */
+    private String brief;
+
+    /**
      * 通知广告图
      */
     @Column(name = "ads_url")
@@ -56,6 +61,24 @@ public class MsgPlatformMessage extends BaseModel {
      */
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
+    }
+
+    /**
+     * 获取消息简介
+     *
+     * @return brief - 消息简介
+     */
+    public String getBrief() {
+        return brief;
+    }
+
+    /**
+     * 设置消息简介
+     *
+     * @param brief 消息简介
+     */
+    public void setBrief(String brief) {
+        this.brief = brief == null ? null : brief.trim();
     }
 
     /**

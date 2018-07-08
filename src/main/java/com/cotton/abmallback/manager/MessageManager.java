@@ -1,5 +1,7 @@
 package com.cotton.abmallback.manager;
 
+import com.cotton.abmallback.model.MsgPlatformMessage;
+
 /**
  * MessageManager
  *
@@ -11,9 +13,15 @@ public interface MessageManager {
 
     /**
      * 发送平台消息
-     * @param systemMessageId
+     * @param
      */
-    void sendSystemNotice(long systemMessageId);
+    void sendSystemNotice();
+
+    /**
+     * 发送平台消息
+     * @param msgPlatformMessage
+     */
+    void sendSystemNotice(MsgPlatformMessage msgPlatformMessage);
 
     /**
      * 发送分享奖励消息

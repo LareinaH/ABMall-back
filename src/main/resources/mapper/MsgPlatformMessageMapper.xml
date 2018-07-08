@@ -6,6 +6,7 @@
       WARNING - @mbggenerated
     -->
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
     <result column="ads_url" jdbcType="VARCHAR" property="adsUrl" />
     <result column="gmt_publish" jdbcType="TIMESTAMP" property="gmtPublish" />
     <result column="level" jdbcType="VARCHAR" property="level" />

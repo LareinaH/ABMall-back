@@ -1,10 +1,7 @@
 package com.cotton.abmallback.web.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cotton.abmallback.enumeration.OrderReturnStatusEnum;
-import com.cotton.abmallback.enumeration.OrderStatusEnum;
-import com.cotton.abmallback.enumeration.PlatformMessageLevelEnum;
-import com.cotton.abmallback.enumeration.ReturnStatus;
+import com.cotton.abmallback.enumeration.*;
 import com.cotton.base.common.RestResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +37,7 @@ public class ConfigController {
 
                 break;
             case "returnStatus":
-                object = Arrays.stream(ReturnStatus.values()).map(x -> {
+                object = Arrays.stream(OrderReturnStatusEnum.values()).map(x -> {
                     JSONObject jo = new JSONObject();
                     jo.put("value", x.name());
                     jo.put("label", x.getDisplayName());
@@ -55,8 +52,9 @@ public class ConfigController {
                     return jo;
                 }).collect(Collectors.toList());
                 break;
-            case "orderReturnStatusEnum":
-                object = Arrays.stream(OrderReturnStatusEnum.values()).map(x -> {
+
+            case "platformMessageStatus":
+                object = Arrays.stream(PlatformMessageStatusEnum.values()).map(x -> {
                     JSONObject jo = new JSONObject();
                     jo.put("value", x.name());
                     jo.put("label", x.getDisplayName());
