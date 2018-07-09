@@ -73,6 +73,7 @@ public class GoodsManagerController extends BaseController {
                 isOnSale = isOnSale || goodsSpecification.getIsOnSell();
 
             }
+            goods.setIsOnSell(isOnSale);
             goods.setStock(stock);
 
             goods.setUnit(goodsVO.getGoodsSpecificationList().get(0).getGoodsSpecificationName());
@@ -126,8 +127,8 @@ public class GoodsManagerController extends BaseController {
                 isOnSale = isOnSale || goodsSpecification.getIsOnSell();
 
             }
+            goods.setIsOnSell(isOnSale);
             goods.setStock(stock);
-
             goods.setUnit(goodsVO.getGoodsSpecificationList().get(0).getGoodsSpecificationName());
             goods.setPrice(goodsVO.getGoodsSpecificationList().get(0).getPrice().toString());
             goods.setPreferentialPrice(goodsVO.getGoodsSpecificationList().get(0).getPreferentialPrice());
