@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.front;
 
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.manager.DistributionManager;
 import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrderGoodsService;
@@ -11,7 +12,6 @@ import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import org.slf4j.Logger;
@@ -47,11 +47,19 @@ public class WechatPayController {
     @Resource(name = "wxPayService")
     private WxPayService wxPayService;
 
-    @Autowired
-    private OrdersService ordersService;
+    private final OrdersService ordersService;
+
+    private final OrderGoodsService orderGoodsService;
+
+    private final DistributionManager distributionManager;
 
     @Autowired
-    private OrderGoodsService orderGoodsService;
+    public WechatPayController(OrdersService ordersService, OrderGoodsService orderGoodsService, DistributionManager distributionManager) {
+        this.ordersService = ordersService;
+        this.orderGoodsService = orderGoodsService;
+        this.distributionManager = distributionManager;
+    }
+
 
     /**
      * 统一下单(详见https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1)
@@ -161,7 +169,8 @@ public class WechatPayController {
 
             ordersService.paySuccess(orderNo,tradeNo,"wechat");
 
-            //TODO:分润
+            distributionManager.orderDistribute(orderNo);
+
         }
         return RestResponse.getSuccesseResponse();
     }

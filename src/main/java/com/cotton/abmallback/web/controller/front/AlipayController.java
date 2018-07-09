@@ -1,6 +1,7 @@
 package com.cotton.abmallback.web.controller.front;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.manager.DistributionManager;
 import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrderGoodsService;
@@ -40,12 +41,15 @@ public class AlipayController {
 
     private final OrderGoodsService orderGoodsService;
 
+    private final DistributionManager distributionManager;
+
 
     @Autowired
-    public AlipayController(AlipayService alipayService, OrdersService ordersService, OrderGoodsService orderGoodsService) {
+    public AlipayController(AlipayService alipayService, OrdersService ordersService, OrderGoodsService orderGoodsService, DistributionManager distributionManager) {
         this.alipayService = alipayService;
         this.ordersService = ordersService;
         this.orderGoodsService = orderGoodsService;
+        this.distributionManager = distributionManager;
     }
 
 
@@ -117,8 +121,8 @@ public class AlipayController {
             String tradeNo = params.get(AlipayField.TRADE_NO.field());
 
             if (ordersService.paySuccess(orderNo, tradeNo, "Alipay")) {
-                //TODO:分润
 
+                distributionManager.orderDistribute(orderNo);
                 logger.info("backend notify success");
                 return "SUCCESS";
             }
