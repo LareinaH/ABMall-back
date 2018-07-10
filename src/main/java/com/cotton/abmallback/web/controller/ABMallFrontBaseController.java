@@ -18,7 +18,7 @@ public class ABMallFrontBaseController extends BaseController {
         if(null != member){
             return member.getId();
         }
-        return 1L;
+        return 0L;
     }
 
     protected Member getCurrentMember(){

@@ -5,6 +5,7 @@ import com.cotton.abmallback.service.AccountMoneyFlowService;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrdersService;
+import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import com.github.pagehelper.PageInfo;
@@ -34,7 +35,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/accountMoneyFlow")
-public class AwardController extends BaseController {
+public class AwardController extends ABMallFrontBaseController {
 
     private Logger logger = LoggerFactory.getLogger(AwardController.class);
 
@@ -80,6 +81,8 @@ public class AwardController extends BaseController {
         if(StringUtils.isNotBlank(type)){
             criteria.andEqualTo("accountMoneyType",type);
         }
+
+        criteria.andEqualTo("memberId",getCurrentMemberId());
 
         PageInfo<AccountMoneyFlow> accountMoneyFlowPageInfo = accountMoneyFlowService.query(pageNum, pageSize, example);
         if (null != accountMoneyFlowPageInfo) {
