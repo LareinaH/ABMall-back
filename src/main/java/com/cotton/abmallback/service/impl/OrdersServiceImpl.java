@@ -1,6 +1,8 @@
 package com.cotton.abmallback.service.impl;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.model.Member;
+import com.cotton.abmallback.service.MemberService;
 import com.cotton.base.service.impl.BaseServiceImpl;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +25,13 @@ import java.util.List;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class OrdersServiceImpl extends BaseServiceImpl<Orders> implements OrdersService {
+
+    private final MemberService memberService;
+
+    public OrdersServiceImpl(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
     @Override
     public boolean paySuccess(String orderNo, String tradeNo, String payMode) {
 
@@ -41,7 +51,14 @@ public class OrdersServiceImpl extends BaseServiceImpl<Orders> implements Orders
         orders.setIsPaid(true);
         orders.setOrderStatus(OrderStatusEnum.WAIT_DELIVER.name());
 
-        return update(orders);
+        if(update(orders)){
+            Member member = memberService.getById(orders.getMemberId());
+
+            member.setMoneyTotalSpend(member.getMoneyTotalSpend().add(orders.getTotalMoney()));
+
+            return memberService.update(member);
+        }
+        return false;
     }
 
     @Override

@@ -56,9 +56,9 @@ public class PromotionManagerImpl implements PromotionManager {
                     member.setLevel(newLevel.toString());
                     memberService.update(member);
                     //发放奖励
-                    sendPromotionReward(member, newLevel, orderId);
+                    String money = sendPromotionReward(member, newLevel, orderId);
                     //发送消息通知
-                    sendPromotionMessage(member, newLevel);
+                    sendPromotionMessage(member, newLevel,BigDecimal.valueOf(Double.valueOf(money)));
                 }
             }
         } else {
@@ -107,7 +107,7 @@ public class PromotionManagerImpl implements PromotionManager {
     /**
      * 给升级的会员发放奖励
      */
-    private void sendPromotionReward(Member member, MemberLevelEnum newLevel, long orderId) {
+    private String  sendPromotionReward(Member member, MemberLevelEnum newLevel, long orderId) {
 
         Map<String, DistributionConfig> map = distributionConfigService.getAllDistributionConfig();
 
@@ -147,14 +147,16 @@ public class PromotionManagerImpl implements PromotionManager {
             }
         }
 
+        return awardMoney;
+
     }
 
     /**
      * 发送消息通知
      */
-    void sendPromotionMessage(Member member, MemberLevelEnum newLevel) {
+    void sendPromotionMessage(Member member, MemberLevelEnum newLevel,BigDecimal money) {
 
-        messageManager.sendPromotionAward(member.getId(),newLevel.name());
+        messageManager.sendPromotionAward(member.getId(),newLevel.name(),money);
     }
 
 }

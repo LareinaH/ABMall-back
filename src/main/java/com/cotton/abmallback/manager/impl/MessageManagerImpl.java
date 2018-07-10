@@ -164,7 +164,7 @@ public class MessageManagerImpl implements MessageManager {
         switch (messageTypeEnum) {
             case SHARE_AWARD:
 
-                return map.get("SHARE_AWARD_1") + money.toString()  + "元" + map.get("SHARE_AWARD_1");
+                return map.get("SHARE_AWARD_1") + money.toString()  + "元" + map.get("SHARE_AWARD_2");
 
             case PROMOTION_AWARD:
                 switch (MemberLevelEnum.valueOf(member.getLevel())) {
@@ -180,7 +180,7 @@ public class MessageManagerImpl implements MessageManager {
                         return "恭喜成功晋级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
                 }
             case EXECUTIVE_AWARD:
-                return map.get("EXECUTIVE_AWARD_1") + money.toString()  + "元。";
+                return map.get("EXECUTIVE_AWARD") + money.toString()  + "元。";
 
             case ACTIVITY_AWARD:
                 break;
