@@ -195,6 +195,7 @@ public class DistributionManagerImpl implements DistributionManager {
         messageManager.sendShareAward(member.getId(),shareMoney);
         //可提现余额增加
         member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(shareMoney));
+        memberService.update(member);
 
         return shareMoney;
     }
@@ -214,7 +215,7 @@ public class DistributionManagerImpl implements DistributionManager {
         //发送消息
         messageManager.sendExecutiveAward(member.getId(), executiveMoney);
         //可提现余额增加
-        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add( executiveMoney));
+        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(executiveMoney));
         memberService.update(member);
 
         return  executiveMoney;
