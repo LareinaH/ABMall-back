@@ -73,7 +73,7 @@ public class DistributionManagerImpl implements DistributionManager {
         Example example = new Example(Orders.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("memberId", orders.getMemberId());
-        criteria.andEqualTo("isDelete", false);
+        criteria.andEqualTo("isDeleted", false);
 
         List<String> orderStatusList = new ArrayList<>();
         orderStatusList.add(OrderStatusEnum.CANCEL.name());
@@ -181,42 +181,43 @@ public class DistributionManagerImpl implements DistributionManager {
 
     private BigDecimal distributionShareAward(Orders orders, Member member, String sharePercent) {
         //计算分润钱数 = 订单总数 * 分润比例 / 100
-        BigDecimal selfShareMoney = orders.getTotalMoney().multiply(new BigDecimal(sharePercent)).divide(new BigDecimal(100));
+        BigDecimal shareMoney = orders.getTotalMoney().multiply(new BigDecimal(sharePercent)).divide(new BigDecimal(100));
 
         //创建流水
         AccountMoneyFlow accountMoneyFlow = new AccountMoneyFlow();
         accountMoneyFlow.setOrderId(orders.getId());
         accountMoneyFlow.setAccountMoneyType(MessageTypeEnum.SHARE_AWARD.name());
-        accountMoneyFlow.setDistributMoney(selfShareMoney);
+        accountMoneyFlow.setDistributMoney(shareMoney);
         accountMoneyFlow.setMemberId(member.getId());
         accountMoneyFlowService.insert(accountMoneyFlow);
 
         //发送消息
-        messageManager.sendShareAward(member.getId());
+        messageManager.sendShareAward(member.getId(),shareMoney);
         //可提现余额增加
-        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(selfShareMoney));
+        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(shareMoney));
 
-        return selfShareMoney;
+        return shareMoney;
     }
 
     private BigDecimal distributionExecutiveAward(Orders orders, Member member, String sharePercent) {
         //计算分润钱数 = 订单总数 * 分润比例 / 100
-        BigDecimal selfShareMoney = orders.getTotalMoney().multiply(new BigDecimal(sharePercent)).divide(new BigDecimal(100));
+        BigDecimal  executiveMoney = orders.getTotalMoney().multiply(new BigDecimal(sharePercent)).divide(new BigDecimal(100));
 
         //创建流水
         AccountMoneyFlow accountMoneyFlow = new AccountMoneyFlow();
         accountMoneyFlow.setOrderId(orders.getId());
         accountMoneyFlow.setAccountMoneyType(MessageTypeEnum.EXECUTIVE_AWARD.name());
-        accountMoneyFlow.setDistributMoney(selfShareMoney);
+        accountMoneyFlow.setDistributMoney( executiveMoney);
         accountMoneyFlow.setMemberId(member.getId());
         accountMoneyFlowService.insert(accountMoneyFlow);
 
         //发送消息
-        messageManager.sendExecutiveAward(member.getId());
+        messageManager.sendExecutiveAward(member.getId(), executiveMoney);
         //可提现余额增加
-        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(selfShareMoney));
+        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add( executiveMoney));
+        memberService.update(member);
 
-        return selfShareMoney;
+        return  executiveMoney;
     }
 
     private String getLevelSharePercent(String level, Map<String, DistributionConfig> map) {

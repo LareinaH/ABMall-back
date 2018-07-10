@@ -51,7 +51,6 @@ public class MessageController extends ABMallFrontBaseController {
     public RestResponse<Map<String, Object>> example() {
 
         Map<String, Object> map = new HashMap<>(2);
-        messageManager.sendShareAward(1);
 
         return RestResponse.getSuccesseResponse(map);
     }

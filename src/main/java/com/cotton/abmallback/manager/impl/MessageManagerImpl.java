@@ -11,7 +11,9 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -96,31 +98,31 @@ public class MessageManagerImpl implements MessageManager {
     }
 
     @Override
-    public void sendShareAward(long memberId) {
+    public void sendShareAward(long memberId, BigDecimal money) {
 
-        String context = "";
-        insertMessage(memberId, "分享奖励", context, MessageTypeEnum.SHARE_AWARD, 1, null);
-
-    }
-
-    @Override
-    public void sendExecutiveAward(long memberId) {
-
-        String context = "";
-        insertMessage(memberId, "高管奖励", context, MessageTypeEnum.EXECUTIVE_AWARD, 1, null);
-
+        String context = buildContext(MessageTypeEnum.SHARE_AWARD,memberId,money);
+        insertMessage(memberId, "分享奖励", context, MessageTypeEnum.SHARE_AWARD,  null);
 
     }
 
     @Override
-    public void sendPromotionAward(long memberId, String promotionLevel) {
+    public void sendExecutiveAward(long memberId, BigDecimal money) {
 
-        String context = "";
-        insertMessage(memberId, "高管奖励", context, MessageTypeEnum.PROMOTION_AWARD, 1, promotionLevel);
+        String context = buildContext(MessageTypeEnum.EXECUTIVE_AWARD,memberId,money);
+        insertMessage(memberId, "高管奖励", context, MessageTypeEnum.EXECUTIVE_AWARD,  null);
+
+
+    }
+
+    @Override
+    public void sendPromotionAward(long memberId, String promotionLevel,BigDecimal money) {
+
+        String context = buildContext(MessageTypeEnum.PROMOTION_AWARD,memberId,money);
+        insertMessage(memberId, "升级奖励", context, MessageTypeEnum.PROMOTION_AWARD, promotionLevel);
     }
 
 
-    private void insertMessage(long memberId, String title, String content, MessageTypeEnum messageTypeEnum, long systemMessageId, String promotionLevel) {
+    private void insertMessage(long memberId, String title, String content, MessageTypeEnum messageTypeEnum,  String promotionLevel) {
 
         //发送系统内部消息
         MsgMemberMessage msgMemberMessage = new MsgMemberMessage();
@@ -130,7 +132,7 @@ public class MessageManagerImpl implements MessageManager {
         msgMemberMessage.setType(messageTypeEnum.name());
 
         if (messageTypeEnum.equals(MessageTypeEnum.SYSTEM_NOTICE)) {
-            msgMemberMessage.setSystemMessageId(systemMessageId);
+            msgMemberMessage.setSystemMessageId(1L);
         } else if (messageTypeEnum.equals(MessageTypeEnum.PROMOTION_AWARD)) {
             msgMemberMessage.setPromotionLevel(promotionLevel);
         }
@@ -144,67 +146,42 @@ public class MessageManagerImpl implements MessageManager {
 
     }
 
-    private String buildContext(MessageTypeEnum messageTypeEnum, long memberId) {
+    private String buildContext(MessageTypeEnum messageTypeEnum, long memberId, BigDecimal money) {
 
         MsgMessageTemplate model = new MsgMessageTemplate();
         model.setType(messageTypeEnum.name());
         model.setIsDeleted(false);
         List<MsgMessageTemplate> msgMessageTemplates = msgMessageTemplateService.queryList(model);
 
-        Map<String, DistributionConfig> distributionConfigMap = distributionConfigService.getAllDistributionConfig();
+        Map<String, String> map = new HashMap<>(10);
+
+        for (MsgMessageTemplate msgMessageTemplate : msgMessageTemplates) {
+            map.put(msgMessageTemplate.getItem(), msgMessageTemplate.getValue());
+        }
 
         Member member = memberService.getById(memberId);
 
         switch (messageTypeEnum) {
             case SHARE_AWARD:
-                switch (MemberLevelEnum.valueOf(member.getLevel())) {
-                    case WHITE:
-                        break;
-                    case AGENT:
-                        break;
-                    case V1:
-                        break;
-                    case V2:
-                        break;
-                    case V3:
-                        break;
-                    default:
-                        break;
-                }
 
-                break;
+                return map.get("SHARE_AWARD_1") + money.toString()  + "元" + map.get("SHARE_AWARD_1");
+
             case PROMOTION_AWARD:
                 switch (MemberLevelEnum.valueOf(member.getLevel())) {
-                    case WHITE:
-                        break;
                     case AGENT:
-                        break;
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.AGENT.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
                     case V1:
-                        break;
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V1.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
                     case V2:
-                        break;
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V2.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
                     case V3:
-                        break;
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V3.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
                     default:
-                        break;
+                        return "恭喜成功晋级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
                 }
-                break;
             case EXECUTIVE_AWARD:
-                switch (MemberLevelEnum.valueOf(member.getLevel())) {
-                    case WHITE:
-                        break;
-                    case AGENT:
-                        break;
-                    case V1:
-                        break;
-                    case V2:
-                        break;
-                    case V3:
-                        break;
-                    default:
-                        break;
-                }
-                break;
+                return map.get("EXECUTIVE_AWARD_1") + money.toString()  + "元。";
+
             case ACTIVITY_AWARD:
                 break;
             default:

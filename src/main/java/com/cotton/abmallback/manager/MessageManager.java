@@ -2,6 +2,8 @@ package com.cotton.abmallback.manager;
 
 import com.cotton.abmallback.model.MsgPlatformMessage;
 
+import java.math.BigDecimal;
+
 /**
  * MessageManager
  *
@@ -27,19 +29,19 @@ public interface MessageManager {
      * 发送分享奖励消息
      * @param memberId
      */
-    void sendShareAward(long memberId);
+    void sendShareAward(long memberId, BigDecimal money);
 
     /**
      * 发送高管奖励消息
      * @param memberId
      */
-    void sendExecutiveAward(long memberId);
+    void sendExecutiveAward(long memberId,BigDecimal money);
 
     /**
      * 发送升级消息
      * @param memberId
      */
-    void sendPromotionAward(long memberId,String promotionLevel);
+    void sendPromotionAward(long memberId,String promotionLevel, BigDecimal money);
 
 
 }
