@@ -4,6 +4,7 @@ import com.cotton.abmallback.third.wechat.mp.config.WechatMpProperties;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import me.chanjar.weixin.common.bean.WxJsapiSignature;
+import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -143,6 +144,21 @@ public class WechatMpController extends BaseController {
             this.logger.error(e.getMessage(), e);
             return RestResponse.getFailedResponse(500,"获取配置失败");
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/createMenu", method = {RequestMethod.GET})
+    public RestResponse<Void> createMenu(String json){
+
+        try {
+            wxService.getMenuService().menuCreate(json);
+
+        } catch (WxErrorException e) {
+
+            this.logger.debug("\n创建菜单失败：{}", e);
+        }
+
+        return RestResponse.getSuccesseResponse();
     }
 
     private WxMpXmlOutMessage route(WxMpXmlMessage message) {

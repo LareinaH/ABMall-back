@@ -6,6 +6,7 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.base.service.impl.BaseServiceImpl;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrdersService;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -45,20 +46,25 @@ public class OrdersServiceImpl extends BaseServiceImpl<Orders> implements Orders
             return false;
         }
 
-        //更新状态
-        orders.setTradeNo(tradeNo);
-        orders.setPayMode(payMode);
-        orders.setIsPaid(true);
-        orders.setOrderStatus(OrderStatusEnum.WAIT_DELIVER.name());
+        if(orders.getOrderStatus().equals(OrderStatusEnum.WAIT_BUYER_PAY.name())) {
 
-        if(update(orders)){
-            Member member = memberService.getById(orders.getMemberId());
+            //更新状态
+            orders.setTradeNo(tradeNo);
+            orders.setPayMode(payMode);
+            orders.setIsPaid(true);
+            orders.setOrderStatus(OrderStatusEnum.WAIT_DELIVER.name());
 
-            member.setMoneyTotalSpend(member.getMoneyTotalSpend().add(orders.getTotalMoney()));
+            if (update(orders)) {
+                Member member = memberService.getById(orders.getMemberId());
 
-            return memberService.update(member);
+                member.setMoneyTotalSpend(member.getMoneyTotalSpend().add(orders.getTotalMoney()));
+
+                return memberService.update(member);
+            }
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     @Override

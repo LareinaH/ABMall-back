@@ -1,5 +1,7 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.enumeration.DeviceType;
 import com.cotton.abmallback.enumeration.MemberLevelEnum;
 import com.cotton.abmallback.manager.SmsManager;
@@ -156,7 +158,7 @@ public class LoginController extends ABMallFrontBaseController {
             //如果member不存在,根据微信自动驻车一个member
             Member newMember = new Member();
             newMember.setUnionId(unionId);
-            newMember.setOpenId(openId);
+            //newMember.setOpenId(openId);
             newMember.setName(nickname);
             newMember.setWechatName(nickname);
             newMember.setIsDeleted(false);
@@ -191,7 +193,9 @@ public class LoginController extends ABMallFrontBaseController {
             wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
         } catch (WxErrorException e) {
             logger.error("登录失败" + e);
-            return RestResponse.getFailedResponse(1,"登录失败" + e.getMessage());
+            //解析异常
+            JSONObject jsonObject = JSON.parseObject(e.getMessage());
+            return RestResponse.getFailedResponse(Integer.valueOf(jsonObject.get("errCode").toString()),"登录失败" + e.getMessage());
 
         }
         if(null == wxMpOAuth2AccessToken){

@@ -3,8 +3,10 @@ package com.cotton.abmallback.web.controller.front;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.manager.DistributionManager;
+import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
+import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.base.common.RestResponse;
@@ -53,11 +55,14 @@ public class WechatPayController {
 
     private final DistributionManager distributionManager;
 
+    private final MemberService memberService;
+
     @Autowired
-    public WechatPayController(OrdersService ordersService, OrderGoodsService orderGoodsService, DistributionManager distributionManager) {
+    public WechatPayController(OrdersService ordersService, OrderGoodsService orderGoodsService, DistributionManager distributionManager, MemberService memberService) {
         this.ordersService = ordersService;
         this.orderGoodsService = orderGoodsService;
         this.distributionManager = distributionManager;
+        this.memberService = memberService;
     }
 
 
@@ -79,12 +84,20 @@ public class WechatPayController {
         model.setOrderId(orderId);
         OrderGoods orderGoods = orderGoodsService.selectOne(model);
 
+
         if(null == orders || null == orderGoods){
             return RestResponse.getFailedResponse(500,"订单编号不存在");
         }
 
         if(!OrderStatusEnum.WAIT_BUYER_PAY.equals(OrderStatusEnum.valueOf(orders.getOrderStatus()))){
             return RestResponse.getFailedResponse(500,"订单状态错误");
+        }
+
+        Member member = memberService.getById(orders.getMemberId());
+
+        if(null == member){
+            return RestResponse.getFailedResponse(500,"会员不存在");
+
         }
 
         String ip = getIpAddr(httpServletRequest);
@@ -100,6 +113,7 @@ public class WechatPayController {
         request.setSpbillCreateIp(ip);
         request.setNotifyUrl("http://47.97.212.22:80/api/v1/wechat/pay/parseOrderNotifyResult");
         request.setTradeType(tradeType);
+        request.setOpenid(member.getOpenId());
 
         if("APP".equalsIgnoreCase(tradeType)) {
 
