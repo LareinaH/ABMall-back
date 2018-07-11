@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -86,7 +88,7 @@ public class WechatMpController extends BaseController {
     }
 
     @PostMapping(produces = "application/xml; charset=UTF-8")
-    public String post(@RequestBody String requestBody,
+    public String post(HttpServletRequest httpServletRequest,
                        @RequestParam("signature") String signature,
                        @RequestParam("timestamp") String timestamp,
                        @RequestParam("nonce") String nonce,
@@ -94,6 +96,22 @@ public class WechatMpController extends BaseController {
                                required = false) String encType,
                        @RequestParam(name = "msg_signature",
                                required = false) String msgSignature) {
+
+
+        String requestBody = null;
+        try {
+            BufferedReader br = null;
+            br = httpServletRequest.getReader();
+            String str;
+            StringBuilder xmlData = new StringBuilder();
+            while((str = br.readLine()) != null){
+                xmlData.append(str);
+            }
+            requestBody =xmlData.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.logger.info(
                 "\n接收微信请求：[signature=[{}], encType=[{}], msgSignature=[{}],"
                         + " timestamp=[{}], nonce=[{}], requestBody=[\n{}\n] ",

@@ -44,6 +44,8 @@ public class WechatMpConfiguration {
   private UnsubscribeHandler unsubscribeHandler;
   @Autowired
   private SubscribeHandler subscribeHandler;
+  @Autowired
+  private QrCodeScanHandle qrCodeScanHandle;
 
   @Bean
   @ConditionalOnMissingBean
@@ -101,7 +103,7 @@ public class WechatMpConfiguration {
 
     // 关注事件
     newRouter.rule().async(false).msgType(XmlMsgType.EVENT)
-        .event(EventType.SUBSCRIBE).handler(this.getSubscribeHandler())
+        .event(EventType.SUBSCRIBE).handler(this.getScanHandler())
         .end();
 
     // 取消关注事件
@@ -149,7 +151,7 @@ public class WechatMpConfiguration {
   }
 
   protected AbstractHandler getScanHandler() {
-    return null;
+    return this.qrCodeScanHandle;
   }
 
 }

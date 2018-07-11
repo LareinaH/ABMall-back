@@ -98,7 +98,7 @@ public class MessageController extends ABMallFrontBaseController {
             Map<String,Object> subMap = new HashMap<>(2);
             subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
 
-            criteria.andEqualTo("isRead",false);
+            criteria2.andEqualTo("isRead",false);
             long count = msgMemberMessageService.count(example2);
             subMap.put("unReadCount",count);
 
@@ -120,7 +120,7 @@ public class MessageController extends ABMallFrontBaseController {
             Map<String,Object> subMap = new HashMap<>(2);
             subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
 
-            criteria.andEqualTo("isRead",false);
+            criteria3.andEqualTo("isRead",false);
             long count = msgMemberMessageService.count(example3);
             subMap.put("unReadCount",count);
 
@@ -142,7 +142,7 @@ public class MessageController extends ABMallFrontBaseController {
             Map<String,Object> subMap = new HashMap<>(2);
             subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
 
-            criteria.andEqualTo("isRead",false);
+            criteria4.andEqualTo("isRead",false);
             long count = msgMemberMessageService.count(example4);
             subMap.put("unReadCount",count);
 
@@ -164,7 +164,7 @@ public class MessageController extends ABMallFrontBaseController {
             Map<String,Object> subMap = new HashMap<>(2);
             subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
 
-            criteria.andEqualTo("isRead",false);
+            criteria5.andEqualTo("isRead",false);
             long count = msgMemberMessageService.count(example5);
             subMap.put("unReadCount",count);
 

@@ -1,7 +1,7 @@
 package com.cotton.abmallback.third.wechat.mp.handler;
 
 import com.cotton.abmallback.third.wechat.mp.builder.TextBuilder;
-import com.github.binarywang.demo.wechat.utils.JsonUtils;
+import com.cotton.abmallback.third.wechat.mp.utils.JsonUtils;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
