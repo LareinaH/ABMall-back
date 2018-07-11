@@ -195,8 +195,12 @@ public class LoginController extends ABMallFrontBaseController {
         } catch (WxErrorException e) {
             logger.error("登录失败" + e);
             //解析异常
-            JSONObject jsonObject = JSON.parseObject(e.getMessage());
-            return RestResponse.getFailedResponse(Integer.valueOf(jsonObject.get("errCode").toString()),"登录失败" + e.getMessage());
+            int errorCode = 1;
+
+            if(e.getMessage().contains("40163")){
+                errorCode = 40163;
+            }
+            return RestResponse.getFailedResponse(errorCode,"登录失败" + e.getMessage());
 
         }
         if(null == wxMpOAuth2AccessToken){
