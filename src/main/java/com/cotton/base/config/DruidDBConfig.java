@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DruidConfig
@@ -100,6 +102,9 @@ public class DruidDBConfig {
         datasource.setTestOnReturn(testOnReturn);
         datasource.setPoolPreparedStatements(poolPreparedStatements);
         datasource.setMaxPoolPreparedStatementPerConnectionSize(maxPoolPreparedStatementPerConnectionSize);
+        List<String > initSql = new ArrayList<>();
+        initSql.add("set names utf8mb4;");
+        datasource.setConnectionInitSqls(initSql);
         try {
             datasource.setFilters(filters);
         } catch (SQLException e) {
