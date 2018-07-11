@@ -13,5 +13,5 @@ public interface StatMapper {
     @Select("select order_status as orderStatus, count(*) as sum from orders " +
             "where is_deleted=0 and date(gmt_create) >= #{gmtStart} and date(gmt_create) <= #{gmtEnd}" +
             "group by order_status order by sum desc")
-    List<Map<String, Long>> getOrderStatusStats(@Param("gmtStart") String gmtStart, @Param("gmtStart") String gmtEnd);
+    List<Map<String, Long>> getOrderStatusStats(@Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd);
 }
