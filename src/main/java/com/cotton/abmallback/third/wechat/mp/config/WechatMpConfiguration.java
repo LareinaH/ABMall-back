@@ -103,7 +103,7 @@ public class WechatMpConfiguration {
 
     // 关注事件
     newRouter.rule().async(false).msgType(XmlMsgType.EVENT)
-        .event(EventType.SUBSCRIBE).handler(this.getSubscribeHandler())
+        .event(EventType.SUBSCRIBE).handler(this.getScanHandler())
         .end();
 
     // 取消关注事件
