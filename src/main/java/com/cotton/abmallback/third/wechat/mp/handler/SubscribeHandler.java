@@ -1,5 +1,7 @@
 package com.cotton.abmallback.third.wechat.mp.handler;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.enumeration.MemberLevelEnum;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.service.MemberService;
@@ -11,9 +13,11 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,8 +50,17 @@ public class SubscribeHandler extends AbstractHandler {
       model.setUnionId(userWxInfo.getUnionId());
       model.setIsDeleted(false);
 
-      if(memberService.queryList(model).size() > 0){
+      List<Member> memberList =  memberService.queryList(model);
+
+      if(null != memberList && memberList.size()> 0){
         this.logger.info("该用户已经存在: " + wxMessage.getFromUser());
+
+        Member member = memberList.get(0);
+        if( null == member.getReferrerId()){
+          getRefferUser(wxMessage, member);
+          memberService.update(member);
+        }
+
       }else {
 
         //注册新用户
@@ -62,6 +75,7 @@ public class SubscribeHandler extends AbstractHandler {
 
         //获取引荐人信息
 
+        getRefferUser(wxMessage, newMember);
 
         memberService.insert(newMember);
 
@@ -86,6 +100,21 @@ public class SubscribeHandler extends AbstractHandler {
     }
 
     return null;
+  }
+
+  private void getRefferUser(WxMpXmlMessage wxMessage, Member member) {
+    String eventKey =  wxMessage.getEventKey();
+
+    this.logger.info("eventKey: " + eventKey);
+
+    if(!StringUtils.isBlank(eventKey)){
+      JSONObject jsonObject = JSON.parseObject(eventKey);
+
+      if(null != jsonObject && jsonObject.get("referrerId") != null){
+        member.setReferrerId(Long.valueOf(jsonObject.get("referrerId").toString()));
+      }
+
+    }
   }
 
   /**

@@ -61,7 +61,7 @@ public class MemberController extends ABMallFrontBaseController {
 
         Map<String, Object> map = new HashMap<>(2);
         Member member = memberService.getById(getCurrentMemberId());
-        map.put("totalSales",member.getMoneyTotalSpend());
+        map.put("totalSales",member.getMoneyTotalEarn());
         map.put("availablePickUpCashAmount",member.getMoneyTotalEarn().subtract(member.getMoneyTotalTake()).subtract(member.getMoneyLock()));
 
         return RestResponse.getSuccesseResponse(map);
