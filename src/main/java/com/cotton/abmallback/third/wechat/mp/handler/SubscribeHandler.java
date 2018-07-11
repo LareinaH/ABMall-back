@@ -38,6 +38,7 @@ public class SubscribeHandler extends AbstractHandler {
                                   Map<String, Object> context, WxMpService weixinService,
                                   WxSessionManager sessionManager) throws WxErrorException {
 
+
     this.logger.info("新关注用户 OPENID: " + wxMessage.getFromUser());
 
     // 获取微信用户基本信息
@@ -108,7 +109,10 @@ public class SubscribeHandler extends AbstractHandler {
     this.logger.info("eventKey: " + eventKey);
 
     if(!StringUtils.isBlank(eventKey)){
-      JSONObject jsonObject = JSON.parseObject(eventKey);
+
+      //eventKey 样式 qrscene_{"referrerId":1}]
+      String jsonStri = eventKey.substring(eventKey.indexOf("_"),eventKey.length());
+      JSONObject jsonObject = JSON.parseObject(jsonStri);
 
       if(null != jsonObject && jsonObject.get("referrerId") != null){
         member.setReferrerId(Long.valueOf(jsonObject.get("referrerId").toString()));

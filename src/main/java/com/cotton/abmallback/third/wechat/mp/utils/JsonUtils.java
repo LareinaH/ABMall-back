@@ -1,4 +1,4 @@
-package com.github.binarywang.demo.wechat.utils;
+package com.cotton.abmallback.third.wechat.mp.utils;
 
 import me.chanjar.weixin.mp.util.json.WxMpGsonBuilder;
 
