@@ -80,13 +80,13 @@ public class QrCodeScanHandle extends AbstractHandler {
             }
 
             try {
-                return new TextBuilder().build("感谢关注", wxMessage, weixinService);
+                return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
             } catch (Exception e) {
                 this.logger.error(e.getMessage(), e);
             }
         }
 
-        return null;
+        return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
     }
 
     private void getRefferUser(WxMpXmlMessage wxMessage, Member member) {
