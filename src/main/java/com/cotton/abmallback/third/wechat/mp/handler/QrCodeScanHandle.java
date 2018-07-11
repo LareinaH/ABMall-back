@@ -38,10 +38,10 @@ public class QrCodeScanHandle extends AbstractHandler {
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
 
 
-        this.logger.info("扫码用户" + wxMessage.getFromUser());
-
         // 获取微信用户基本信息
         WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
+
+        this.logger.info("扫码用户" + userWxInfo);
 
         if (userWxInfo != null) {
             //查看用户是否存在
@@ -60,42 +60,30 @@ public class QrCodeScanHandle extends AbstractHandler {
                     memberService.update(member);
                 }
 
+            } else {
+
+                //注册新用户
+                Member newMember = new Member();
+                newMember.setUnionId(userWxInfo.getUnionId());
+                newMember.setOpenId(userWxInfo.getOpenId());
+                newMember.setName(userWxInfo.getNickname());
+                newMember.setWechatName(userWxInfo.getNickname());
+                newMember.setIsDeleted(false);
+                newMember.setLevel(MemberLevelEnum.WHITE.name());
+                newMember.setPhoto(userWxInfo.getHeadImgUrl());
+
+                //获取引荐人信息
+                getRefferUser(wxMessage, newMember);
+
+                memberService.insert(newMember);
+
             }
-        } else {
 
-            //注册新用户
-            Member newMember = new Member();
-            newMember.setUnionId(userWxInfo.getUnionId());
-            newMember.setOpenId(userWxInfo.getOpenId());
-            newMember.setName(userWxInfo.getNickname());
-            newMember.setWechatName(userWxInfo.getNickname());
-            newMember.setIsDeleted(false);
-            newMember.setLevel(MemberLevelEnum.WHITE.name());
-            newMember.setPhoto(userWxInfo.getHeadImgUrl());
-
-            //获取引荐人信息
-
-            getRefferUser(wxMessage, newMember);
-
-            memberService.insert(newMember);
-
-        }
-
-        WxMpXmlOutMessage responseResult = null;
-        try {
-            responseResult = handleSpecial(wxMessage);
-        } catch (Exception e) {
-            this.logger.error(e.getMessage(), e);
-        }
-
-        if (responseResult != null) {
-            return responseResult;
-        }
-
-        try {
-            return new TextBuilder().build("感谢关注", wxMessage, weixinService);
-        } catch (Exception e) {
-            this.logger.error(e.getMessage(), e);
+            try {
+                return new TextBuilder().build("感谢关注", wxMessage, weixinService);
+            } catch (Exception e) {
+                this.logger.error(e.getMessage(), e);
+            }
         }
 
         return null;
@@ -116,13 +104,4 @@ public class QrCodeScanHandle extends AbstractHandler {
 
         }
     }
-
-    /**
-     * 处理特殊请求，比如如果是扫码进来的，可以做相应处理
-     */
-    private WxMpXmlOutMessage handleSpecial(WxMpXmlMessage wxMessage) throws Exception {
-        //TODO
-        return null;
-    }
-
 }
