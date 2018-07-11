@@ -19,6 +19,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,12 @@ public class WechatPayController {
     private final DistributionManager distributionManager;
 
     private final MemberService memberService;
+
+    @Value("${wechat.mp.app-id}")
+    private String mpAppId;
+
+    @Value("${wechat.pay.app-id}")
+    private String openAppId;
 
     @Autowired
     public WechatPayController(OrdersService ordersService, OrderGoodsService orderGoodsService, DistributionManager distributionManager, MemberService memberService) {
@@ -117,6 +124,7 @@ public class WechatPayController {
 
         if("APP".equalsIgnoreCase(tradeType)) {
 
+            this.wxPayService.getConfig().setAppId(openAppId);
 
             WxPayAppOrderResult wxPayAppOrderResult = this.wxPayService.createOrder(request);
 
@@ -137,6 +145,7 @@ public class WechatPayController {
             }
         }else if("JSAPI".equalsIgnoreCase(tradeType)){
 
+            this.wxPayService.getConfig().setAppId(mpAppId);
             WxPayMpOrderResult wxPayMpOrderResult =  this.wxPayService.createOrder(request);
 
             if (null != wxPayMpOrderResult) {

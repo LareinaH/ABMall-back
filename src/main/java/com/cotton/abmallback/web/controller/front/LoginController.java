@@ -133,9 +133,11 @@ public class LoginController extends ABMallFrontBaseController {
      */
     private RestResponse<LoginMemberVO> loginWeChatApp(String unionId,String openId,String headImageUrl, String nickname, String deviceType) {
 
-        //根据openid号查找用户
+        //根据unionId号查找用户
+        if(StringUtils.isBlank(unionId)){
+            return RestResponse.getFailedResponse(1,"unionId 为空");
+        }
         Member model = new Member();
-        model.setOpenId(openId);
         model.setUnionId(unionId);
         model.setIsDeleted(false);
 
@@ -158,7 +160,6 @@ public class LoginController extends ABMallFrontBaseController {
             //如果member不存在,根据微信自动驻车一个member
             Member newMember = new Member();
             newMember.setUnionId(unionId);
-            //newMember.setOpenId(openId);
             newMember.setName(nickname);
             newMember.setWechatName(nickname);
             newMember.setIsDeleted(false);
@@ -204,10 +205,13 @@ public class LoginController extends ABMallFrontBaseController {
 
         String token =  UUID.randomUUID().toString();
 
-        //根据openId 获取用户信息
+        //根据unionId获取用户信息
+        if(StringUtils.isBlank(wxMpOAuth2AccessToken.getUnionId())){
+            return RestResponse.getFailedResponse(1,"unionId 为空");
+        }
 
         Member model = new Member();
-        model.setOpenId(wxMpOAuth2AccessToken.getOpenId());
+        model.setUnionId(wxMpOAuth2AccessToken.getUnionId());
         model.setIsDeleted(false);
 
         List<Member> memberList = memberService.queryList(model);
