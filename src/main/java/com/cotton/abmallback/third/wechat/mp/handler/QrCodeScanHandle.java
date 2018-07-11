@@ -26,7 +26,7 @@ import java.util.Map;
  * @date 2018/7/11
  */
 @Component
-public class QrCodeScanHandle extends AbstractHandler  {
+public class QrCodeScanHandle extends AbstractHandler {
 
     private final MemberService memberService;
 
@@ -35,16 +35,13 @@ public class QrCodeScanHandle extends AbstractHandler  {
     }
 
     @Override
-    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
-                                    Map<String, Object> context, WxMpService weixinService,
-                                    WxSessionManager sessionManager) throws WxErrorException {
+    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
 
 
         this.logger.info("扫码用户" + wxMessage.getFromUser());
 
         // 获取微信用户基本信息
-        WxMpUser userWxInfo = weixinService.getUserService()
-                .userInfo(wxMessage.getFromUser(), null);
+        WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
 
         if (userWxInfo != null) {
             //查看用户是否存在
@@ -52,36 +49,36 @@ public class QrCodeScanHandle extends AbstractHandler  {
             model.setUnionId(userWxInfo.getUnionId());
             model.setIsDeleted(false);
 
-            List<Member> memberList =  memberService.queryList(model);
+            List<Member> memberList = memberService.queryList(model);
 
-            if(null != memberList && memberList.size()> 0){
+            if (null != memberList && memberList.size() > 0) {
                 this.logger.info("该用户已经存在: " + wxMessage.getFromUser());
 
                 Member member = memberList.get(0);
-                if( null == member.getReferrerId()){
+                if (null == member.getReferrerId()) {
                     getRefferUser(wxMessage, member);
                     memberService.update(member);
                 }
 
-            }else {
-
-                //注册新用户
-                Member newMember = new Member();
-                newMember.setUnionId(userWxInfo.getUnionId());
-                newMember.setOpenId(userWxInfo.getOpenId());
-                newMember.setName(userWxInfo.getNickname());
-                newMember.setWechatName(userWxInfo.getNickname());
-                newMember.setIsDeleted(false);
-                newMember.setLevel(MemberLevelEnum.WHITE.name());
-                newMember.setPhoto(userWxInfo.getHeadImgUrl());
-
-                //获取引荐人信息
-
-                getRefferUser(wxMessage, newMember);
-
-                memberService.insert(newMember);
-
             }
+        } else {
+
+            //注册新用户
+            Member newMember = new Member();
+            newMember.setUnionId(userWxInfo.getUnionId());
+            newMember.setOpenId(userWxInfo.getOpenId());
+            newMember.setName(userWxInfo.getNickname());
+            newMember.setWechatName(userWxInfo.getNickname());
+            newMember.setIsDeleted(false);
+            newMember.setLevel(MemberLevelEnum.WHITE.name());
+            newMember.setPhoto(userWxInfo.getHeadImgUrl());
+
+            //获取引荐人信息
+
+            getRefferUser(wxMessage, newMember);
+
+            memberService.insert(newMember);
+
         }
 
         WxMpXmlOutMessage responseResult = null;
@@ -105,15 +102,15 @@ public class QrCodeScanHandle extends AbstractHandler  {
     }
 
     private void getRefferUser(WxMpXmlMessage wxMessage, Member member) {
-        String eventKey =  wxMessage.getEventKey();
+        String eventKey = wxMessage.getEventKey();
 
         this.logger.info("eventKey: " + eventKey);
 
-        if(!StringUtils.isBlank(eventKey)){
+        if (!StringUtils.isBlank(eventKey)) {
 
             JSONObject jsonObject = JSON.parseObject(eventKey);
 
-            if(null != jsonObject && jsonObject.get("referrerId") != null){
+            if (null != jsonObject && jsonObject.get("referrerId") != null) {
                 member.setReferrerId(Long.valueOf(jsonObject.get("referrerId").toString()));
             }
 
@@ -123,8 +120,7 @@ public class QrCodeScanHandle extends AbstractHandler  {
     /**
      * 处理特殊请求，比如如果是扫码进来的，可以做相应处理
      */
-    private WxMpXmlOutMessage handleSpecial(WxMpXmlMessage wxMessage)
-            throws Exception {
+    private WxMpXmlOutMessage handleSpecial(WxMpXmlMessage wxMessage) throws Exception {
         //TODO
         return null;
     }
