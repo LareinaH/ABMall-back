@@ -139,6 +139,7 @@ public class OrdersController extends ABMallFrontBaseController {
             orderGoods.setGoodThum(goods.getThums());
             orderGoods.setGoodNum(count);
             orderGoods.setGoodPrice(goodsSpecification.getPreferentialPrice());
+            orderGoods.setGoodsSpecificationNo(goodsSpecification.getGoodsSpecificationNo());
 
             orderGoodsService.insert(orderGoods);
 
