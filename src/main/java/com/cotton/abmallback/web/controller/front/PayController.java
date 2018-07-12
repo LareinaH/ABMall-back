@@ -59,17 +59,17 @@ public class PayController {
         //map.put("url",url);
 
         WxMpTemplateMessage mpTemplateMessage = new WxMpTemplateMessage();
-        mpTemplateMessage.setToUser("o8HRJ0zUMzifidi_5OmU2PlZkY80");
-        mpTemplateMessage.setTemplateId("sxpOziBoYK5-xwMaURnVXH8roX2iyE5NLJvRMyps5cA");
+        mpTemplateMessage.setToUser("o8HRJ0zjXTdkOJZonIDTfWsuPH7I");
+        mpTemplateMessage.setTemplateId("tT2nGgVk-m4R-oCylqHHmbSsSRNJVFy2tnJvqklOgYY");
         mpTemplateMessage.setUrl("https://www.jufenyun.com/ticket/b041f1b83c41854cdfa673c65bd97a6a");
         List<WxMpTemplateData> list = new ArrayList<>();
-        WxMpTemplateData data1 = new WxMpTemplateData("first.DATA","客官您好,您在云鼎绿色的返利提现，已经飞奔而来了。");
+        WxMpTemplateData data1 = new WxMpTemplateData("first","客官您好,您在云鼎绿色的返利提现，已经飞奔而来了。");
         list.add(data1);
-        WxMpTemplateData data2 = new WxMpTemplateData("keyword1.DATA","✪返利成功✪");
+        WxMpTemplateData data2 = new WxMpTemplateData("keyword1","2018年07月12日");
         list.add(data2);
-        WxMpTemplateData data3 = new WxMpTemplateData("keyword2.DATA","￥100000000.0元");
+        WxMpTemplateData data3 = new WxMpTemplateData("keyword2","￥100000000.0元");
         list.add(data3);
-        WxMpTemplateData data4 = new WxMpTemplateData("remark.DATA","点击查看,赶快领取吧！");
+        WxMpTemplateData data4 = new WxMpTemplateData("remark","点击查看,赶快领取吧！");
         list.add(data4);
         mpTemplateMessage.setData(list);
 
