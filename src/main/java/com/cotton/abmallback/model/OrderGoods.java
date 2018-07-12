@@ -51,7 +51,7 @@ public class OrderGoods extends BaseModel {
     /**
      * 规格编号
      */
-    @Column(name = "`  goods_specification_no`")
+    @Column(name = "goods_specification_no")
     private String goodsSpecificationNo;
 
     /**
@@ -193,7 +193,7 @@ public class OrderGoods extends BaseModel {
     /**
      * 获取规格编号
      *
-     * @return   goods_specification_no - 规格编号
+     * @return goods_specification_no - 规格编号
      */
     public String getGoodsSpecificationNo() {
         return goodsSpecificationNo;

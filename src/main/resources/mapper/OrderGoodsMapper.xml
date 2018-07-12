@@ -13,6 +13,6 @@
     <result column="good_thum" jdbcType="VARCHAR" property="goodThum" />
     <result column="good_price" jdbcType="DECIMAL" property="goodPrice" />
     <result column="good_num" jdbcType="INTEGER" property="goodNum" />
-    <result column="  goods_specification_no" jdbcType="VARCHAR" property="goodsSpecificationNo" />
+    <result column="goods_specification_no" jdbcType="VARCHAR" property="goodsSpecificationNo" />
   </resultMap>
 </mapper>
