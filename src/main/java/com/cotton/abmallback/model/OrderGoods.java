@@ -49,6 +49,12 @@ public class OrderGoods extends BaseModel {
     private Integer goodNum;
 
     /**
+     * 规格编号
+     */
+    @Column(name = "`  goods_specification_no`")
+    private String goodsSpecificationNo;
+
+    /**
      * 获取订单编号
      *
      * @return order_id - 订单编号
@@ -182,5 +188,23 @@ public class OrderGoods extends BaseModel {
      */
     public void setGoodNum(Integer goodNum) {
         this.goodNum = goodNum;
+    }
+
+    /**
+     * 获取规格编号
+     *
+     * @return   goods_specification_no - 规格编号
+     */
+    public String getGoodsSpecificationNo() {
+        return goodsSpecificationNo;
+    }
+
+    /**
+     * 设置规格编号
+     *
+     * @param goodsSpecificationNo 规格编号
+     */
+    public void setGoodsSpecificationNo(String goodsSpecificationNo) {
+        this.goodsSpecificationNo = goodsSpecificationNo == null ? null : goodsSpecificationNo.trim();
     }
 }
