@@ -25,6 +25,11 @@ public enum CashStatusEnum {
     /**
      * 拒绝
      */
-    REFUSE
+    REFUSE,
+
+    /**
+     * 超时
+     */
+    TIME_OUT,
 
 }

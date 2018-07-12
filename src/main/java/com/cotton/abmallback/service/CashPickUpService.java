@@ -15,5 +15,7 @@ public interface CashPickUpService extends BaseService<CashPickUp> {
     /**
      * 发红包
      */
-    void sendRedpack();
+    void checkRedpack();
+
+
 }

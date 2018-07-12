@@ -62,36 +62,24 @@ public class ABMallTimer {
     }
 
     /**
-     * 提现到账（通过发红包的方式）
+     * 查看红包发送状态
      */
-    @Scheduled(cron = "0 */30 * * * ?" )
-    public void sendRedpack() {
+    @Scheduled(cron = "0 */1 * * * ?" )
+    public void checkRedpack() {
 
-        //cashPickUpService.sendRedpack();
+        logger.info("查看红包发送状态");
+        cashPickUpService.checkRedpack();
 
     }
-
 
     /**
      * 发送平台消息
      */
-
     @Scheduled(cron = "0 */5 * * * ?" )
     public void sendPlatformMessage() {
 
         logger.info("发送平台消息定时器benin");
         messageManager.sendSystemNotice();
-    }
-
-
-    /**
-     * 开始活动
-     */
-    @Scheduled(cron = "0 */1 * * * ?" )
-    public void beginActivities() {
-
-        logger.info("开始活动定时器benin");
-        shopActivitiesService.beginActivities();
     }
 
     /**

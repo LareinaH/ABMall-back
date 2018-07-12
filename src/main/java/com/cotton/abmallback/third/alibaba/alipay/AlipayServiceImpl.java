@@ -36,6 +36,9 @@ public class AlipayServiceImpl implements AlipayService{
     @Value("${alipay.merchantId}")
     private String merchantId;
 
+    //private String appId = "2018062960528027";
+    //private String merchantId = "2018062960528027";
+
     @Value("${alipay.secret}")
     private String secret;
 
@@ -96,6 +99,12 @@ public class AlipayServiceImpl implements AlipayService{
             "jNETDbz4kVsNigY8RkaGSGIYuV/p/7djVROC5ZtpXQp0EYUeNgiIwcp/qD7cRZItcizsWe4uWZ1Wa" +
             "HYGI9yZoAZaTToCP90aa9YmJzOgwGR7PjQIDAQAB";
 
+
+    /*private String appPrikey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC//I9c49mjSoyXy8TYMDLWGBTQWH4uVf+lFK82lP2AVotpb+cOJIsbKZwqm+mwrRWQ9LlqL7FAXQHaBEXMGUntG6kSKIOJDIJvWIwi4mY1SHhkPZxFIfYOeVq0bZQmEidrT4982x6Av/dSxmG1oso6Wer8YIlpaHqCHRJMPmBvo4/q2tUgt3Ferd+0fBZTwfCXSrY8byO8U/pf1Ln+p9QH6uwxrZIvuvnvqzp/xtdyve09nXHJPG6M7Kc4lrL4mDFhQOHuz3NSjeoQPRp9HAdYIy3GKlTJgsaV8Vw0ox0uX4oGMngdgXoKPQm4Kq3GYmoGQY9ScuMUYTjk6CKfIh8hAgMBAAECggEAWL6QLmoMclTFhG1mwmAVP63GAUDGoviRwWc8Tsi0HZzjuItHjNwLiTTEwVVswoRfka/t/U2qa4wSjQqokN2ntHiywHgFxVYI/Rs7O+zXPg4PyJZKJBK8wJgL+5cjgi2mFw6hzx8ijHUwCA03oVRskmh6HMsq+ZSX/IkfqiqzPSbbLNVahrQYu8h84JS8j2YGbyCGJu7dyRRg3aCfqlayiofUowREBqsXDn4IhsYOFHyDCzRcAacIVy7dLry9cY10fnfvOARTX/jeEH6qD09FSdp2q+NmOS+Bz3yJMgovq2cxZEVQ9lFzJHn/Zhyj0HOiEzROK9a9jvuxv72cE+cSuQKBgQDdtN6GLqEtBKILOx6IsuqoywXbc3A2Ix95jaKxNfjAPUfBQfm5H6BAUCQNeDf2J/FJ1s5FD9/W/fPF9EDvABpxCpzOa3bO+gSm00JYOhAbz+JKF1ya6E3Jd5UAJXGfbCnxB0UUa40zB7hKoHqr7X6aL9IzjhSgVQMxXfcJNpGHgwKBgQDdrtcl/nQJ6LKR7PjHlK8kVG65fqO5W5l0HIfQI/JJCU2je/k3xLdiFE4TWZuVGQVUDbqc4RZVoC8lZfxS3dBUUxaMsaRdH1L56PVUM9uyQxRicAhWg3nix0RNvUMnwLKomZl/yamymjrBOJxEdj5DAtkDGl6wN8bPRLH1YStZiwKBgQDRYsuygIF6KeD8qGYLBqb2qV+rxZeZmYxVWX3ozadTr8x/6dZ2jzbi5o1WJ0767PhGG1gOA5MM0iUTtL5Kupc+YZ58mSPJEHmqMOV8u8GQ8sGt5ehw6KrmdkjDrZlkzlvCJnKIeZcONeFIoc2ZaKBj8HwecrZqQj/UtQDls6K4DwKBgCa9kFHOdv7oUJSZ4hwWysjBjJwUGo6hCF83QTDJp2TGIHBKkRIC6b1VKRPOnBbhSYIX6B3UZC/Qj4yslvzwUKD76DvsK3ouqDSOVplBespbWKufQoXD8kAEbNZdFehTj6VROncPif1xYIU13HFGbLkPPVeCezu2c6LzMVpdgdLjAoGBAKxb43ycnWGHUXQH2PcKOc8gpwwau3F8QhDgSL0fwvPjLqOujlLvHUEf47h4i4TjusL+WUf4nIQAlfbNHTCTRebxTjYQm4Nd6GmjhDf1TjqJ367YepXeaCPHRzsEHtURmWnNv2VUlGryamzVnRLrA7KvmLrW6Y/7SNZt81kQwH3W";
+    private String appPubKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv/yPXOPZo0qMl8vE2DAy1hgU0Fh+LlX/pRSvNpT9gFaLaW/nDiSLGymcKpvpsK0VkPS5ai+xQF0B2gRFzBlJ7RupEiiDiQyCb1iMIuJmNUh4ZD2cRSH2DnlatG2UJhIna0+PfNsegL/3UsZhtaLKOlnq/GCJaWh6gh0STD5gb6OP6trVILdxXq3ftHwWU8Hwl0q2PG8jvFP6X9S5/qfUB+rsMa2SL7r576s6f8bXcr3tPZ1xyTxujOynOJay+JgxYUDh7s9zUo3qED0afRwHWCMtxipUyYLGlfFcNKMdLl+KBjJ4HYF6Cj0JuCqtxmJqBkGPUnLjFGE45OginyIfIQIDAQAB";
+    private String payPubKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7m/TY605qfRhSGgEUyEZ0mcPCd5+xOdY0unG2gS6o+7hd9skJ0A7DYN5KKsWjr2anqUx9Nq6iydMOOhm2zwGUa3E3FtqTlRj19Drwr/5CrTgUsY52FiY+UVx3sv6dhStSKCI+1nN7HeDuzgRPcRE90/qLtPuGxAgQBzR+Kf8zTSZ5taH85W7RSpanq0mASckMwEVR8RsvPLb+th+4zRVMTMl2O2ysbktd64RLU4inslSih5S0TmUlFdDCDypPaN1UOcBC0diKesvLfBZXXaqpuNgP+ApiF5aarm7vKS6emNN9+LU6mvwepMPwyrLFCq80GFZULtNIaUgwoJCdOv6QIDAQAB";
+
+*/
     @PostConstruct
     public void initAlipay(){
         alipayClient = new DefaultAlipayClient(
@@ -105,7 +114,6 @@ public class AlipayServiceImpl implements AlipayService{
 
         System.err.println(alipayClient);
     }
-
 
     /**
      * 验证
@@ -118,9 +126,7 @@ public class AlipayServiceImpl implements AlipayService{
         } catch (AlipayApiException e) {
             logger.error("支付宝回调参数校验错误",e);
         }
-
         return false;
-
     }
 
 
