@@ -63,12 +63,11 @@ public abstract class ExcelView extends AbstractXlsView {
             }
         }
         response.setContentType("application/ms-excel; charset=UTF-8");
-        for (String sn : (Set<String>)map.get("sheetName")) {
-            Sheet sheet = workbook.createSheet(sn);
-            sheet.setDefaultColumnWidth(30);
-            setStyle(workbook);
-            setHyperLinkStyle(workbook);
-            setRow(sheet, map);
-        }
+        String sn = (String)map.get("sheetName");
+        Sheet sheet = workbook.createSheet(sn);
+        sheet.setDefaultColumnWidth(30);
+        setStyle(workbook);
+        setHyperLinkStyle(workbook);
+        setRow(sheet, map);
     }
 }
