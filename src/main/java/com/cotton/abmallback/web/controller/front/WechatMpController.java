@@ -5,9 +5,11 @@ import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
+import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.menu.WxMpMenu;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * WechatMpController
@@ -166,10 +170,28 @@ public class WechatMpController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/createMenu", method = {RequestMethod.GET})
-    public RestResponse<Void> createMenu(String json){
+    public RestResponse<Void> createMenu(){
 
         try {
-            wxService.getMenuService().menuCreate(json);
+            //微信商城
+            WxMenu wxMenu = new WxMenu();
+            List<WxMenuButton> wxMenuButtonList = new ArrayList<>();
+            WxMenuButton wxMenuButton = new WxMenuButton();
+            wxMenuButton.setType("view");
+            wxMenuButton.setName("云鼎官网");
+            wxMenuButton.setUrl("http://yund.live/");
+            wxMenuButtonList.add(wxMenuButton);
+            WxMenuButton wxMenuButton2 = new WxMenuButton();
+            wxMenuButton2.setType("view");
+            wxMenuButton2.setName("云鼎商城");
+            wxMenuButton2.setUrl("http://wx.yund.live/wxindex.html");
+            wxMenuButtonList.add(wxMenuButton2);
+            wxMenu.setButtons(wxMenuButtonList);
+            wxService.getMenuService().menuCreate(wxMenu);
+
+            WxMpMenu wxMpMenu = wxService.getMenuService().menuGet();
+
+            logger.info(wxMpMenu.toJson());
 
         } catch (WxErrorException e) {
 
