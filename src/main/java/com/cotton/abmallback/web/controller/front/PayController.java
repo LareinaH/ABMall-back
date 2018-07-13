@@ -58,27 +58,7 @@ public class PayController {
         //String url = jufenyunService.sendRedpack("o8HRJ0zjXTdkOJZonIDTfWsuPH7I",new BigDecimal(0.4));
         //map.put("url",url);
 
-        WxMpTemplateMessage mpTemplateMessage = new WxMpTemplateMessage();
-        mpTemplateMessage.setToUser("o8HRJ0zjXTdkOJZonIDTfWsuPH7I");
-        mpTemplateMessage.setTemplateId("tT2nGgVk-m4R-oCylqHHmbSsSRNJVFy2tnJvqklOgYY");
-        mpTemplateMessage.setUrl("https://www.jufenyun.com/ticket/b041f1b83c41854cdfa673c65bd97a6a");
-        List<WxMpTemplateData> list = new ArrayList<>();
-        WxMpTemplateData data1 = new WxMpTemplateData("first","客官您好,您在云鼎绿色的返利提现，已经飞奔而来了。");
-        list.add(data1);
-        WxMpTemplateData data2 = new WxMpTemplateData("keyword1","2018年07月12日");
-        list.add(data2);
-        WxMpTemplateData data3 = new WxMpTemplateData("keyword2","￥100000000.0元");
-        list.add(data3);
-        WxMpTemplateData data4 = new WxMpTemplateData("remark","点击查看,赶快领取吧！");
-        list.add(data4);
-        mpTemplateMessage.setData(list);
 
-        try {
-            String string =wxMpService.getTemplateMsgService().sendTemplateMsg(mpTemplateMessage);
-            logger.info(string);
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-        }
 
         return RestResponse.getSuccesseResponse(map);
     }

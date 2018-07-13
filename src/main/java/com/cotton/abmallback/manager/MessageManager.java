@@ -43,5 +43,4 @@ public interface MessageManager {
      */
     void sendPromotionAward(long memberId,String promotionLevel, BigDecimal money);
 
-
 }
