@@ -148,7 +148,6 @@
         </table>
 
         -->
-        <!--
                 <table tableName="ads">
                     <property name="useActualColumnNames" value="false" />
                     <generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -156,7 +155,7 @@
                     <ignoreColumn column="is_deleted" />
                     <ignoreColumn column="gmt_create" />
                     <ignoreColumn column="gmt_modify" />
-                </table>-->
+                </table>
 
         <!--
         <table tableName="cash_pick_up">
@@ -168,14 +167,14 @@
             <ignoreColumn column="gmt_modify" />
         </table>-->
 
-        <table tableName="redpack_record">
+   <!--     <table tableName="redpack_record">
             <property name="useActualColumnNames" value="false" />
             <generatedKey column="id" sqlStatement="Mysql" identity="true" />
             <ignoreColumn column="id" />
             <ignoreColumn column="is_deleted" />
             <ignoreColumn column="gmt_create" />
             <ignoreColumn column="gmt_modify" />
-        </table>
+        </table>-->
 
         <!--		<table tableName="goods_specification">
                     <property name="useActualColumnNames" value="false" />

@@ -53,7 +53,7 @@ public class JufenyunServiceImpl  implements  JufenyunService{
 
         Map<String,Object> params = new HashMap<>(10);
         params.put("appkey",appKey);
-        params.put("method","jfy.redpacks.send");
+        params.put("method","jfy.redpacks.get");
         params.put("redpack_sn",redpack_sn);
 
         String result = HttpUtil.doPost(url,params);

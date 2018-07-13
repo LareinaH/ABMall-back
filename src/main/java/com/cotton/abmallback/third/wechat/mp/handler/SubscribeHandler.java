@@ -6,17 +6,18 @@ import com.cotton.abmallback.enumeration.MemberLevelEnum;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.third.wechat.mp.builder.TextBuilder;
-import com.cotton.base.enumeration.Sex;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +29,11 @@ public class SubscribeHandler extends AbstractHandler {
 
   private final MemberService memberService;
 
-  public SubscribeHandler(MemberService memberService) {
+  private final WxMpService wxMpService;
+
+  public SubscribeHandler(MemberService memberService, WxMpService wxMpService) {
     this.memberService = memberService;
+    this.wxMpService = wxMpService;
   }
 
   @Override
@@ -77,6 +81,7 @@ public class SubscribeHandler extends AbstractHandler {
 
       }
 
+
       try {
         return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
       } catch (Exception e) {
@@ -94,12 +99,41 @@ public class SubscribeHandler extends AbstractHandler {
 
     if (!StringUtils.isBlank(eventKey)) {
 
-      JSONObject jsonObject = JSON.parseObject(eventKey);
+      String jsonStr = eventKey.substring(eventKey.indexOf("{"),eventKey.indexOf("}"));
+
+      JSONObject jsonObject = JSON.parseObject(jsonStr);
 
       if (null != jsonObject && jsonObject.get("referrerId") != null) {
         member.setReferrerId(Long.valueOf(jsonObject.get("referrerId").toString()));
       }
 
     }
+  }
+
+  private boolean sendWxMessage(String memberOpenId) {
+    WxMpTemplateMessage mpTemplateMessage = new WxMpTemplateMessage();
+    mpTemplateMessage.setToUser(memberOpenId);
+    mpTemplateMessage.setTemplateId("tT2nGgVk-m4R-oCylqHHmbSsSRNJVFy2tnJvqklOgYY");
+    List<WxMpTemplateData> list = new ArrayList<>();
+    WxMpTemplateData data1 = new WxMpTemplateData("first", "客官您好,您在云鼎绿色的返利提现，已经飞奔而来了。");
+    list.add(data1);
+    WxMpTemplateData data2 = new WxMpTemplateData("keyword1", "");
+    list.add(data2);
+    String moneyStr = "￥"  + "元";
+    WxMpTemplateData data3 = new WxMpTemplateData("keyword2", moneyStr);
+    list.add(data3);
+    WxMpTemplateData data4 = new WxMpTemplateData("remark", "点击查看,赶快领取吧！");
+    list.add(data4);
+    mpTemplateMessage.setData(list);
+
+    try {
+      String string = wxMpService.getTemplateMsgService().sendTemplateMsg(mpTemplateMessage);
+      logger.info(string);
+
+      return true;
+    } catch (WxErrorException e) {
+      logger.error("发送消息失败", e);
+    }
+    return false;
   }
 }

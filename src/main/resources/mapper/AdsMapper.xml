@@ -8,7 +8,8 @@
     <result column="ad_type" jdbcType="VARCHAR" property="adType" />
     <result column="level" jdbcType="VARCHAR" property="level" />
     <result column="ad_url" jdbcType="VARCHAR" property="adUrl" />
-    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
+    <result column="link_type" jdbcType="VARCHAR" property="linkType" />
+    <result column="link_params" jdbcType="VARCHAR" property="linkParams" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
 </mapper>

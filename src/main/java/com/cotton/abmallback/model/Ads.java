@@ -23,10 +23,16 @@ public class Ads extends BaseModel {
     private String adUrl;
 
     /**
-     * 链接地址
+     * 链接类型：goods | activity | nothing | url
      */
-    @Column(name = "link_url")
-    private String linkUrl;
+    @Column(name = "link_type")
+    private String linkType;
+
+    /**
+     * 链接参数，如果类型是goods  参数是goodsid  如果类型活动，参数是 活动id，如果类型是url 参数是跳转url
+     */
+    @Column(name = "link_params")
+    private String linkParams;
 
     /**
      * 排序
@@ -88,21 +94,39 @@ public class Ads extends BaseModel {
     }
 
     /**
-     * 获取链接地址
+     * 获取链接类型：goods | activity | nothing | url
      *
-     * @return link_url - 链接地址
+     * @return link_type - 链接类型：goods | activity | nothing | url
      */
-    public String getLinkUrl() {
-        return linkUrl;
+    public String getLinkType() {
+        return linkType;
     }
 
     /**
-     * 设置链接地址
+     * 设置链接类型：goods | activity | nothing | url
      *
-     * @param linkUrl 链接地址
+     * @param linkType 链接类型：goods | activity | nothing | url
      */
-    public void setLinkUrl(String linkUrl) {
-        this.linkUrl = linkUrl == null ? null : linkUrl.trim();
+    public void setLinkType(String linkType) {
+        this.linkType = linkType == null ? null : linkType.trim();
+    }
+
+    /**
+     * 获取链接参数，如果类型是goods  参数是goodsid  如果类型活动，参数是 活动id，如果类型是url 参数是跳转url
+     *
+     * @return link_params - 链接参数，如果类型是goods  参数是goodsid  如果类型活动，参数是 活动id，如果类型是url 参数是跳转url
+     */
+    public String getLinkParams() {
+        return linkParams;
+    }
+
+    /**
+     * 设置链接参数，如果类型是goods  参数是goodsid  如果类型活动，参数是 活动id，如果类型是url 参数是跳转url
+     *
+     * @param linkParams 链接参数，如果类型是goods  参数是goodsid  如果类型活动，参数是 活动id，如果类型是url 参数是跳转url
+     */
+    public void setLinkParams(String linkParams) {
+        this.linkParams = linkParams == null ? null : linkParams.trim();
     }
 
     /**
