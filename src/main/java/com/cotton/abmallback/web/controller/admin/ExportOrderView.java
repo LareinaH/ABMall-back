@@ -1,0 +1,74 @@
+package com.cotton.abmallback.web.controller.admin;
+
+import com.cotton.abmallback.model.Orders;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Map;
+
+public class ExportOrderView extends ExcelView {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Override
+    protected void setRow(Sheet sheet, Map<String, Object> map) {
+        Row header = sheet.createRow(0);
+        int cellIndex = 0;
+        header.createCell(cellIndex).setCellValue("订单号");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("下单时间");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("订单来源");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("收件联系方式");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("实付金额");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("总返利金额");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("订单状态");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("快递单号");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("补货状态");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("订单变更时间");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("订单会员手机号");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+
+        List<Orders> ordersList = (List<Orders>)map.get("detail");
+        ordersList.forEach(x -> {
+            int ci = 0;
+            int rowIndex = 1;
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(ci++).setCellValue(x.getOrderNo());
+            row.createCell(ci++).setCellValue(x.getGmtCreate());
+            row.createCell(ci++).setCellValue(x.getOrderSource());
+            row.createCell(ci++).setCellValue(
+                    String.format(
+                            "%s省%s市%s区%s",
+                            x.getReceiverProvinceName(),
+                            x.getReceiverCityName(),
+                            x.getReceiverCountyName(),
+                            x.getReceiverAddress()
+                    )
+            );
+            row.createCell(ci++).setCellValue(x.getTotalMoney().toString());
+            row.createCell(ci++).setCellValue(x.getRebateMoney().toString());
+            row.createCell(ci++).setCellValue(x.getOrderStatus());
+            row.createCell(ci++).setCellValue(x.getLogisticCode());
+            row.createCell(ci++).setCellValue(x.getReturnStatus());
+            row.createCell(ci++).setCellValue(x.getGmtModify());
+            row.createCell(ci++).setCellValue(x.getMemberPhone());
+        });
+    }
+
+    @Override
+    protected void setStyle(Workbook workbook) {
+        super.cellStyle = new DefaultCellStyleImpl().setCellStyle(workbook);
+    }
+}
