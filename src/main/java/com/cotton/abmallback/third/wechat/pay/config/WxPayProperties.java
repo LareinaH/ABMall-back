@@ -16,6 +16,11 @@ public class WxPayProperties {
     /**
      * 设置微信公众号的appid
      */
+    private String mpAppId;
+
+    /**
+     * app支付的appId
+     */
     private String appId;
 
     /**
@@ -42,6 +47,14 @@ public class WxPayProperties {
      * apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
      */
     private String keyPath;
+
+    public String getMpAppId() {
+        return mpAppId;
+    }
+
+    public void setMpAppId(String mpAppId) {
+        this.mpAppId = mpAppId;
+    }
 
     public String getAppId() {
         return this.appId;

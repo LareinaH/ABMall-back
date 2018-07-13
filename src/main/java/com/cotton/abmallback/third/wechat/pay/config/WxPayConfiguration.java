@@ -54,7 +54,7 @@ public class WxPayConfiguration {
         WxPayService wxPayService = new WxPayServiceImpl();
 
         WxPayConfig mpPayConfig = new WxPayConfig();
-        mpPayConfig.setAppId(this.properties.getAppId());
+        mpPayConfig.setAppId(this.properties.getMpAppId());
         mpPayConfig.setMchId(this.properties.getMchId());
         mpPayConfig.setMchKey(this.properties.getMchKey());
         mpPayConfig.setSubAppId(StringUtils.trimToNull(this.properties.getSubAppId()));
