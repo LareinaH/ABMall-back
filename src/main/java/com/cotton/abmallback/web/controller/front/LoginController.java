@@ -249,6 +249,7 @@ public class LoginController extends ABMallFrontBaseController {
             }
         }else {
             memberList.get(0).setTokenWechatMp(token);
+            memberList.get(0).setOpenId(wxMpOAuth2AccessToken.getOpenId());
             memberService.update(memberList.get(0));
             return RestResponse.getSuccesseResponse(translateLoginVO(memberList.get(0),token));
         }
