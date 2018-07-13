@@ -82,6 +82,10 @@ public class OrdersController extends ABMallFrontBaseController {
         long goodsSpecificationServiceId = Long.valueOf(params.get("goodsSpecificationServiceId").toString()) ;
         int count = Integer.valueOf(params.get("count").toString());
         long addressId = Long.valueOf(params.get("addressId").toString());
+        String orderSource = "APP";
+        if(params.get("orderSource") != null){
+            orderSource = params.get("orderSource").toString();
+        }
 
         //根据goodsSpecificationServiceId查找商品
         GoodsSpecification goodsSpecification = goodsSpecificationService.getById(goodsSpecificationServiceId);
@@ -115,6 +119,7 @@ public class OrdersController extends ABMallFrontBaseController {
         String random = RandomUtil.getRandomNumCode(3);
         orders.setOrderNo(strDate + random);
         orders.setTotalMoney(goodsSpecification.getPreferentialPrice().multiply(new BigDecimal(Double.valueOf(count))));
+        orders.setOrderSource(orderSource);
 
         //收货人信息
         orders.setReceiverName(memberAddress.getReceiverName());

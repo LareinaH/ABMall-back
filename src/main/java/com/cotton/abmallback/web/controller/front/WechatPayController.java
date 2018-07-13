@@ -123,9 +123,10 @@ public class WechatPayController {
         request.setSpbillCreateIp(ip);
         request.setNotifyUrl("http://47.97.212.22:80/api/v1/wechat/pay/parseOrderNotifyResult");
         request.setTradeType(tradeType);
-        request.setOpenid(member.getOpenId());
 
         if("APP".equalsIgnoreCase(tradeType)) {
+
+            logger.info("---------app支付---------");
 
             WxPayAppOrderResult wxPayAppOrderResult = this.wxPayService.createOrder(request);
 
@@ -146,6 +147,8 @@ public class WechatPayController {
             }
         }else if("JSAPI".equalsIgnoreCase(tradeType)){
 
+            logger.info("---------公众号支付---------");
+            request.setOpenid(member.getOpenId());
             WxPayMpOrderResult wxPayMpOrderResult =  this.wxMpPayService.createOrder(request);
 
             if (null != wxPayMpOrderResult) {
