@@ -48,11 +48,11 @@ public class ExportController {
             criteria.andEqualTo("orderStatus", orderStatus);
         }
 
-        if (StringUtils.isNotBlank(orderStatus)) {
+        if (StringUtils.isNotBlank(returnStatus)) {
             criteria.andEqualTo("returnStatus", returnStatus);
         }
 
-        if (StringUtils.isNotBlank(orderStatus)) {
+        if (StringUtils.isNotBlank(orderNo)) {
             criteria.andEqualTo("orderNo", orderNo);
         }
 
