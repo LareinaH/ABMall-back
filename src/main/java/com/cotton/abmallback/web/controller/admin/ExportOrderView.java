@@ -53,7 +53,7 @@ public class ExportOrderView extends ExcelView {
             Row row = sheet.createRow(rowIndex++);
             row.createCell(ci++).setCellValue(x.getOrderNo());
             row.createCell(ci++).setCellValue(sdf.format(x.getGmtCreate()));
-            row.createCell(ci++).setCellValue(OrderStatusEnum.valueOf(x.getOrderSource()).getDisplayName());
+            row.createCell(ci++).setCellValue(x.getOrderSource());
             row.createCell(ci++).setCellValue(
                     String.format(
                             "%s省%s市%s区%s",
@@ -65,7 +65,7 @@ public class ExportOrderView extends ExcelView {
             );
             row.createCell(ci++).setCellValue(x.getTotalMoney().toString());
             row.createCell(ci++).setCellValue(x.getRebateMoney().toString());
-            row.createCell(ci++).setCellValue(x.getOrderStatus());
+            row.createCell(ci++).setCellValue(OrderStatusEnum.valueOf(x.getOrderStatus()).getDisplayName());
             row.createCell(ci++).setCellValue(x.getLogisticCode());
             row.createCell(ci++).setCellValue(OrderReturnStatusEnum.valueOf(x.getReturnStatus()).getDisplayName());
             row.createCell(ci++).setCellValue(sdf.format(x.getGmtModify()));
