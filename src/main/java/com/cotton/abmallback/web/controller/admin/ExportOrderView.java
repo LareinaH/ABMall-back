@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExportOrderView extends ExcelView {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -47,10 +48,10 @@ public class ExportOrderView extends ExcelView {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         List<Orders> ordersList = (List<Orders>)map.get("detail");
+        AtomicInteger rowIndex = new AtomicInteger(1);
         ordersList.forEach(x -> {
             int ci = 0;
-            int rowIndex = 1;
-            Row row = sheet.createRow(rowIndex++);
+            Row row = sheet.createRow(rowIndex.getAndIncrement());
             row.createCell(ci++).setCellValue(x.getOrderNo());
             row.createCell(ci++).setCellValue(sdf.format(x.getGmtCreate()));
             row.createCell(ci++).setCellValue(x.getOrderSource());
