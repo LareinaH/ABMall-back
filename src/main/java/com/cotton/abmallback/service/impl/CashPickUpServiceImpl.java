@@ -68,15 +68,16 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
                 JufenyunResultObject jufenyunResultObject = jufenyunService.getRedpackInfo(redpackRecord.getRedpackSn());
 
                 if (null != jufenyunResultObject) {
-                    switch (jufenyunResultObject.getStatus()) {
+                    switch (jufenyunResultObject.getRedpack().getStatus()) {
+                        case 1:
                         case 4:
-                            cashPichUpSuccess(redpackRecord);
+                            cashPickUpSuccess(redpackRecord);
                             break;
                         case 3:
-                            cashPichUpFailed(redpackRecord,RedpackStatusEnum.RETURN);
+                            cashPickUpFailed(redpackRecord,RedpackStatusEnum.RETURN);
                             break;
                         case 2:
-                            cashPichUpFailed(redpackRecord,RedpackStatusEnum.WAIT_RETURN);
+                            cashPickUpFailed(redpackRecord,RedpackStatusEnum.WAIT_RETURN);
                             break;
                         default:
                             break;
@@ -86,7 +87,7 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
         }
     }
 
-    private void cashPichUpSuccess(RedpackRecord redpackRecord){
+    private void cashPickUpSuccess(RedpackRecord redpackRecord){
 
         redpackRecord.setStatus(RedpackStatusEnum.SEND_SCUUESS.name());
 
@@ -103,10 +104,11 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
             member.setMoneyTotalTake(member.getMoneyTotalTake().add(cashPickUp.getMoney()));
             member.setMoneyLock(member.getMoneyLock().subtract(cashPickUp.getMoney()));
             memberService.update(member);
+            update(cashPickUp);
         }
     }
 
-    private void cashPichUpFailed(RedpackRecord redpackRecord,RedpackStatusEnum status){
+    private void cashPickUpFailed(RedpackRecord redpackRecord, RedpackStatusEnum status){
 
         redpackRecord.setStatus(status.name());
 

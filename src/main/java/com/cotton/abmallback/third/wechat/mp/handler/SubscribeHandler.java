@@ -104,7 +104,7 @@ public class SubscribeHandler extends AbstractHandler {
 
     if (!StringUtils.isBlank(eventKey)) {
 
-      String jsonStr = eventKey.substring(eventKey.indexOf("{"),eventKey.indexOf("}"));
+      String jsonStr = eventKey.substring(eventKey.indexOf("{"),eventKey.indexOf("}") + 1);
 
       JSONObject jsonObject = JSON.parseObject(jsonStr);
 

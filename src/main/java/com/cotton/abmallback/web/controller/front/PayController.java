@@ -53,6 +53,11 @@ public class PayController {
 
         Map<String, Object> map = new HashMap<>(2);
 
+        String eventKey = "qrscene_{\"referrerId\":2}";
+        String jsonStr = eventKey.substring(eventKey.indexOf("{"),eventKey.indexOf("}"));
+
+        logger.info(jsonStr);
+
         //distributionManager.orderDistribute("20180710073044029703");
 
         //String url = jufenyunService.sendRedpack("o8HRJ0zjXTdkOJZonIDTfWsuPH7I",new BigDecimal(0.4));

@@ -29,31 +29,16 @@ public class JufenyunResultObject {
      */
     private String redpack_url;
 
-    /**
-     *   发放金额	单位为分
-     */
-    private int money;
 
-    /**
-     * 	您公众号的粉丝openid
-     */
-    private String openid;
+    private Redpack redpack;
 
-    /**
-     *  昵称
-     */
-    private String nickname;
+    public Redpack getRedpack() {
+        return redpack;
+    }
 
-    /**
-     * 	支付流水号
-     */
-    private String consume_sn;
-
-    /**
-     *  0:等待发放；1：已发放；2：等待退回；3：已退回；4：发放成功
-     */
-    private int status;
-
+    public void setRedpack(Redpack redpack) {
+        this.redpack = redpack;
+    }
 
     public int getCode() {
         return code;
@@ -87,43 +72,86 @@ public class JufenyunResultObject {
         this.redpack_url = redpack_url;
     }
 
-    public int getMoney() {
-        return money;
-    }
+    public class Redpack{
 
-    public void setMoney(int money) {
-        this.money = money;
-    }
+        /**
+         *红包编号	红包编号。此编号为唯一存在。发放通知结果也返回此编号
+         */
+        private String redpack_sn;
 
-    public String getOpenid() {
-        return openid;
-    }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
+        /**
+         *   发放金额	单位为分
+         */
+        private int money;
 
-    public String getNickname() {
-        return nickname;
-    }
+        /**
+         * 	您公众号的粉丝openid
+         */
+        private String openid;
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+        /**
+         *  昵称
+         */
+        private String nickname;
 
-    public String getConsume_sn() {
-        return consume_sn;
-    }
+        /**
+         * 	支付流水号
+         */
+        private String consume_sn;
 
-    public void setConsume_sn(String consume_sn) {
-        this.consume_sn = consume_sn;
-    }
+        /**
+         *  0:等待发放；1：已发放；2：等待退回；3：已退回；4：发放成功
+         */
+        private int status;
 
-    public int getStatus() {
-        return status;
-    }
+        public String getRedpack_sn() {
+            return redpack_sn;
+        }
 
-    public void setStatus(int status) {
-        this.status = status;
+        public void setRedpack_sn(String redpack_sn) {
+            this.redpack_sn = redpack_sn;
+        }
+
+        public int getMoney() {
+            return money;
+        }
+
+        public void setMoney(int money) {
+            this.money = money;
+        }
+
+        public String getOpenid() {
+            return openid;
+        }
+
+        public void setOpenid(String openid) {
+            this.openid = openid;
+        }
+
+        public String getNickname() {
+            return nickname;
+        }
+
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
+        }
+
+        public String getConsume_sn() {
+            return consume_sn;
+        }
+
+        public void setConsume_sn(String consume_sn) {
+            this.consume_sn = consume_sn;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
     }
 }
