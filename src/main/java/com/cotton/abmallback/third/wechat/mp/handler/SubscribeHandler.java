@@ -9,6 +9,7 @@ import com.cotton.abmallback.third.wechat.mp.builder.TextBuilder;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.api.WxMpTemplateMsgService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
@@ -17,6 +18,7 @@ import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +31,12 @@ public class SubscribeHandler extends AbstractHandler {
 
   private final MemberService memberService;
 
-  private final WxMpService wxMpService;
 
-  public SubscribeHandler(MemberService memberService, WxMpService wxMpService) {
+
+
+  public SubscribeHandler(MemberService memberService) {
     this.memberService = memberService;
-    this.wxMpService = wxMpService;
-  }
+    }
 
   @Override
   public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
@@ -62,6 +64,8 @@ public class SubscribeHandler extends AbstractHandler {
           memberService.update(member);
         }
 
+        sendWxMessage(member.getOpenId(),member.getName());
+
       } else {
 
         //注册新用户
@@ -79,8 +83,9 @@ public class SubscribeHandler extends AbstractHandler {
 
         memberService.insert(newMember);
 
-      }
+        sendWxMessage(newMember.getOpenId(),newMember.getName());
 
+      }
 
       try {
         return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
@@ -110,30 +115,29 @@ public class SubscribeHandler extends AbstractHandler {
     }
   }
 
-  private boolean sendWxMessage(String memberOpenId) {
-    WxMpTemplateMessage mpTemplateMessage = new WxMpTemplateMessage();
+  private boolean sendWxMessage(String memberOpenId,String memberName) {
+/*    WxMpTemplateMessage mpTemplateMessage = new WxMpTemplateMessage();
     mpTemplateMessage.setToUser(memberOpenId);
-    mpTemplateMessage.setTemplateId("tT2nGgVk-m4R-oCylqHHmbSsSRNJVFy2tnJvqklOgYY");
+    mpTemplateMessage.setTemplateId("eD6ie0CFoDVS7S0y0SJCStPLgJgpoOGRCJadsAj0his");
     List<WxMpTemplateData> list = new ArrayList<>();
-    WxMpTemplateData data1 = new WxMpTemplateData("first", "客官您好,您在云鼎绿色的返利提现，已经飞奔而来了。");
+    WxMpTemplateData data1 = new WxMpTemplateData("first", "感谢您关注绿色云鼎,恭喜您已经成为我们的会员");
     list.add(data1);
-    WxMpTemplateData data2 = new WxMpTemplateData("keyword1", "");
+    WxMpTemplateData data2 = new WxMpTemplateData("keyword1", memberName);
     list.add(data2);
-    String moneyStr = "￥"  + "元";
-    WxMpTemplateData data3 = new WxMpTemplateData("keyword2", moneyStr);
+    WxMpTemplateData data3 = new WxMpTemplateData("keyword2", LocalDateTime.now().toString());
     list.add(data3);
-    WxMpTemplateData data4 = new WxMpTemplateData("remark", "点击查看,赶快领取吧！");
+    WxMpTemplateData data4 = new WxMpTemplateData("remark", "赶快开启您新的旅程吧！");
     list.add(data4);
     mpTemplateMessage.setData(list);
 
     try {
-      String string = wxMpService.getTemplateMsgService().sendTemplateMsg(mpTemplateMessage);
+      String string = wxMpTemplateMsgService.sendTemplateMsg(mpTemplateMessage);
       logger.info(string);
 
       return true;
     } catch (WxErrorException e) {
       logger.error("发送消息失败", e);
-    }
+    }*/
     return false;
   }
 }

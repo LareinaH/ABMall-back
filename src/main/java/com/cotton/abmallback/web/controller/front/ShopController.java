@@ -232,4 +232,24 @@ public class ShopController extends ABMallFrontBaseController {
 
         return RestResponse.getSuccesseResponse();
     }
+
+
+    /**
+     * 商城活动 详情 按照 id查找
+     * @return 商城活动
+     */
+    @ResponseBody
+    @RequestMapping(value = "/shopActivityDetail",method = {RequestMethod.GET})
+    public RestResponse<ShopActivities> shopActivityDetail(@RequestParam()long shopActivityId) {
+
+        ShopActivities shopActivities = shopActivitiesService.getById(shopActivityId);
+
+        if(null != shopActivities){
+
+            return RestResponse.getSuccesseResponse(shopActivities);
+        }
+
+        return RestResponse.getFailedResponse(500,"活动id错误，该活动不存在");
+
+    }
 }
