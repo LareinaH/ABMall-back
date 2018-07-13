@@ -2,6 +2,8 @@ package com.cotton.abmallback.third.wechat;
 
 import com.alibaba.fastjson.JSON;
 import com.cotton.base.utils.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,6 +19,8 @@ import java.util.Map;
  */
 @Service
 public class JufenyunServiceImpl  implements  JufenyunService{
+
+    private Logger logger = LoggerFactory.getLogger(JufenyunServiceImpl.class);
 
     private  String  appKey = "a62fcd52-dd14-4e94-b824-a579f3774c8a";
 
@@ -39,6 +43,8 @@ public class JufenyunServiceImpl  implements  JufenyunService{
         if(null != jsonObject && jsonObject.getCode() == 0){
             return jsonObject;
         }
+
+        logger.error(result);
         return null;
     }
 
@@ -57,6 +63,8 @@ public class JufenyunServiceImpl  implements  JufenyunService{
         if(null != jsonObject && jsonObject.getCode() == 0){
             return jsonObject;
         }
+
+        logger.error(result);
         return null;
     }
 }

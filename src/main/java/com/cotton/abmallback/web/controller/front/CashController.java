@@ -120,7 +120,7 @@ public class CashController extends ABMallFrontBaseController {
         BigDecimal availablePickUpCashAmount = member.getMoneyTotalEarn().subtract(member.getMoneyTotalTake()).subtract(member.getMoneyLock());
 
         //判断提现金额
-        if (money.compareTo(availablePickUpCashAmount) < 0) {
+        if (money.compareTo(availablePickUpCashAmount) > 0) {
             return RestResponse.getFailedResponse(500, "提现金额不能大于可提现金额。");
         }
 
