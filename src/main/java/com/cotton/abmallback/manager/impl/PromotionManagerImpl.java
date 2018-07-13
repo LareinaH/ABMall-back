@@ -3,16 +3,23 @@ package com.cotton.abmallback.manager.impl;
 import com.cotton.abmallback.enumeration.AccountMoneyTypeEnum;
 import com.cotton.abmallback.enumeration.DistributionItemEnum;
 import com.cotton.abmallback.enumeration.MemberLevelEnum;
+import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.manager.MessageManager;
 import com.cotton.abmallback.manager.PromotionManager;
 import com.cotton.abmallback.model.AccountMoneyFlow;
 import com.cotton.abmallback.model.DistributionConfig;
 import com.cotton.abmallback.model.Member;
+import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.AccountMoneyFlowService;
 import com.cotton.abmallback.service.DistributionConfigService;
 import com.cotton.abmallback.service.MemberService;
+import com.cotton.abmallback.service.OrdersService;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +29,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2018/7/3
  */
+@Service
 public class PromotionManagerImpl implements PromotionManager {
 
     private final DistributionConfigService distributionConfigService;
@@ -32,11 +40,14 @@ public class PromotionManagerImpl implements PromotionManager {
 
     private final MessageManager messageManager;
 
-    public PromotionManagerImpl(DistributionConfigService distributionConfigService, MemberService memberService, AccountMoneyFlowService accountMoneyFlowService, MessageManager messageManager) {
+    private final OrdersService ordersService;
+
+    public PromotionManagerImpl(DistributionConfigService distributionConfigService, MemberService memberService, AccountMoneyFlowService accountMoneyFlowService, MessageManager messageManager, OrdersService ordersService) {
         this.distributionConfigService = distributionConfigService;
         this.memberService = memberService;
         this.accountMoneyFlowService = accountMoneyFlowService;
         this.messageManager = messageManager;
+        this.ordersService = ordersService;
     }
 
 
@@ -51,7 +62,7 @@ public class PromotionManagerImpl implements PromotionManager {
             if (null != newLevel) {
 
                 //判断是否达到晋级条件
-                if (checkCanBePromited(member, newLevel)) {
+                if (checkCanBePromoted(member, newLevel)) {
 
                     member.setLevel(newLevel.toString());
                     memberService.update(member);
@@ -67,40 +78,54 @@ public class PromotionManagerImpl implements PromotionManager {
     }
 
 
-    private boolean checkCanBePromited(Member member, MemberLevelEnum newLevel) {
+    private boolean checkCanBePromoted(Member member, MemberLevelEnum newLevel) {
 
         Map<String, DistributionConfig> map = distributionConfigService.getAllDistributionConfig();
 
-        String totalMoney = null;
-        String totalMemberConut = null;
-        String shopTimes = null;
+        String totalMoney = "0";
+        String totalMemberCount = "0";
+        String shopTimes = "0";
 
         //获取newLevel的晋级条件
         switch (newLevel) {
             case AGENT:
-                totalMoney = map.get(DistributionItemEnum.PROMOTION_AGENT_MONEY).getValue();
-                shopTimes = map.get(DistributionItemEnum.PROMOTION_AGENT_TIMES).getValue();
+                totalMoney = map.get(DistributionItemEnum.PROMOTION_AGENT_MONEY.name()).getValue();
+                shopTimes = map.get(DistributionItemEnum.PROMOTION_AGENT_TIMES.name()).getValue();
                 break;
             case V1:
-                totalMoney = map.get(DistributionItemEnum.PROMOTION_V1_MONEY).getValue();
-                totalMemberConut = map.get(DistributionItemEnum.PROMOTION_V1_SHARE_PEOPLE).getValue();
+                totalMoney = map.get(DistributionItemEnum.PROMOTION_V1_MONEY.name()).getValue();
+                totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V1_SHARE_PEOPLE.name()).getValue();
                 break;
             case V2:
-                totalMoney = map.get(DistributionItemEnum.PROMOTION_V2_MONEY).getValue();
-                totalMemberConut = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_PEOPLE).getValue();
+                totalMoney = map.get(DistributionItemEnum.PROMOTION_V2_MONEY.name()).getValue();
+                totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_PEOPLE.name()).getValue();
                 break;
             case V3:
-                totalMoney = map.get(DistributionItemEnum.PROMOTION_V3_MONEY).getValue();
-                totalMemberConut = map.get(DistributionItemEnum.PROMOTION_V3_SHARE_PEOPLE).getValue();
+                totalMoney = map.get(DistributionItemEnum.PROMOTION_V3_MONEY.name()).getValue();
+                totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V3_SHARE_PEOPLE.name()).getValue();
                 break;
             default:
                 break;
         }
 
         if (newLevel.equals(MemberLevelEnum.AGENT)) {
-            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) > 0 && member.getReferTotalCount() > Integer.valueOf(shopTimes);
+
+            //获取有效订单数
+            Example example = new Example(Orders.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("memberId", member.getId());
+            criteria.andEqualTo("isDeleted", false);
+
+            List<String> orderStatusList = new ArrayList<>();
+            orderStatusList.add(OrderStatusEnum.CANCEL.name());
+            orderStatusList.add(OrderStatusEnum.WAIT_BUYER_PAY.name());
+            criteria.andNotIn("orderStatus", orderStatusList);
+
+            long count = ordersService.count(example);
+
+            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) > 0 && count > Long.valueOf(shopTimes);
         } else {
-            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) > 0 && member.getReferTotalCount() > Integer.valueOf(totalMemberConut);
+            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) > 0 && member.getReferTotalCount() > Integer.valueOf(totalMemberCount);
         }
     }
 
@@ -120,13 +145,13 @@ public class PromotionManagerImpl implements PromotionManager {
                 awardMoney = null;
                 break;
             case V1:
-                awardMoney = map.get(DistributionItemEnum.PROMOTION_AWARD_V1).getValue();
+                awardMoney = map.get(DistributionItemEnum.PROMOTION_AWARD_V1.name()).getValue();
                 break;
             case V2:
-                awardMoney = map.get(DistributionItemEnum.PROMOTION_AWARD_V2).getValue();
+                awardMoney = map.get(DistributionItemEnum.PROMOTION_AWARD_V2.name()).getValue();
                 break;
             case V3:
-                awardMoney = map.get(DistributionItemEnum.PROMOTION_AWARD_V3).getValue();
+                awardMoney = map.get(DistributionItemEnum.PROMOTION_AWARD_V3.name()).getValue();
                 break;
             default:
                 break;
@@ -154,7 +179,7 @@ public class PromotionManagerImpl implements PromotionManager {
     /**
      * 发送消息通知
      */
-    void sendPromotionMessage(Member member, MemberLevelEnum newLevel,BigDecimal money) {
+    private void sendPromotionMessage(Member member, MemberLevelEnum newLevel,BigDecimal money) {
 
         messageManager.sendPromotionAward(member.getId(),newLevel.name(),money);
     }

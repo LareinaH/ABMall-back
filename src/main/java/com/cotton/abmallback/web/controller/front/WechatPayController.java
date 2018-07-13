@@ -50,6 +50,9 @@ public class WechatPayController {
     @Resource(name = "wxPayService")
     private WxPayService wxPayService;
 
+    @Resource(name = "wxMpPayService")
+    private WxPayService wxMpPayService;
+
     private final OrdersService ordersService;
 
     private final OrderGoodsService orderGoodsService;
@@ -124,8 +127,6 @@ public class WechatPayController {
 
         if("APP".equalsIgnoreCase(tradeType)) {
 
-            this.wxPayService.getConfig().setAppId(openAppId);
-
             WxPayAppOrderResult wxPayAppOrderResult = this.wxPayService.createOrder(request);
 
             if (null != wxPayAppOrderResult) {
@@ -145,8 +146,7 @@ public class WechatPayController {
             }
         }else if("JSAPI".equalsIgnoreCase(tradeType)){
 
-            this.wxPayService.getConfig().setAppId(mpAppId);
-            WxPayMpOrderResult wxPayMpOrderResult =  this.wxPayService.createOrder(request);
+            WxPayMpOrderResult wxPayMpOrderResult =  this.wxMpPayService.createOrder(request);
 
             if (null != wxPayMpOrderResult) {
 

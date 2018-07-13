@@ -39,11 +39,28 @@ public class WxPayConfiguration {
         return payConfig;
     }
 
-    @Bean
+
+    @Bean(name = "wxPayService")
     //@ConditionalOnMissingBean
     public WxPayService wxPayService(WxPayConfig payConfig) {
         WxPayService wxPayService = new WxPayServiceImpl();
         wxPayService.setConfig(payConfig);
+        return wxPayService;
+    }
+
+    @Bean(name = "wxMpPayService")
+    //@ConditionalOnMissingBean
+    public WxPayService wxMpPayService(WxPayConfig payConfig) {
+        WxPayService wxPayService = new WxPayServiceImpl();
+
+        WxPayConfig mpPayConfig = new WxPayConfig();
+        mpPayConfig.setAppId(this.properties.getAppId());
+        mpPayConfig.setMchId(this.properties.getMchId());
+        mpPayConfig.setMchKey(this.properties.getMchKey());
+        mpPayConfig.setSubAppId(StringUtils.trimToNull(this.properties.getSubAppId()));
+        mpPayConfig.setSubMchId(StringUtils.trimToNull(this.properties.getSubMchId()));
+        mpPayConfig.setKeyPath(this.properties.getKeyPath());
+        wxPayService.setConfig(mpPayConfig);
         return wxPayService;
     }
 
