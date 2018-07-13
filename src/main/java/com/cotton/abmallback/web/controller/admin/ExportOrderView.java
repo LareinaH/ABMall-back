@@ -1,12 +1,16 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.enumeration.OrderReturnStatusEnum;
+import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.model.Orders;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +44,16 @@ public class ExportOrderView extends ExcelView {
         header.createCell(cellIndex).setCellValue("订单会员手机号");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
         List<Orders> ordersList = (List<Orders>)map.get("detail");
         ordersList.forEach(x -> {
             int ci = 0;
             int rowIndex = 1;
             Row row = sheet.createRow(rowIndex++);
             row.createCell(ci++).setCellValue(x.getOrderNo());
-            row.createCell(ci++).setCellValue(x.getGmtCreate());
-            row.createCell(ci++).setCellValue(x.getOrderSource());
+            row.createCell(ci++).setCellValue(sdf.format(x.getGmtCreate()));
+            row.createCell(ci++).setCellValue(OrderStatusEnum.valueOf(x.getOrderSource()).getDisplayName());
             row.createCell(ci++).setCellValue(
                     String.format(
                             "%s省%s市%s区%s",
@@ -61,8 +67,8 @@ public class ExportOrderView extends ExcelView {
             row.createCell(ci++).setCellValue(x.getRebateMoney().toString());
             row.createCell(ci++).setCellValue(x.getOrderStatus());
             row.createCell(ci++).setCellValue(x.getLogisticCode());
-            row.createCell(ci++).setCellValue(x.getReturnStatus());
-            row.createCell(ci++).setCellValue(x.getGmtModify());
+            row.createCell(ci++).setCellValue(OrderReturnStatusEnum.valueOf(x.getReturnStatus()).getDisplayName());
+            row.createCell(ci++).setCellValue(sdf.format(x.getGmtModify()));
             row.createCell(ci++).setCellValue(x.getMemberPhone());
         });
     }
