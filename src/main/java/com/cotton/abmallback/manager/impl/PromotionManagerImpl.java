@@ -94,6 +94,7 @@ public class PromotionManagerImpl implements PromotionManager {
 
         String totalMoney = "0";
         String totalMemberCount = "0";
+        String totalV1Count="0";
         String shopTimes = "0";
 
         //获取newLevel的晋级条件
@@ -101,42 +102,76 @@ public class PromotionManagerImpl implements PromotionManager {
             case AGENT:
                 totalMoney = map.get(DistributionItemEnum.PROMOTION_AGENT_MONEY.name()).getValue();
                 shopTimes = map.get(DistributionItemEnum.PROMOTION_AGENT_TIMES.name()).getValue();
-                break;
+                long count = getOrdersCount(member.getId());
+
+
+                return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >= 0 && count >= Long.valueOf(shopTimes);
+
             case V1:
-                totalMoney = map.get(DistributionItemEnum.PROMOTION_V1_MONEY.name()).getValue();
+                // 晋级v1的条件是：直接分享XXX代言人。
+                //totalMoney = map.get(DistributionItemEnum.PROMOTION_V1_MONEY.name()).getValue();
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V1_SHARE_PEOPLE.name()).getValue();
-                break;
+                return getAgentPeopleCount(member.getReferrerId()) >= Long.valueOf(totalMemberCount);
             case V2:
-                totalMoney = map.get(DistributionItemEnum.PROMOTION_V2_MONEY.name()).getValue();
+                //晋级V2的条件是：团队中有XXX个v1 并且直接分享XXX代言人。
+                //totalMoney = map.get(DistributionItemEnum.PROMOTION_V2_MONEY.name()).getValue();
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_PEOPLE.name()).getValue();
-                break;
+                totalV1Count = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_V1_PEOPLE.name()).getValue();
+
+                return (getAgentPeopleCount(member.getReferrerId()) >= Long.valueOf(totalMemberCount)) &&
+                        (getV1PeopleCount(member.getReferrerId()) >= Long.valueOf(totalV1Count));
+
             case V3:
+                // 晋级V3的条件是：直接分享XXX代言人，V3自己获得返佣XXXX元
                 totalMoney = map.get(DistributionItemEnum.PROMOTION_V3_MONEY.name()).getValue();
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V3_SHARE_PEOPLE.name()).getValue();
-                break;
+
+                return (getAgentPeopleCount(member.getReferrerId()) >= Long.valueOf(totalMemberCount)) &&
+                        (member.getMoneyTotalTake().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >=0);
+
             default:
-                break;
+                return false;
         }
+    }
 
-        if (newLevel.equals(MemberLevelEnum.AGENT)) {
+    private long getOrdersCount(long memberId) {
+        //获取有效订单数
+        Example example = new Example(Orders.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("memberId", memberId);
+        criteria.andEqualTo("isDeleted", false);
 
-            //获取有效订单数
-            Example example = new Example(Orders.class);
-            Example.Criteria criteria = example.createCriteria();
-            criteria.andEqualTo("memberId", member.getId());
-            criteria.andEqualTo("isDeleted", false);
+        List<String> orderStatusList = new ArrayList<>();
+        orderStatusList.add(OrderStatusEnum.CANCEL.name());
+        orderStatusList.add(OrderStatusEnum.WAIT_BUYER_PAY.name());
+        criteria.andNotIn("orderStatus", orderStatusList);
 
-            List<String> orderStatusList = new ArrayList<>();
-            orderStatusList.add(OrderStatusEnum.CANCEL.name());
-            orderStatusList.add(OrderStatusEnum.WAIT_BUYER_PAY.name());
-            criteria.andNotIn("orderStatus", orderStatusList);
+        return ordersService.count(example);
+    }
 
-            long count = ordersService.count(example);
 
-            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >= 0 && count >= Long.valueOf(shopTimes);
-        } else {
-            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >= 0 && member.getReferTotalCount() >= Integer.valueOf(totalMemberCount);
-        }
+    private long  getV1PeopleCount(long referrerId){
+        Example example = new Example(Member.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("referrerId", referrerId);
+        criteria.andEqualTo("isDeleted", false);
+
+        List<String> levelList = new ArrayList<>();
+        levelList.add(MemberLevelEnum.WHITE.name());
+        levelList.add(MemberLevelEnum.V1.name());
+        criteria.andNotIn("level", levelList);
+
+        return memberService.count(example);
+    }
+
+
+    private long  getAgentPeopleCount(long referrerId){
+        Example example = new Example(Member.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("referrerId", referrerId);
+        criteria.andEqualTo("isDeleted", false);
+        criteria.andNotEqualTo("level", MemberLevelEnum.WHITE);
+        return memberService.count(example);
     }
 
     /**
