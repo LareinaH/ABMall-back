@@ -27,9 +27,12 @@ public class SubscribeHandler extends AbstractHandler {
 
   private final MemberService memberService;
 
+  private final PromotionManager promotionManager;
 
-  public SubscribeHandler(MemberService memberService) {
+
+  public SubscribeHandler(MemberService memberService, PromotionManager promotionManager) {
     this.memberService = memberService;
+    this.promotionManager = promotionManager;
   }
 
   @Override
@@ -115,6 +118,8 @@ public class SubscribeHandler extends AbstractHandler {
 
     Member refferMember = memberService.getById(remmberId);
     refferMember.setReferTotalCount( refferMember.getReferTotalCount() + 1);
+
+    promotionManager.memberPromotion(refferMember,0L);
 
     memberService.update(refferMember);
 
