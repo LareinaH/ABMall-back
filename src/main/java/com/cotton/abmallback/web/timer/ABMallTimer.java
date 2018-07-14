@@ -102,6 +102,8 @@ public class ABMallTimer {
     @Scheduled(cron = "0 */1 * * * ?" )
     public void promot() {
 
+
+
         logger.info("用户晋级");
 
     }

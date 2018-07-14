@@ -84,7 +84,7 @@ public class DistributionManagerImpl implements DistributionManager {
 
             long count = ordersService.count(example);
 
-            if (count <= 0) {
+            if (count <= 1) {
                 //首次购物 不需要分销
                 return;
             }
