@@ -18,4 +18,6 @@ public interface PromotionManager {
      */
     void memberPromotion(Member member,long orderId);
 
+    void memberPromotionAll();
+
 }

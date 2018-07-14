@@ -1,6 +1,7 @@
 package com.cotton.abmallback.web.timer;
 
 import com.cotton.abmallback.manager.MessageManager;
+import com.cotton.abmallback.manager.PromotionManager;
 import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.service.ShopActivitiesService;
@@ -26,16 +27,19 @@ public class ABMallTimer {
 
     private final ShopActivitiesService shopActivitiesService;
 
+    private final PromotionManager promotionManager;
+
     private final MessageManager messageManager;
 
     private Logger logger = LoggerFactory.getLogger(ABMallTimer.class);
 
 
 
-    public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService, ShopActivitiesService shopActivitiesService, MessageManager messageManager) {
+    public ABMallTimer(OrdersService ordersService, CashPickUpService cashPickUpService, ShopActivitiesService shopActivitiesService, PromotionManager promotionManager, MessageManager messageManager) {
         this.ordersService = ordersService;
         this.cashPickUpService = cashPickUpService;
         this.shopActivitiesService = shopActivitiesService;
+        this.promotionManager = promotionManager;
         this.messageManager = messageManager;
     }
 
@@ -90,5 +94,15 @@ public class ABMallTimer {
 
         logger.info("关闭已经结束的活动定时器benin");
         shopActivitiesService.finishActivities();
+    }
+
+    /**
+     * 用户晋级
+     */
+    @Scheduled(cron = "0 */1 * * * ?" )
+    public void promot() {
+
+        logger.info("用户晋级");
+
     }
 }

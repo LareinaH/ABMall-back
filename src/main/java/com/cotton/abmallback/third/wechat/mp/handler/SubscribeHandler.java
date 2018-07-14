@@ -3,23 +3,19 @@ package com.cotton.abmallback.third.wechat.mp.handler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.enumeration.MemberLevelEnum;
+import com.cotton.abmallback.manager.PromotionManager;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.third.wechat.mp.builder.TextBuilder;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.WxMpTemplateMsgService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
-import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
-import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +28,9 @@ public class SubscribeHandler extends AbstractHandler {
   private final MemberService memberService;
 
 
-
-
   public SubscribeHandler(MemberService memberService) {
     this.memberService = memberService;
-    }
+  }
 
   @Override
   public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
@@ -61,6 +55,7 @@ public class SubscribeHandler extends AbstractHandler {
         Member member = memberList.get(0);
         if (null == member.getReferrerId()) {
           getRefferUser(wxMessage, member);
+          countRefferUser(member.getReferrerId());
           memberService.update(member);
         }
 
@@ -82,6 +77,7 @@ public class SubscribeHandler extends AbstractHandler {
         getRefferUser(wxMessage, newMember);
 
         memberService.insert(newMember);
+        countRefferUser(newMember.getReferrerId());
 
         sendWxMessage(newMember.getOpenId(),newMember.getName());
 
@@ -113,6 +109,15 @@ public class SubscribeHandler extends AbstractHandler {
       }
 
     }
+  }
+
+  private void countRefferUser(Long remmberId) {
+
+    Member refferMember = memberService.getById(remmberId);
+    refferMember.setReferTotalCount( refferMember.getReferTotalCount() + 1);
+
+    memberService.update(refferMember);
+
   }
 
   private boolean sendWxMessage(String memberOpenId,String memberName) {

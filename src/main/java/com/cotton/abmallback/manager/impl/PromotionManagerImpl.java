@@ -77,6 +77,16 @@ public class PromotionManagerImpl implements PromotionManager {
         }
     }
 
+    @Override
+    public void memberPromotionAll() {
+
+        List<Member> members = memberService.queryList();
+
+        for(Member member : members){
+            memberPromotion(member,0);
+        }
+    }
+
 
     private boolean checkCanBePromoted(Member member, MemberLevelEnum newLevel) {
 
@@ -123,9 +133,9 @@ public class PromotionManagerImpl implements PromotionManager {
 
             long count = ordersService.count(example);
 
-            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) > 0 && count > Long.valueOf(shopTimes);
+            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >= 0 && count >= Long.valueOf(shopTimes);
         } else {
-            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) > 0 && member.getReferTotalCount() > Integer.valueOf(totalMemberCount);
+            return member.getMoneyTotalSpend().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >= 0 && member.getReferTotalCount() >= Integer.valueOf(totalMemberCount);
         }
     }
 
@@ -142,7 +152,7 @@ public class PromotionManagerImpl implements PromotionManager {
         switch (newLevel) {
             case AGENT:
                 //awardMoney = map.get(DistributionItemEnum.PROMOTION_AGENT_TIMES).getValue();
-                awardMoney = null;
+                awardMoney = "0";
                 break;
             case V1:
                 awardMoney = map.get(DistributionItemEnum.PROMOTION_AWARD_V1.name()).getValue();

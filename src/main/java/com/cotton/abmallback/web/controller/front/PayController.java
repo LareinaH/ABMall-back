@@ -1,6 +1,9 @@
 package com.cotton.abmallback.web.controller.front;
 
 import com.cotton.abmallback.manager.DistributionManager;
+import com.cotton.abmallback.manager.PromotionManager;
+import com.cotton.abmallback.model.Member;
+import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.wechat.JufenyunService;
 import com.cotton.base.common.RestResponse;
@@ -47,6 +50,12 @@ public class PayController {
     @Autowired
     private WxMpService wxMpService;
 
+    @Autowired
+    private PromotionManager promotionManager;
+
+    @Autowired
+    private MemberService memberService;
+
     @ResponseBody
     @RequestMapping(value = "/example")
     public RestResponse<Map<String, Object>> example() {
@@ -62,6 +71,9 @@ public class PayController {
 
         //String url = jufenyunService.sendRedpack("o8HRJ0zjXTdkOJZonIDTfWsuPH7I",new BigDecimal(0.4));
         //map.put("url",url);
+
+        Member member = memberService.getById(7L);
+        promotionManager.memberPromotion(member,1);
 
 
 
