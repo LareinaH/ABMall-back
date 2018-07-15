@@ -84,13 +84,35 @@ public class MessageController extends ABMallFrontBaseController {
         }
 
         //分享奖励
+        Example example1 = new Example(MsgMemberMessage.class);
+        example1.setOrderByClause("gmt_create desc");
+
+        Example.Criteria criteria1 = example1.createCriteria();
+        criteria1.andEqualTo("isDeleted",false);
+        criteria1.andEqualTo("memberId",getCurrentMemberId());
+        criteria1.andEqualTo("type",MessageTypeEnum.SHARE_AWARD.name());
+
+        msgMemberMessagePageInfo = msgMemberMessageService.query(1,1,example1);
+        if(msgMemberMessagePageInfo != null && msgMemberMessagePageInfo.getList() != null
+                && msgMemberMessagePageInfo.getList().size()>0) {
+            Map<String,Object> subMap = new HashMap<>(2);
+            subMap.put("msg",msgMemberMessagePageInfo.getList().get(0));
+
+            criteria1.andEqualTo("isRead",false);
+            long count = msgMemberMessageService.count(example1);
+            subMap.put("unReadCount",count);
+
+            map.put(MessageTypeEnum.SHARE_AWARD.name(),subMap);
+        }
+
+        //复购奖励
         Example example2 = new Example(MsgMemberMessage.class);
         example2.setOrderByClause("gmt_create desc");
 
         Example.Criteria criteria2 = example2.createCriteria();
         criteria2.andEqualTo("isDeleted",false);
         criteria2.andEqualTo("memberId",getCurrentMemberId());
-        criteria2.andEqualTo("type",MessageTypeEnum.SHARE_AWARD.name());
+        criteria2.andEqualTo("type",MessageTypeEnum.REPURCHASE_AWARD.name());
 
         msgMemberMessagePageInfo = msgMemberMessageService.query(1,1,example2);
         if(msgMemberMessagePageInfo != null && msgMemberMessagePageInfo.getList() != null
@@ -102,7 +124,7 @@ public class MessageController extends ABMallFrontBaseController {
             long count = msgMemberMessageService.count(example2);
             subMap.put("unReadCount",count);
 
-            map.put(MessageTypeEnum.SHARE_AWARD.name(),subMap);
+            map.put(MessageTypeEnum.EXECUTIVE_AWARD.name(),subMap);
         }
 
         //高管奖励
