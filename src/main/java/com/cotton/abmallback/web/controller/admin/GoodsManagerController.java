@@ -189,6 +189,7 @@ public class GoodsManagerController extends BaseController {
     public RestResponse<List<Goods>> queryList() {
 
         Example example = new Example(Goods.class);
+        example.setOrderByClause("id desc");
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
 
