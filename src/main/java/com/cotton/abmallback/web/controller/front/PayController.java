@@ -3,6 +3,7 @@ package com.cotton.abmallback.web.controller.front;
 import com.cotton.abmallback.manager.DistributionManager;
 import com.cotton.abmallback.manager.PromotionManager;
 import com.cotton.abmallback.model.Member;
+import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.wechat.JufenyunService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -58,22 +60,37 @@ public class PayController {
 
     @ResponseBody
     @RequestMapping(value = "/example")
-    public RestResponse<Map<String, Object>> example() {
+    public RestResponse<Map<String, Object>> example(String orderNo) {
 
         Map<String, Object> map = new HashMap<>(2);
 
-        String eventKey = "qrscene_{\"referrerId\":2}";
+    /*    String eventKey = "qrscene_{\"referrerId\":2}";
         String jsonStr = eventKey.substring(eventKey.indexOf("{"),eventKey.indexOf("}"));
 
         logger.info(jsonStr);
 
-        //distributionManager.orderDistribute("20180710073044029703");
+       Example example = new Example(Orders.class);
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDeleted",false);
+
+
+        List<Orders> orders = ordersService.queryList(example);
+
+
+        for(Orders orders1 :orders) {
+            if(orders1.getId() > 43L) {
+                distributionManager.orderDistribute(orders1.getOrderNo());
+            }
+        }*/
 
         //String url = jufenyunService.sendRedpack("o8HRJ0zjXTdkOJZonIDTfWsuPH7I",new BigDecimal(0.4));
         //map.put("url",url);
 
-        Member member = memberService.getById(7L);
-        promotionManager.memberPromotion(member,1);
+        //Member member = memberService.getById(8L);
+        //promotionManager.memberPromotion(member,1);
+
+        distributionManager.orderDistribute("20180714205905128280");
 
 
 

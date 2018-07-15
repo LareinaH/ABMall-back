@@ -97,12 +97,13 @@ public class ABMallTimer {
     }
 
     /**
-     * 用户晋级
+     *
      */
     @Scheduled(cron = "0 */1 * * * ?" )
-    public void promot() {
+    public void promotMember() {
 
-        logger.info("用户晋级");
+        logger.info("校验v2用户能否升级v3");
+        promotionManager.memberPromotionAll();
 
     }
 }

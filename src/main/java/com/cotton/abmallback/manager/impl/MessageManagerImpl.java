@@ -39,16 +39,15 @@ public class MessageManagerImpl implements MessageManager {
 
     private final MemberService memberService;
 
-    private final WxMpService wxMpService;
+    //private final WxMpService wxMpService;
 
-    public MessageManagerImpl(MsgMemberMessageService msgMemberMessageService, MsgPlatformMessageService msgPlatformMessageService, MsgMessageTemplateService msgMessageTemplateService, DistributionConfigService distributionConfigService, GeTuiService geTuiService, MemberService memberService, WxMpService wxMpService) {
+    public MessageManagerImpl(MsgMemberMessageService msgMemberMessageService, MsgPlatformMessageService msgPlatformMessageService, MsgMessageTemplateService msgMessageTemplateService, DistributionConfigService distributionConfigService, GeTuiService geTuiService, MemberService memberService) {
         this.msgMemberMessageService = msgMemberMessageService;
         this.msgPlatformMessageService = msgPlatformMessageService;
         this.msgMessageTemplateService = msgMessageTemplateService;
         this.distributionConfigService = distributionConfigService;
         this.geTuiService = geTuiService;
         this.memberService = memberService;
-        this.wxMpService = wxMpService;
     }
 
     @Override
