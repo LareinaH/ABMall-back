@@ -17,14 +17,22 @@ public enum MessageTypeEnum {
      * 分享奖励
      */
     SHARE_AWARD("分享奖励"),
+
+    /**
+     * 复购奖励
+     */
+    REPURCHASE_AWARD("复购奖励"),
+
     /**
      * 高管奖励
      */
     EXECUTIVE_AWARD("高管奖励"),
+
     /**
      * 平台通知
      */
     SYSTEM_NOTICE("平台通知"),
+
     /**
      * 活动奖励
      */

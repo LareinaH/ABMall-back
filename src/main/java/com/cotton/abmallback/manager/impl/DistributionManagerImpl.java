@@ -71,24 +71,6 @@ public class DistributionManagerImpl implements DistributionManager {
 
         if(!orders.getIsDistrubuted()) {
 
-            //查找该订单用户的 订单个数.
-            Example example = new Example(Orders.class);
-            Example.Criteria criteria = example.createCriteria();
-            criteria.andEqualTo("memberId", orders.getMemberId());
-            criteria.andEqualTo("isDeleted", false);
-
-            List<String> orderStatusList = new ArrayList<>();
-            orderStatusList.add(OrderStatusEnum.CANCEL.name());
-            orderStatusList.add(OrderStatusEnum.WAIT_BUYER_PAY.name());
-            criteria.andNotIn("orderStatus", orderStatusList);
-
-            long count = ordersService.count(example);
-
-            if (count <= 1) {
-                //首次购物 不需要分销
-                return;
-            }
-
             //获取全部分销配置
             Map<String, DistributionConfig> map = distributionConfigService.getAllDistributionConfig();
 
@@ -137,38 +119,62 @@ public class DistributionManagerImpl implements DistributionManager {
 
             BigDecimal totalDistrubtionMoney = new BigDecimal(0);
 
-            //1 分享奖励
+            //查找该订单用户的 订单个数.
+            Example example = new Example(Orders.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("memberId", orders.getMemberId());
+            criteria.andEqualTo("isDeleted", false);
 
-            //1.1 self
-            totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, self, selfSharePercent));
-            //1.2 第一层
-            if (null != first) {
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, first, firstSharePercent));
-            }
-            //1.2 第二层
-            if (null != second) {
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, second, secondSharePercent));
-            }
-            //1.2 第三层
-            if (null != third) {
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, third, thirdSharePercent));
-            }
+            List<String> orderStatusList = new ArrayList<>();
+            orderStatusList.add(OrderStatusEnum.CANCEL.name());
+            orderStatusList.add(OrderStatusEnum.WAIT_BUYER_PAY.name());
+            criteria.andNotIn("orderStatus", orderStatusList);
 
-            //高管奖励 级别高于才分高管奖励
-            //2.1 第一层
-            if (first != null && compareLevel(first.getLevel(), self.getLevel()) > 0) {
+            long count = ordersService.count(example);
 
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, first, firstExecutivePercent));
-            }
-            //2.2 第二层
-            if (second != null && compareLevel(second.getLevel(), self.getLevel()) > 0 && compareLevel(second.getLevel(), first.getLevel()) > 0) {
+            if (count <= 1) {
+                //首次购物 只分享分享奖励
 
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, second, secondExecutivePercent));
-            }
-            //2.3 第三层
-            if (third != null && compareLevel(third.getLevel(), self.getLevel()) > 0 && compareLevel(third.getLevel(), first.getLevel()) > 0 && compareLevel(third.getLevel(), second.getLevel()) > 0) {
+                //1.1 self
+                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, self, selfSharePercent));
+                //1.2 第一层
+                if (null != first) {
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, first, firstSharePercent));
+                }
+                //1.2 第二层
+                if (null != second) {
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, second, secondSharePercent));
+                }
+                //1.2 第三层
+                if (null != third) {
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, third, thirdSharePercent));
+                }
+            }else {
 
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, third, thirdExecutivePercent));
+                //复购奖励
+                String selfRepurchasePercent = getLevelRepurchasePercent(0, map);
+                String firstRepurchasePercent = getLevelRepurchasePercent(1, map);
+                String secondRepurchasePercent = getLevelRepurchasePercent(2, map);
+                String thirdRepurchasePercent = getLevelRepurchasePercent(3, map);
+
+
+
+                //高管奖励 级别高于才分高管奖励
+                //2.1 第一层
+                if (first != null && compareLevel(first.getLevel(), self.getLevel()) > 0) {
+
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, first, firstExecutivePercent));
+                }
+                //2.2 第二层
+                if (second != null && compareLevel(second.getLevel(), self.getLevel()) > 0 && compareLevel(second.getLevel(), first.getLevel()) > 0) {
+
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, second, secondExecutivePercent));
+                }
+                //2.3 第三层
+                if (third != null && compareLevel(third.getLevel(), self.getLevel()) > 0 && compareLevel(third.getLevel(), first.getLevel()) > 0 && compareLevel(third.getLevel(), second.getLevel()) > 0) {
+
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, third, thirdExecutivePercent));
+                }
             }
 
             //更新订单信息
@@ -270,6 +276,30 @@ public class DistributionManagerImpl implements DistributionManager {
                 break;
         }
         return percent;
+    }
+
+    private String getLevelRepurchasePercent(int level, Map<String, DistributionConfig> map){
+
+        String percent = "0";
+
+        switch (level) {
+            case 0:
+                percent = map.get(DistributionItemEnum.REPURCHASE_SELF.name()).getValue();
+                break;
+            case 1:
+                percent = map.get(DistributionItemEnum.REPURCHASE_FIRST.name()).getValue();
+                break;
+            case 2:
+                percent = map.get(DistributionItemEnum.REPURCHASE_SECOND.name()).getValue();
+                break;
+            case 3:
+                percent = map.get(DistributionItemEnum.REPURCHASE_THIRD.name()).getValue();
+                break;
+            default:
+                break;
+        }
+        return percent;
+
     }
 
     private int compareLevel(String level1,String level2){

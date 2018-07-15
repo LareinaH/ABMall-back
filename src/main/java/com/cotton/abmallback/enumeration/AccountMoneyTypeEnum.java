@@ -17,6 +17,12 @@ public enum  AccountMoneyTypeEnum {
      * 分享奖励
      */
     SHARE_AWARD("分享奖励"),
+
+    /**
+     * 复购奖励
+     */
+    REPURCHASE_AWARD("复购奖励"),
+
     /**
      * 高管奖励
      */

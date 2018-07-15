@@ -47,6 +47,14 @@ public enum DistributionItemEnum {
     EXECUTIVE_AWARD_V3,
 
     /**
+     * 复购奖励
+     */
+    REPURCHASE_SELF,
+    REPURCHASE_FIRST,
+    REPURCHASE_SECOND,
+    REPURCHASE_THIRD,
+
+    /**
      * V3 额外奖励_获得条件
      */
     V3_AWARD_SHARE_PEOPLE,
