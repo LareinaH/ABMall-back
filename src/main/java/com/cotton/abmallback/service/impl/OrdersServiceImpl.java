@@ -34,40 +34,6 @@ public class OrdersServiceImpl extends BaseServiceImpl<Orders> implements Orders
     }
 
     @Override
-    public boolean paySuccess(String orderNo, String tradeNo, String payMode) {
-
-        //根据orderNo 找到订单
-        Orders model = new Orders();
-        model.setOrderNo(orderNo);
-        model.setIsDeleted(false);
-        Orders orders = selectOne(model);
-
-        if(null == orders){
-            return false;
-        }
-
-        if(orders.getOrderStatus().equals(OrderStatusEnum.WAIT_BUYER_PAY.name())) {
-
-            //更新状态
-            orders.setTradeNo(tradeNo);
-            orders.setPayMode(payMode);
-            orders.setIsPaid(true);
-            orders.setOrderStatus(OrderStatusEnum.WAIT_DELIVER.name());
-
-            if (update(orders)) {
-                Member member = memberService.getById(orders.getMemberId());
-
-                member.setMoneyTotalSpend(member.getMoneyTotalSpend().add(orders.getTotalMoney()));
-
-                return memberService.update(member);
-            }
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
     public void systemCancelOrder() {
 
         Example example = new Example(Orders.class);

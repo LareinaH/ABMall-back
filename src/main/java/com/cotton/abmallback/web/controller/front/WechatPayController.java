@@ -3,6 +3,7 @@ package com.cotton.abmallback.web.controller.front;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
 import com.cotton.abmallback.manager.DistributionManager;
+import com.cotton.abmallback.manager.OrdersManager;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
@@ -55,6 +56,8 @@ public class WechatPayController {
 
     private final OrdersService ordersService;
 
+    private final OrdersManager ordersManager;
+
     private final OrderGoodsService orderGoodsService;
 
     private final DistributionManager distributionManager;
@@ -68,8 +71,9 @@ public class WechatPayController {
     private String openAppId;
 
     @Autowired
-    public WechatPayController(OrdersService ordersService, OrderGoodsService orderGoodsService, DistributionManager distributionManager, MemberService memberService) {
+    public WechatPayController(OrdersService ordersService, OrdersManager ordersManager, OrderGoodsService orderGoodsService, DistributionManager distributionManager, MemberService memberService) {
         this.ordersService = ordersService;
+        this.ordersManager = ordersManager;
         this.orderGoodsService = orderGoodsService;
         this.distributionManager = distributionManager;
         this.memberService = memberService;
@@ -193,7 +197,7 @@ public class WechatPayController {
 
             String tradeNo = wxPayOrderNotifyResult.getTransactionId();
 
-            ordersService.paySuccess(orderNo,tradeNo,"wechat");
+            ordersManager.paySuccess(orderNo,tradeNo,"wechat");
 
             distributionManager.orderDistribute(orderNo);
 
