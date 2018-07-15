@@ -155,18 +155,18 @@ public class DistributionManagerImpl implements DistributionManager {
                 String thirdRepurchasePercent = getLevelRepurchasePercent(3, map);
 
                 //1.1 self
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, self, selfSharePercent));
+                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, self, selfRepurchasePercent));
                 //1.2 第一层
                 if (null != first) {
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, first, firstSharePercent));
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, first, firstRepurchasePercent));
                 }
                 //1.2 第二层
                 if (null != second) {
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, second, secondSharePercent));
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, second, secondRepurchasePercent));
                 }
                 //1.2 第三层
                 if (null != third) {
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, third, thirdSharePercent));
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, third, thirdRepurchasePercent));
                 }
 
 
