@@ -14,6 +14,7 @@ import com.cotton.abmallback.service.AccountMoneyFlowService;
 import com.cotton.abmallback.service.DistributionConfigService;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrdersService;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -70,6 +71,13 @@ public class PromotionManagerImpl implements PromotionManager {
                     String money = sendPromotionReward(member, newLevel, orderId);
                     //发送消息通知
                     sendPromotionMessage(member, newLevel,BigDecimal.valueOf(Double.valueOf(money)));
+
+                    //校验自己的上级是否升级
+                    if(member.getReferrerId() != null){
+
+                    Member referrerMember = memberService.getById(member.getReferrerId());
+                    memberPromotion(referrerMember,0);
+                    }
                 }
             }
         } else {
@@ -80,8 +88,10 @@ public class PromotionManagerImpl implements PromotionManager {
     @Override
     public void memberPromotionAll() {
 
-        List<Member> members = memberService.queryList();
-
+        Member model = new Member();
+        model.setIsDeleted(false);
+        model.setLevel(MemberLevelEnum.V2.name());
+        List<Member> members = memberService.queryList(model);
         for(Member member : members){
             memberPromotion(member,0);
         }

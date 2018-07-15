@@ -95,4 +95,15 @@ public class ABMallTimer {
         logger.info("关闭已经结束的活动定时器benin");
         shopActivitiesService.finishActivities();
     }
+
+    /**
+     *
+     */
+    @Scheduled(cron = "0 */1 * * * ?" )
+    public void promotMember() {
+
+        logger.info("校验v2用户能否升级v3");
+        promotionManager.memberPromotionAll();
+
+    }
 }
