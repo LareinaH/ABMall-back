@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.cotton.abmallback.mapper.GoodsMapper;
 import com.cotton.abmallback.mapper.GoodsSpecificationMapper;
 import com.cotton.abmallback.model.Goods;
 import com.cotton.abmallback.model.GoodsSpecification;
@@ -42,6 +43,9 @@ public class GoodsManagerController extends BaseController {
 
     @Autowired
     GoodsSpecificationMapper goodsSpecificationMapper;
+
+    @Autowired
+    GoodsMapper goodsMapper;
 
     @Autowired
     public GoodsManagerController(GoodsService goodsService, GoodsSpecificationService goodsSpecificationService) {
@@ -313,7 +317,8 @@ public class GoodsManagerController extends BaseController {
             @RequestParam(defaultValue = "goodsId") long goodsId,
             @RequestParam(defaultValue = "isOnSale") int isOnSale
     ) {
-         goodsSpecificationMapper.setGoodsOnSaleStatus(goodsId, isOnSale);
+        goodsSpecificationMapper.setGoodsOnSaleStatus(goodsId, isOnSale);
+        goodsMapper.setGoodsOnSaleStatus(goodsId, isOnSale);
         return RestResponse.getSuccesseResponse();
     }
 }
