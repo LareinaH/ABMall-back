@@ -99,7 +99,7 @@ public class MessageManagerImpl implements MessageManager {
     @Override
     public void sendRepurchaseAward(long memberId, BigDecimal money) {
         String context = buildContext(MessageTypeEnum.REPURCHASE_AWARD,memberId,money);
-        insertMessage(memberId, "复购奖励", context, MessageTypeEnum.SHARE_AWARD,  null);
+        insertMessage(memberId, "复购奖励", context, MessageTypeEnum.REPURCHASE_AWARD,  null);
     }
 
     @Override
