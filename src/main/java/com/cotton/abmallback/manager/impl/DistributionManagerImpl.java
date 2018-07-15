@@ -1,9 +1,6 @@
 package com.cotton.abmallback.manager.impl;
 
-import com.cotton.abmallback.enumeration.DistributionItemEnum;
-import com.cotton.abmallback.enumeration.MemberLevelEnum;
-import com.cotton.abmallback.enumeration.MessageTypeEnum;
-import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.enumeration.*;
 import com.cotton.abmallback.manager.DistributionManager;
 import com.cotton.abmallback.manager.MessageManager;
 import com.cotton.abmallback.model.AccountMoneyFlow;
@@ -157,6 +154,20 @@ public class DistributionManagerImpl implements DistributionManager {
                 String secondRepurchasePercent = getLevelRepurchasePercent(2, map);
                 String thirdRepurchasePercent = getLevelRepurchasePercent(3, map);
 
+                //1.1 self
+                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, self, selfSharePercent));
+                //1.2 第一层
+                if (null != first) {
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, first, firstSharePercent));
+                }
+                //1.2 第二层
+                if (null != second) {
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, second, secondSharePercent));
+                }
+                //1.2 第三层
+                if (null != third) {
+                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, third, thirdSharePercent));
+                }
 
 
                 //高管奖励 级别高于才分高管奖励
@@ -192,13 +203,35 @@ public class DistributionManagerImpl implements DistributionManager {
         //创建流水
         AccountMoneyFlow accountMoneyFlow = new AccountMoneyFlow();
         accountMoneyFlow.setOrderId(orders.getId());
-        accountMoneyFlow.setAccountMoneyType(MessageTypeEnum.SHARE_AWARD.name());
+        accountMoneyFlow.setAccountMoneyType(AccountMoneyTypeEnum.SHARE_AWARD.name());
         accountMoneyFlow.setDistributMoney(shareMoney);
         accountMoneyFlow.setMemberId(member.getId());
         accountMoneyFlowService.insert(accountMoneyFlow);
 
         //发送消息
         messageManager.sendShareAward(member.getId(),shareMoney);
+        //可提现余额增加
+        member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(shareMoney));
+        memberService.update(member);
+
+        return shareMoney;
+    }
+
+
+    private BigDecimal distributionRepurchaseAward(Orders orders, Member member, String sharePercent) {
+        //计算分润钱数 = 订单总数 * 分润比例 / 100
+        BigDecimal shareMoney = orders.getTotalMoney().multiply(new BigDecimal(sharePercent)).divide(new BigDecimal(100));
+
+        //创建流水
+        AccountMoneyFlow accountMoneyFlow = new AccountMoneyFlow();
+        accountMoneyFlow.setOrderId(orders.getId());
+        accountMoneyFlow.setAccountMoneyType(AccountMoneyTypeEnum.REPURCHASE_AWARD.name());
+        accountMoneyFlow.setDistributMoney(shareMoney);
+        accountMoneyFlow.setMemberId(member.getId());
+        accountMoneyFlowService.insert(accountMoneyFlow);
+
+        //发送消息
+        messageManager.sendRepurchaseAward(member.getId(),shareMoney);
         //可提现余额增加
         member.setMoneyTotalEarn(member.getMoneyTotalEarn().add(shareMoney));
         memberService.update(member);
@@ -213,7 +246,7 @@ public class DistributionManagerImpl implements DistributionManager {
         //创建流水
         AccountMoneyFlow accountMoneyFlow = new AccountMoneyFlow();
         accountMoneyFlow.setOrderId(orders.getId());
-        accountMoneyFlow.setAccountMoneyType(MessageTypeEnum.EXECUTIVE_AWARD.name());
+        accountMoneyFlow.setAccountMoneyType(AccountMoneyTypeEnum.EXECUTIVE_AWARD.name());
         accountMoneyFlow.setDistributMoney( executiveMoney);
         accountMoneyFlow.setMemberId(member.getId());
         accountMoneyFlowService.insert(accountMoneyFlow);

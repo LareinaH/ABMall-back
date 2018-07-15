@@ -31,6 +31,13 @@ public interface MessageManager {
      */
     void sendShareAward(long memberId, BigDecimal money);
 
+
+    /**
+     * 发送复购奖励消息
+     * @param memberId
+     */
+    void sendRepurchaseAward(long memberId, BigDecimal money);
+
     /**
      * 发送高管奖励消息
      * @param memberId

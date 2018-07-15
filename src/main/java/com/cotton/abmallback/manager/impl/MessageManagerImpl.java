@@ -97,6 +97,12 @@ public class MessageManagerImpl implements MessageManager {
     }
 
     @Override
+    public void sendRepurchaseAward(long memberId, BigDecimal money) {
+        String context = buildContext(MessageTypeEnum.REPURCHASE_AWARD,memberId,money);
+        insertMessage(memberId, "复购奖励", context, MessageTypeEnum.SHARE_AWARD,  null);
+    }
+
+    @Override
     public void sendShareAward(long memberId, BigDecimal money) {
 
         String context = buildContext(MessageTypeEnum.SHARE_AWARD,memberId,money);
@@ -161,6 +167,11 @@ public class MessageManagerImpl implements MessageManager {
         Member member = memberService.getById(memberId);
 
         switch (messageTypeEnum) {
+
+            case REPURCHASE_AWARD:
+
+                return map.get("REPURCHASE_AWARD_1") + money.toString()  + "元" + map.get("REPURCHASE_AWARD_2");
+
             case SHARE_AWARD:
 
                 return map.get("SHARE_AWARD_1") + money.toString()  + "元" + map.get("SHARE_AWARD_2");
