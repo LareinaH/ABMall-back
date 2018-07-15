@@ -120,7 +120,7 @@ public class WechatPayController {
 
         //构建WxPayUnifiedOrderRequest
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
-        request.setBody(orderGoods.getGoodName());
+        request.setBody("订单商品" + orderGoods.getGoodName());
         request.setOutTradeNo(orders.getOrderNo());
         BigDecimal var = new BigDecimal("100");
         request.setTotalFee(orders.getTotalMoney().multiply(var).intValue());
