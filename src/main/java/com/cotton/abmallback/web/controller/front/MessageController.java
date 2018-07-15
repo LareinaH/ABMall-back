@@ -124,7 +124,7 @@ public class MessageController extends ABMallFrontBaseController {
             long count = msgMemberMessageService.count(example2);
             subMap.put("unReadCount",count);
 
-            map.put(MessageTypeEnum.EXECUTIVE_AWARD.name(),subMap);
+            map.put(MessageTypeEnum.REPURCHASE_AWARD.name(),subMap);
         }
 
         //高管奖励
