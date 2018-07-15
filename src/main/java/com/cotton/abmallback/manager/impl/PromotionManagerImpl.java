@@ -121,7 +121,7 @@ public class PromotionManagerImpl implements PromotionManager {
                 // 晋级v1的条件是：直接分享XXX代言人。
                 //totalMoney = map.get(DistributionItemEnum.PROMOTION_V1_MONEY.name()).getValue();
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V1_SHARE_PEOPLE.name()).getValue();
-                return getAgentPeopleCount(member.getReferrerId()) >= Long.valueOf(totalMemberCount);
+                return getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount);
             case V2:
                 //晋级V2的条件是：团队中有XXX个v1 并且直接分享XXX代言人。
                 //totalMoney = map.get(DistributionItemEnum.PROMOTION_V2_MONEY.name()).getValue();
@@ -129,7 +129,7 @@ public class PromotionManagerImpl implements PromotionManager {
                 totalV1Count = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_V1_PEOPLE.name()).getValue();
 
                 return (getAgentPeopleCount(member.getReferrerId()) >= Long.valueOf(totalMemberCount)) &&
-                        (getV1PeopleCount(member.getReferrerId()) >= Long.valueOf(totalV1Count));
+                        (getV1PeopleCount(member.getId()) >= Long.valueOf(totalV1Count));
 
             case V3:
                 // 晋级V3的条件是：直接分享XXX代言人，V3自己获得返佣XXXX元
