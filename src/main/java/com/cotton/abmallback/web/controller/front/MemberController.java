@@ -76,9 +76,9 @@ public class MemberController extends ABMallFrontBaseController {
     public RestResponse<Void> bindPhoneNum(String phoneNum,String code) {
 
         //校验验证码
-    /*    if(!smsManager.checkCaptcha(phoneNum,code)){
+        if(!smsManager.checkCaptcha(phoneNum,code)){
             return RestResponse.getFailedResponse(500,"验证码错误");
-        }*/
+        }
 
         //查看手机号是否存在
         Member model = new Member();
