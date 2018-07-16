@@ -168,7 +168,7 @@ public class PromotionManagerImpl implements PromotionManager {
 
         List<String> levelList = new ArrayList<>();
         levelList.add(MemberLevelEnum.WHITE.name());
-        levelList.add(MemberLevelEnum.V1.name());
+        levelList.add(MemberLevelEnum.AGENT.name());
         criteria.andNotIn("level", levelList);
 
         return memberService.count(example);
