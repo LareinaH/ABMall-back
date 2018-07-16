@@ -148,14 +148,14 @@
         </table>
 
         -->
-                <table tableName="ads">
+ <!--               <table tableName="ads">
                     <property name="useActualColumnNames" value="false" />
                     <generatedKey column="id" sqlStatement="Mysql" identity="true" />
                     <ignoreColumn column="id" />
                     <ignoreColumn column="is_deleted" />
                     <ignoreColumn column="gmt_create" />
                     <ignoreColumn column="gmt_modify" />
-                </table>
+                </table>-->
 
         <!--
         <table tableName="cash_pick_up">
@@ -261,6 +261,15 @@
                     <ignoreColumn column="gmt_create" />
                     <ignoreColumn column="gmt_modify" />
                 </table>-->
+
+        <table tableName="content_study">
+             <property name="useActualColumnNames" value="false" />
+             <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+             <ignoreColumn column="id" />
+             <ignoreColumn column="is_deleted" />
+             <ignoreColumn column="gmt_create" />
+             <ignoreColumn column="gmt_modify" />
+         </table>
     </context>
 
 </generatorConfiguration>
