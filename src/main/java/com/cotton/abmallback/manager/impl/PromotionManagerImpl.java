@@ -128,7 +128,7 @@ public class PromotionManagerImpl implements PromotionManager {
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_PEOPLE.name()).getValue();
                 totalV1Count = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_V1_PEOPLE.name()).getValue();
 
-                return (getAgentPeopleCount(member.getReferrerId()) >= Long.valueOf(totalMemberCount)) &&
+                return (getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount)) &&
                         (getV1PeopleCount(member.getId()) >= Long.valueOf(totalV1Count));
 
             case V3:
@@ -136,7 +136,7 @@ public class PromotionManagerImpl implements PromotionManager {
                 totalMoney = map.get(DistributionItemEnum.PROMOTION_V3_MONEY.name()).getValue();
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V3_SHARE_PEOPLE.name()).getValue();
 
-                return (getAgentPeopleCount(member.getReferrerId()) >= Long.valueOf(totalMemberCount)) &&
+                return (getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount)) &&
                         (member.getMoneyTotalTake().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >=0);
 
             default:
