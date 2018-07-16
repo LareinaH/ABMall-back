@@ -198,9 +198,7 @@ public class WechatPayController {
             String tradeNo = wxPayOrderNotifyResult.getTransactionId();
 
             ordersManager.paySuccess(orderNo,tradeNo,"wechat");
-
-            distributionManager.orderDistribute(orderNo);
-
+            
         }
         return RestResponse.getSuccesseResponse();
     }

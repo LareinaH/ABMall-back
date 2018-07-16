@@ -1,6 +1,7 @@
 package com.cotton.abmallback.manager.impl;
 
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.manager.DistributionManager;
 import com.cotton.abmallback.manager.OrdersManager;
 import com.cotton.abmallback.manager.PromotionManager;
 import com.cotton.abmallback.model.Member;
@@ -25,10 +26,13 @@ public class OrdersManagerImpl implements OrdersManager {
 
     private final MemberService memberService;
 
-    public OrdersManagerImpl(OrdersService ordersService, PromotionManager promotionManager, MemberService memberService) {
+    private final DistributionManager distributionManager;
+
+    public OrdersManagerImpl(OrdersService ordersService, PromotionManager promotionManager, MemberService memberService, DistributionManager distributionManager) {
         this.ordersService = ordersService;
         this.promotionManager = promotionManager;
         this.memberService = memberService;
+        this.distributionManager = distributionManager;
     }
 
 
@@ -60,7 +64,12 @@ public class OrdersManagerImpl implements OrdersManager {
 
                 memberService.update(member);
 
+                //先分润
+                distributionManager.orderDistribute(orderNo);
+
+                //提升等级
                 promotionManager.memberPromotion(member,orders.getId());
+
 
                 return true;
 

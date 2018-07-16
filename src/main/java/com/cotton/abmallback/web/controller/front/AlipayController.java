@@ -126,7 +126,6 @@ public class AlipayController {
 
             if (ordersManager.paySuccess(orderNo, tradeNo, "Alipay")) {
 
-                distributionManager.orderDistribute(orderNo);
                 logger.info("backend notify success");
                 return "SUCCESS";
             }
