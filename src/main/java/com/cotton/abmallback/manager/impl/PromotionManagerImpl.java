@@ -137,7 +137,7 @@ public class PromotionManagerImpl implements PromotionManager {
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V3_SHARE_PEOPLE.name()).getValue();
 
                 return (getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount)) &&
-                        (member.getMoneyTotalTake().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >=0);
+                        (member.getMoneyTotalEarn().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >=0);
 
             default:
                 return false;
