@@ -150,6 +150,7 @@ public class WechatMpController extends BaseController {
 
         try {
             httpServletResponse.getWriter().write(out);
+            httpServletRequest.setCharacterEncoding("utf-8");
         } catch (IOException e) {
             logger.error(e.getMessage(),e);
         }
