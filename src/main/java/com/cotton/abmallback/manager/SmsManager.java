@@ -29,7 +29,7 @@ public class SmsManager {
     private SmsCaptchaService smsCaptchaService;
 
     @Value("${sms.captcha.template.code}")
-    private final String captchaTemplateCode = "SMS_25560793";
+    private final String captchaTemplateCode = "SMS_139910119";
     @Value("${sms.sign.name}")
     private final String signName="棉花糖";
 
@@ -79,7 +79,7 @@ public class SmsManager {
 
     private boolean sendCheckCode (String phoneNum, String captcha){
         Map<String ,String> paramMap = new HashMap<>(2);
-        paramMap.put("name","");
+       // paramMap.put("name","");
         paramMap.put("code",captcha);
 
         return smsService.sendSms(phoneNum,signName, captchaTemplateCode,paramMap);
