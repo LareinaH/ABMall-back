@@ -91,7 +91,7 @@ public class WechatMpController extends BaseController {
         }
     }
 
-    @PostMapping(produces = "application/xml; charset=UTF-8")
+    @PostMapping(produces = "text/html; charset=UTF-8")
     public void post(HttpServletRequest httpServletRequest,
                        HttpServletResponse httpServletResponse,
                        @RequestParam("signature") String signature,
@@ -150,7 +150,6 @@ public class WechatMpController extends BaseController {
 
         try {
             httpServletResponse.getWriter().write(out);
-            httpServletResponse.setCharacterEncoding("utf-8");
 
         } catch (IOException e) {
             logger.error(e.getMessage(),e);
