@@ -149,6 +149,7 @@ public class WechatMpController extends BaseController {
         logger.info("\n组装回复信息：{}", out);
 
         try {
+            httpServletRequest.setCharacterEncoding("UTF-8");
             httpServletResponse.getWriter().write(out);
             httpServletResponse.setCharacterEncoding("UTF-8");
 
