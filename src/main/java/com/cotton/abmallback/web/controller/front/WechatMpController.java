@@ -92,7 +92,8 @@ public class WechatMpController extends BaseController {
     }
 
     @PostMapping(produces = "application/xml; charset=UTF-8")
-    public String post(HttpServletRequest httpServletRequest,
+    public void post(HttpServletRequest httpServletRequest,
+                       HttpServletResponse httpServletResponse,
                        @RequestParam("signature") String signature,
                        @RequestParam("timestamp") String timestamp,
                        @RequestParam("nonce") String nonce,
@@ -125,34 +126,33 @@ public class WechatMpController extends BaseController {
             throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
         }
 
-        String out = null;
+        String out = "";
         if (encType == null) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
-            if (outMessage == null) {
-                return "";
+            if (outMessage != null) {
+                out = outMessage.toXml();
             }
-
-            out = outMessage.toXml();
         } else if ("aes".equals(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(
                     requestBody, this.wxService.getWxMpConfigStorage(), timestamp,
                     nonce, msgSignature);
-            this.logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
+            this.logger.info("\n消息解密后内容为：\n{} ", inMessage.toString());
             WxMpXmlOutMessage outMessage = this.route(inMessage);
-            if (outMessage == null) {
-                return "";
+            if (outMessage != null) {
+                out = outMessage.toEncryptedXml(this.wxService.getWxMpConfigStorage());
             }
-
-            out = outMessage
-                    .toEncryptedXml(this.wxService.getWxMpConfigStorage());
         }
 
-        this.logger.debug("\n组装回复信息：{}", out);
+        logger.info("\n组装回复信息：{}", out);
 
-        return out;
+        try {
+            httpServletResponse.getWriter().write(out);
+        } catch (IOException e) {
+            logger.error(e.getMessage(),e);
+        }
     }
 
 
