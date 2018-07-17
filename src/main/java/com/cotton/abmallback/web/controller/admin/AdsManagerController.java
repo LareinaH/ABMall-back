@@ -87,9 +87,11 @@ public class AdsManagerController extends BaseController {
     public RestResponse<List<Ads>> queryList(AdTypeEnum adType) {
 
         Example example = new Example(Ads.class);
+        example.setOrderByClause("sort asc");
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
         criteria.andEqualTo("adType",adType.name());
+
 
         List<Ads> adsList = adsService.queryList(example);
 
