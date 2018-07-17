@@ -17,22 +17,22 @@ public enum MemberLevelEnum {
     /**
      * 代理人
      */
-    AGENT("代理人"),
+    AGENT("代言人"),
 
     /**
      * V1
      */
-    V1("V1"),
+    V1("销售明星"),
 
     /**
      * V2
      */
-    V2("V2"),
+    V2("销售经理"),
 
     /**
      * V3
      */
-    V3("V3");
+    V3("执行董事");
 
     private String displayName;
 

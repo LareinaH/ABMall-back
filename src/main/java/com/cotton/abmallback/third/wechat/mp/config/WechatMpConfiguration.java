@@ -44,6 +44,8 @@ public class WechatMpConfiguration {
   private UnsubscribeHandler unsubscribeHandler;
   @Autowired
   private SubscribeHandler subscribeHandler;
+  @Autowired
+  private ScanHandler scanHandler;
 
   @Bean
   @ConditionalOnMissingBean
@@ -149,7 +151,7 @@ public class WechatMpConfiguration {
   }
 
   protected AbstractHandler getScanHandler() {
-    return null;
+    return this.scanHandler;
   }
 
 }

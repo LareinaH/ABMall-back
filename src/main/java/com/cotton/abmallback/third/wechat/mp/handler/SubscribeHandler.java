@@ -61,9 +61,6 @@ public class SubscribeHandler extends AbstractHandler {
           countRefferUser(member.getReferrerId());
           memberService.update(member);
         }
-
-        sendWxMessage(member.getOpenId(),member.getName());
-
       } else {
 
         //注册新用户
@@ -82,7 +79,6 @@ public class SubscribeHandler extends AbstractHandler {
         memberService.insert(newMember);
         countRefferUser(newMember.getReferrerId());
 
-        sendWxMessage(newMember.getOpenId(),newMember.getName());
 
       }
 
@@ -123,31 +119,5 @@ public class SubscribeHandler extends AbstractHandler {
 
     memberService.update(refferMember);
 
-  }
-
-  private boolean sendWxMessage(String memberOpenId,String memberName) {
-/*    WxMpTemplateMessage mpTemplateMessage = new WxMpTemplateMessage();
-    mpTemplateMessage.setToUser(memberOpenId);
-    mpTemplateMessage.setTemplateId("eD6ie0CFoDVS7S0y0SJCStPLgJgpoOGRCJadsAj0his");
-    List<WxMpTemplateData> list = new ArrayList<>();
-    WxMpTemplateData data1 = new WxMpTemplateData("first", "感谢您关注绿色云鼎,恭喜您已经成为我们的会员");
-    list.add(data1);
-    WxMpTemplateData data2 = new WxMpTemplateData("keyword1", memberName);
-    list.add(data2);
-    WxMpTemplateData data3 = new WxMpTemplateData("keyword2", LocalDateTime.now().toString());
-    list.add(data3);
-    WxMpTemplateData data4 = new WxMpTemplateData("remark", "赶快开启您新的旅程吧！");
-    list.add(data4);
-    mpTemplateMessage.setData(list);
-
-    try {
-      String string = wxMpTemplateMsgService.sendTemplateMsg(mpTemplateMessage);
-      logger.info(string);
-
-      return true;
-    } catch (WxErrorException e) {
-      logger.error("发送消息失败", e);
-    }*/
-    return false;
   }
 }
