@@ -111,6 +111,10 @@ public class WechatMpConfiguration {
         .event(EventType.UNSUBSCRIBE)
         .handler(this.getUnsubscribeHandler()).end();
 
+    // 扫码事件
+    newRouter.rule().async(false).msgType(XmlMsgType.EVENT)
+            .event(EventType.SCAN).handler(this.getScanHandler()).end();
+
     // 上报地理位置事件
     newRouter.rule().async(false).msgType(XmlMsgType.EVENT)
         .event(EventType.LOCATION).handler(this.getLocationHandler())
@@ -119,10 +123,6 @@ public class WechatMpConfiguration {
     // 接收地理位置消息
     newRouter.rule().async(false).msgType(XmlMsgType.LOCATION)
         .handler(this.getLocationHandler()).end();
-
-    // 扫码事件
-    newRouter.rule().async(false).msgType(XmlMsgType.EVENT)
-        .event(EventType.SCAN).handler(this.getScanHandler()).end();
 
     // 默认
     newRouter.rule().async(false).handler(this.getMsgHandler()).end();

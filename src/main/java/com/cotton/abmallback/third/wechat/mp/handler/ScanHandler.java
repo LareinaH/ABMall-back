@@ -35,10 +35,10 @@ public class ScanHandler extends AbstractHandler {
     }
 
     @Override
-    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
+    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
 
         // 获取微信用户基本信息
-        WxMpUser userWxInfo = wxMpService.getUserService().userInfo(wxMessage.getFromUser(), null);
+        WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
 
         this.logger.info("关注用户" + userWxInfo);
 
@@ -81,13 +81,13 @@ public class ScanHandler extends AbstractHandler {
             }
 
             try {
-                return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, wxMpService);
+                return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
             } catch (Exception e) {
                 this.logger.error(e.getMessage(), e);
             }
         }
 
-        return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, wxMpService);
+        return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
     }
 
 

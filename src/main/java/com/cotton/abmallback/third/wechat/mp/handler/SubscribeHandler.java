@@ -38,6 +38,7 @@ public class SubscribeHandler extends AbstractHandler {
   @Override
   public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
 
+    this.logger.info("处理已关注的扫码事件.....\n");
 
     // 获取微信用户基本信息
     WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
