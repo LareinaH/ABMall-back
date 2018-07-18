@@ -76,7 +76,9 @@ public class PromotionManagerImpl implements PromotionManager {
                     if(member.getReferrerId() != null){
 
                     Member referrerMember = memberService.getById(member.getReferrerId());
-                    memberPromotion(referrerMember,0);
+                    if(referrerMember != null) {
+                        memberPromotion(referrerMember, 0);
+                    }
                     }
                 }
             }
