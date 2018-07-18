@@ -14,6 +14,7 @@ import com.cotton.abmallback.service.OrdersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ import java.util.Map;
  * @date 2018/6/26
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class DistributionManagerImpl implements DistributionManager {
 
     private Logger logger = LoggerFactory.getLogger(DistributionManagerImpl.class);

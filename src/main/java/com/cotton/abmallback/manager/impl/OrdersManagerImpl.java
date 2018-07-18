@@ -9,6 +9,7 @@ import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrdersService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * OrdersManagerImpl
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
  * @date 2018/7/15
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class OrdersManagerImpl implements OrdersManager {
 
     private final OrdersService ordersService;
