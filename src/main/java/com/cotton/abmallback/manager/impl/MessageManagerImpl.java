@@ -145,7 +145,8 @@ public class MessageManagerImpl implements MessageManager {
         msgMemberMessageService.insert(msgMemberMessage);
 
         //发送个推消息
-        geTuiService.pushMessage(title, content, memberId);
+
+       // geTuiService.pushMessage(title, content, memberId);
 
         //TODO:发送微信消息
 

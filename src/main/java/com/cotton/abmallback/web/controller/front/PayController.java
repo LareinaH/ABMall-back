@@ -87,10 +87,10 @@ public class PayController {
         //String url = jufenyunService.sendRedpack("o8HRJ0zjXTdkOJZonIDTfWsuPH7I",new BigDecimal(0.4));
         //map.put("url",url);
 
-        Member member = memberService.getById(183L);
-        promotionManager.memberPromotion(member,1);
+        //Member member = memberService.getById(236L);
+        //promotionManager.memberPromotion(member,0);
 
-       // distributionManager.orderDistribute("20180714205905128280");
+       distributionManager.orderDistribute("20180719171123044922");
 
 
 

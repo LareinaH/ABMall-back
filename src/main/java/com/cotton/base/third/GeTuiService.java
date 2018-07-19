@@ -58,7 +58,7 @@ public class GeTuiService {
 
         Target target = new Target();
         target.setAppId(appId);
-        target.setAlias("7"/*String.valueOf(memberId)*/);
+        target.setAlias(String.valueOf(memberId));
 
 
         IPushResult ret = push.pushMessageToSingle(message,target);
