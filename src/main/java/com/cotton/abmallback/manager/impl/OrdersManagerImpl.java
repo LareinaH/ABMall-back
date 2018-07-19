@@ -66,13 +66,6 @@ public class OrdersManagerImpl implements OrdersManager {
 
                 memberService.update(member);
 
-                //先分润
-                distributionManager.orderDistribute(orderNo);
-
-                //提升等级
-                promotionManager.memberPromotion(member,orders.getId());
-
-
                 return true;
 
             }
@@ -82,4 +75,27 @@ public class OrdersManagerImpl implements OrdersManager {
         return true;
     }
 
+    @Override
+    public boolean afterPaySuccess(String orderNo) {
+
+        //根据orderNo 找到订单
+        Orders model = new Orders();
+        model.setOrderNo(orderNo);
+        model.setIsDeleted(false);
+        Orders orders = ordersService.selectOne(model);
+
+        if(null == orders){
+            return false;
+        }
+
+        Member member = memberService.getById(orders.getMemberId());
+
+
+        //先分润
+        distributionManager.orderDistribute(orderNo);
+
+        //提升等级
+        promotionManager.memberPromotion(member,orders.getId());
+        return false;
+    }
 }

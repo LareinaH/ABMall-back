@@ -135,7 +135,7 @@ public class DistributionManagerImpl implements DistributionManager {
                 //首次购物 只分享分享奖励
 
                 //1.1 self
-                //totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, self, selfSharePercent));
+                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, self, selfSharePercent));
                 //1.2 第一层
                 if (null != first) {
                     totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, first, firstSharePercent));

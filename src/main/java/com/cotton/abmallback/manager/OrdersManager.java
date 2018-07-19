@@ -13,4 +13,9 @@ public interface OrdersManager {
      * 付款成功
      */
     boolean paySuccess(String orderNo,String tradeNo,String payMode);
+
+    /**
+     * 付款成功
+     */
+    boolean afterPaySuccess(String orderNo);
 }

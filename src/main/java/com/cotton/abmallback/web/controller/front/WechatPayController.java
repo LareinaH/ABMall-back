@@ -199,6 +199,8 @@ public class WechatPayController {
 
             ordersManager.paySuccess(orderNo,tradeNo,"wechat");
 
+            ordersManager.afterPaySuccess(orderNo);
+
         }
         return RestResponse.getSuccesseResponse();
     }
