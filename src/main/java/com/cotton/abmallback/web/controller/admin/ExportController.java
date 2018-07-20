@@ -66,7 +66,7 @@ public class ExportController {
         List<Orders> ordersList = ordersService.queryList(example);
 
         Example e2 = new Example(OrderGoods.class);
-        Example.Criteria c2 = example.createCriteria();
+        Example.Criteria c2 = e2.createCriteria();
         c2.andIn("orderId", ordersList.stream().map(x -> x.getId()).collect(Collectors.toList()));
 
         List<OrderGoods> orderGoodsList = orderGoodsService.queryList(e2);
