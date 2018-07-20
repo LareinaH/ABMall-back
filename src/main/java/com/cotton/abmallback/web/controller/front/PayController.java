@@ -90,7 +90,7 @@ public class PayController {
         //Member member = memberService.getById(236L);
         //promotionManager.memberPromotion(member,0);
 
-       distributionManager.orderDistribute("20180719171123044922");
+       distributionManager.orderDistribute(orderNo);
 
 
 

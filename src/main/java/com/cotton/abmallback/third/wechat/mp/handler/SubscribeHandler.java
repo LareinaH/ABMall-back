@@ -38,12 +38,10 @@ public class SubscribeHandler extends AbstractHandler {
   @Override
   public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
 
-    this.logger.info("处理已关注的扫码事件.....\n");
+    this.logger.info("处理未关注的扫码事件 : {}",wxMessage);
 
     // 获取微信用户基本信息
     WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
-
-    this.logger.info("关注用户" + userWxInfo);
 
     if (userWxInfo != null) {
       //查看用户是否存在
@@ -60,6 +58,7 @@ public class SubscribeHandler extends AbstractHandler {
         if (null == member.getReferrerId()) {
           getRefferUser(wxMessage, member);
           countRefferUser(member.getReferrerId());
+          member.setOpenId(userWxInfo.getOpenId());
           memberService.update(member);
         }
       } else {
@@ -89,6 +88,8 @@ public class SubscribeHandler extends AbstractHandler {
         this.logger.error(e.getMessage(), e);
       }
     }
+
+    logger.error("关注账号错误：获取微信用户信息错误：{}",wxMessage);
 
     return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
   }

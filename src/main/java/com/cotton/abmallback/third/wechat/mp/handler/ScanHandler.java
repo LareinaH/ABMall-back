@@ -37,10 +37,9 @@ public class ScanHandler extends AbstractHandler {
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
 
+        this.logger.info("处理已关注的扫码事件 : {}",wxMessage);
         // 获取微信用户基本信息
         WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
-
-        this.logger.info("关注用户" + userWxInfo);
 
         if (userWxInfo != null) {
             //查看用户是否存在
@@ -51,12 +50,14 @@ public class ScanHandler extends AbstractHandler {
             List<Member> memberList = memberService.queryList(model);
 
             if (null != memberList && memberList.size() > 0) {
+
                 this.logger.info("该用户已经存在: " + wxMessage.getFromUser());
 
                 Member member = memberList.get(0);
                 if (null == member.getReferrerId()) {
                     getRefferUser(wxMessage, member);
                     countRefferUser(member.getReferrerId());
+                    member.setOpenId(userWxInfo.getOpenId());
                     memberService.update(member);
                 }
             } else {
