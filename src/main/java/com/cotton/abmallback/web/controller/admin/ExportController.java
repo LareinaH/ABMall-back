@@ -1,6 +1,8 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
+import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrdersService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -21,6 +25,9 @@ public class ExportController {
 
     @Autowired
     private OrdersService ordersService;
+
+    @Autowired
+    OrderGoodsService orderGoodsService;
 
     @RequestMapping(value = "/exportOrder", method = RequestMethod.GET)
     public ModelAndView exportOrder(
@@ -58,8 +65,16 @@ public class ExportController {
 
         List<Orders> ordersList = ordersService.queryList(example);
 
+        Example e2 = new Example(OrderGoods.class);
+        Example.Criteria c2 = example.createCriteria();
+        c2.andIn("orderId", ordersList.stream().map(x -> x.getId()).collect(Collectors.toList()));
+
+        List<OrderGoods> orderGoodsList = orderGoodsService.queryList(e2);
+        Map<Long, OrderGoods> orderGoodsMap = orderGoodsList.stream().collect(Collectors.toMap(OrderGoods::getOrderId, Function.identity()));
+
         Map<String, Object> map = new HashMap<>();
         map.put("detail", ordersList);
+        map.put("orderGoods", orderGoodsMap);
         map.put("name", String.format("%s~%s订单列表-%d", timeBegin, timeEnd, System.currentTimeMillis()));
         map.put("sheetName", "订单列表");
 

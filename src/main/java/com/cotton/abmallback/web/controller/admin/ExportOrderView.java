@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.enumeration.OrderReturnStatusEnum;
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -30,6 +31,8 @@ public class ExportOrderView extends ExcelView {
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
         header.createCell(cellIndex).setCellValue("收件联系方式");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("商品详情");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
         header.createCell(cellIndex).setCellValue("实付金额");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
         header.createCell(cellIndex).setCellValue("总返利金额");
@@ -48,6 +51,7 @@ public class ExportOrderView extends ExcelView {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         List<Orders> ordersList = (List<Orders>)map.get("detail");
+        Map<Long, OrderGoods> orderGoodsMap = (Map<Long, OrderGoods>)map.get("orderGoods");
         AtomicInteger rowIndex = new AtomicInteger(1);
         ordersList.forEach(x -> {
             int ci = 0;
@@ -64,6 +68,20 @@ public class ExportOrderView extends ExcelView {
                             x.getReceiverAddress()
                     )
             );
+            if (orderGoodsMap.containsKey(x.getId())) {
+                OrderGoods og = orderGoodsMap.get(x.getId());
+                row.createCell(ci++).setCellValue(
+                        String.format(
+                                "%s,%s,%s * %d",
+                                og.getGoodsSpecificationNo(),
+                                og.getGoodName(),
+                                og.getGoodsSpecificationName(),
+                                og.getGoodNum()
+                        )
+                );
+            } else {
+                row.createCell(ci++).setCellValue("未查询到商品详情");
+            }
             row.createCell(ci++).setCellValue(x.getTotalMoney().toString());
             row.createCell(ci++).setCellValue(x.getRebateMoney().toString());
             row.createCell(ci++).setCellValue(OrderStatusEnum.valueOf(x.getOrderStatus()).getDisplayName());
