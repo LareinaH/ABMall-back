@@ -29,7 +29,11 @@ public class ExportOrderView extends ExcelView {
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
         header.createCell(cellIndex).setCellValue("订单来源");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
-        header.createCell(cellIndex).setCellValue("收件联系方式");
+        header.createCell(cellIndex).setCellValue("收件人姓名");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("收件人手机号");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("收件人联系方式");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
         header.createCell(cellIndex).setCellValue("商品详情");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
@@ -59,6 +63,8 @@ public class ExportOrderView extends ExcelView {
             row.createCell(ci++).setCellValue(x.getOrderNo());
             row.createCell(ci++).setCellValue(sdf.format(x.getGmtCreate()));
             row.createCell(ci++).setCellValue(x.getOrderSource());
+            row.createCell(ci++).setCellValue(x.getReceiverName());
+            row.createCell(ci++).setCellValue(x.getReceiverPhone());
             row.createCell(ci++).setCellValue(
                     String.format(
                             "%s省%s市%s区%s",
