@@ -34,6 +34,11 @@ public class MyTeamVO {
     private Integer referTotalCount;
 
     /**
+     * 推荐的 代言人及以上级别人数
+     */
+    private Integer referTotalAgentCount;
+
+    /**
      * 总消费
      */
     private BigDecimal moneyTotalSpend;
@@ -77,5 +82,13 @@ public class MyTeamVO {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public Integer getReferTotalAgentCount() {
+        return referTotalAgentCount;
+    }
+
+    public void setReferTotalAgentCount(Integer referTotalAgentCount) {
+        this.referTotalAgentCount = referTotalAgentCount;
     }
 }
