@@ -115,11 +115,13 @@ public class SubscribeHandler extends AbstractHandler {
   private void countRefferUser(Long remmberId) {
 
     Member refferMember = memberService.getById(remmberId);
-    refferMember.setReferTotalCount( refferMember.getReferTotalCount() + 1);
+    if(null != refferMember) {
+      refferMember.setReferTotalCount(refferMember.getReferTotalCount() + 1);
 
-    promotionManager.memberPromotion(refferMember,0L);
+      promotionManager.memberPromotion(refferMember, 0L);
 
-    memberService.update(refferMember);
+      memberService.update(refferMember);
+    }
 
   }
 }

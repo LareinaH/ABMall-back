@@ -81,15 +81,15 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/delivery", method = {RequestMethod.POST})
-    public RestResponse<Void> delivery(@RequestParam long orderId,@RequestParam String logisticCode) {
+    public RestResponse<Void> delivery(@RequestParam long orderId, @RequestParam String logisticCode) {
 
         Orders orders = ordersService.getById(orderId);
-        if(null == orders){
-            return RestResponse.getFailedResponse(500,"订单编号不存在");
+        if (null == orders) {
+            return RestResponse.getFailedResponse(500, "订单编号不存在");
         }
 
-        if(!orders.getOrderStatus().equalsIgnoreCase(OrderStatusEnum.WAIT_DELIVER.name())){
-            return RestResponse.getFailedResponse(500,"该订单不处于待发货状态");
+        if (!orders.getOrderStatus().equalsIgnoreCase(OrderStatusEnum.WAIT_DELIVER.name())) {
+            return RestResponse.getFailedResponse(500, "该订单不处于待发货状态");
         }
 
         orders.setOrderStatus(OrderStatusEnum.WAIT_CONFIRM.name());
@@ -104,23 +104,23 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/replenish", method = {RequestMethod.POST})
-    public RestResponse<Void> replenish(@RequestParam long orderId,@RequestParam String logisticCode) {
+    public RestResponse<Void> replenish(@RequestParam long orderId, @RequestParam String logisticCode) {
 
         Orders orders = ordersService.getById(orderId);
-        if(null == orders){
-            return RestResponse.getFailedResponse(500,"订单编号不存在");
+        if (null == orders) {
+            return RestResponse.getFailedResponse(500, "订单编号不存在");
         }
 
         OrderReplenish model = new OrderReplenish();
         model.setOrderId(orderId);
         model.setLogisticCode(logisticCode);
 
-        if(replenishService.queryList(model).size() > 0){
+        if (replenishService.queryList(model).size() > 0) {
 
-            return RestResponse.getFailedResponse(500,"该补货运单号已经存在");
+            return RestResponse.getFailedResponse(500, "该补货运单号已经存在");
         }
 
-        if(!orders.getReturnStatus().equalsIgnoreCase(OrderReturnStatusEnum.REPLENISHMENT.name())) {
+        if (!orders.getReturnStatus().equalsIgnoreCase(OrderReturnStatusEnum.REPLENISHMENT.name())) {
 
             orders.setReturnStatus(OrderReturnStatusEnum.REPLENISHMENT.name());
 
@@ -129,13 +129,32 @@ public class OrdersManagerController extends ABMallAdminBaseController {
             }
 
         }
-        if(replenishService.insert(model)) {
+        if (replenishService.insert(model)) {
 
             return RestResponse.getSuccesseResponse();
-        }else {
+        } else {
 
-            return RestResponse.getFailedResponse(500,"补货失败");
+            return RestResponse.getFailedResponse(500, "补货失败");
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/systemCancel", method = {RequestMethod.POST})
+    public RestResponse<Void> systemCancel(@RequestParam long orderId) {
+
+        Orders orders = ordersService.getById(orderId);
+        if (null == orders) {
+            return RestResponse.getFailedResponse(500, "订单编号不存在");
+        }
+
+        orders.setOrderStatus(OrderStatusEnum.SYSTEM_CANCEL.name());
+
+        if (!ordersService.update(orders)) {
+            return RestResponse.getFailedResponse(500, "系统取消失败,Orders为:" + orders.toString());
+        }
+
+        return RestResponse.getSuccesseResponse();
+
     }
 
     @ResponseBody
@@ -170,9 +189,7 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
-    public RestResponse<PageInfo<Orders>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
-                                                        @RequestParam(defaultValue = "4") int pageSize,
-                                                        @RequestBody()Map<String,Object> conditions) {
+    public RestResponse<PageInfo<Orders>> queryPageList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "4") int pageSize, @RequestBody() Map<String, Object> conditions) {
 
         Example example = new Example(Orders.class);
         example.setOrderByClause("gmt_create desc");
@@ -180,41 +197,41 @@ public class OrdersManagerController extends ABMallAdminBaseController {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDeleted", false);
 
-        if(null != conditions){
-            if(null != conditions.get("timeBegin")){
+        if (null != conditions) {
+            if (null != conditions.get("timeBegin")) {
 
                 Date date;
                 try {
                     String begin = conditions.get("timeBegin").toString() + " 00:00:00";
-                    date = DateUtils.parseDate(begin,"yyyy-MM-dd hh:mm:ss");
+                    date = DateUtils.parseDate(begin, "yyyy-MM-dd hh:mm:ss");
                 } catch (ParseException e) {
-                    return RestResponse.getFailedResponse(500,"时间格式错误");
+                    return RestResponse.getFailedResponse(500, "时间格式错误");
                 }
-                criteria.andGreaterThanOrEqualTo("gmtCreate",date);
+                criteria.andGreaterThanOrEqualTo("gmtCreate", date);
             }
 
-            if(null != conditions.get("timeEnd")){
+            if (null != conditions.get("timeEnd")) {
 
                 Date date;
                 try {
                     String end = conditions.get("timeEnd").toString() + " 23:59:59";
-                    date = DateUtils.parseDate(end,"yyyy-MM-dd hh:mm:ss");
+                    date = DateUtils.parseDate(end, "yyyy-MM-dd hh:mm:ss");
                 } catch (ParseException e) {
-                    return RestResponse.getFailedResponse(500,"时间格式错误");
+                    return RestResponse.getFailedResponse(500, "时间格式错误");
                 }
-                criteria.andLessThanOrEqualTo("gmtCreate",date);
+                criteria.andLessThanOrEqualTo("gmtCreate", date);
             }
 
-            if(null != conditions.get("orderStatus")){
-                criteria.andEqualTo("orderStatus",conditions.get("orderStatus").toString());
+            if (null != conditions.get("orderStatus")) {
+                criteria.andEqualTo("orderStatus", conditions.get("orderStatus").toString());
             }
 
-            if(null != conditions.get("returnStatus")){
-                criteria.andEqualTo("returnStatus",conditions.get("returnStatus").toString());
+            if (null != conditions.get("returnStatus")) {
+                criteria.andEqualTo("returnStatus", conditions.get("returnStatus").toString());
             }
 
-            if(null != conditions.get("orderNo")){
-                criteria.andEqualTo("orderNo",conditions.get("orderNo").toString());
+            if (null != conditions.get("orderNo")) {
+                criteria.andEqualTo("orderNo", conditions.get("orderNo").toString());
             }
         }
 

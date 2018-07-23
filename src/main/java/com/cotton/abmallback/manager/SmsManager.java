@@ -29,9 +29,9 @@ public class SmsManager {
     private SmsCaptchaService smsCaptchaService;
 
     @Value("${sms.captcha.template.code}")
-    private final String captchaTemplateCode = "SMS_139910119";
+    private final String captchaTemplateCode = "SMS_139239325";
     @Value("${sms.sign.name}")
-    private final String signName="棉花糖";
+    private final String signName="云鼎绿色";
 
     @Autowired
     public SmsManager(SmsService smsService, SmsCaptchaService smsCaptchaService) {

@@ -132,8 +132,7 @@ public class DistributionManagerImpl implements DistributionManager {
             long count = ordersService.count(example);
 
             if (count <= 1) {
-                //首次购物 只分享分享奖励
-
+                //首次购物 分享分享奖励
                 //1.1 self
                 totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, self, selfSharePercent));
                 //1.2 第一层
@@ -148,6 +147,7 @@ public class DistributionManagerImpl implements DistributionManager {
                 if (null != third) {
                     totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, third, thirdSharePercent));
                 }
+
             }else {
 
                 //复购奖励
@@ -171,23 +171,23 @@ public class DistributionManagerImpl implements DistributionManager {
                     totalDistrubtionMoney = totalDistrubtionMoney.add(distributionRepurchaseAward(orders, third, thirdRepurchasePercent));
                 }
 
+            }
 
-                //高管奖励 级别高于才分高管奖励
-                //2.1 第一层
-                if (first != null && compareLevel(first.getLevel(), self.getLevel()) > 0) {
+            //高管奖励 级别高于才分高管奖励
+            //2.1 第一层
+            if (first != null && compareLevel(first.getLevel(), self.getLevel()) > 0) {
 
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, first, firstExecutivePercent));
-                }
-                //2.2 第二层
-                if (second != null && compareLevel(second.getLevel(), self.getLevel()) > 0 && compareLevel(second.getLevel(), first.getLevel()) > 0) {
+                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, first, firstExecutivePercent));
+            }
+            //2.2 第二层
+            if (second != null && compareLevel(second.getLevel(), self.getLevel()) > 0 && compareLevel(second.getLevel(), first.getLevel()) > 0) {
 
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, second, secondExecutivePercent));
-                }
-                //2.3 第三层
-                if (third != null && compareLevel(third.getLevel(), self.getLevel()) > 0 && compareLevel(third.getLevel(), first.getLevel()) > 0 && compareLevel(third.getLevel(), second.getLevel()) > 0) {
+                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, second, secondExecutivePercent));
+            }
+            //2.3 第三层
+            if (third != null && compareLevel(third.getLevel(), self.getLevel()) > 0 && compareLevel(third.getLevel(), first.getLevel()) > 0 && compareLevel(third.getLevel(), second.getLevel()) > 0) {
 
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, third, thirdExecutivePercent));
-                }
+                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionExecutiveAward(orders, third, thirdExecutivePercent));
             }
 
             //更新订单信息

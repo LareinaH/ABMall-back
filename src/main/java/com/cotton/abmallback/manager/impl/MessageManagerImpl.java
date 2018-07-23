@@ -180,15 +180,15 @@ public class MessageManagerImpl implements MessageManager {
             case PROMOTION_AWARD:
                 switch (MemberLevelEnum.valueOf(member.getLevel())) {
                     case AGENT:
-                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.AGENT.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.AGENT.name()  + "级，" + map.get("PROMOTION_AWARD_2");
                     case V1:
-                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V1.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V1.name()  + "级，" + map.get("PROMOTION_AWARD_2") ;
                     case V2:
-                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V2.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V2.name()  + "级，" + map.get("PROMOTION_AWARD_2");
                     case V3:
-                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V3.name()  + "级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
+                        return map.get("PROMOTION_AWARD_1") + MemberLevelEnum.V3.name()  + "级，" + map.get("PROMOTION_AWARD_2");
                     default:
-                        return "恭喜成功晋级，" + map.get("PROMOTION_AWARD_2") + money.toString()  + "元。";
+                        return "恭喜成功晋级，" + map.get("PROMOTION_AWARD_2");
                 }
             case EXECUTIVE_AWARD:
                 return map.get("EXECUTIVE_AWARD") + money.toString()  + "元。";
