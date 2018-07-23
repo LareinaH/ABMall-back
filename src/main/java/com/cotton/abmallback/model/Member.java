@@ -56,6 +56,12 @@ public class Member extends BaseModel {
     private Integer referTotalCount;
 
     /**
+     * 推荐的 代言人及以上级别人数
+     */
+    @Column(name = "refer_total_agent_count")
+    private Integer referTotalAgentCount;
+
+    /**
      * 微信号
      */
     @Column(name = "wechat_no")
@@ -299,6 +305,24 @@ public class Member extends BaseModel {
      */
     public void setReferTotalCount(Integer referTotalCount) {
         this.referTotalCount = referTotalCount;
+    }
+
+    /**
+     * 获取推荐的 代言人及以上级别人数
+     *
+     * @return refer_total_agent_count - 推荐的 代言人及以上级别人数
+     */
+    public Integer getReferTotalAgentCount() {
+        return referTotalAgentCount;
+    }
+
+    /**
+     * 设置推荐的 代言人及以上级别人数
+     *
+     * @param referTotalAgentCount 推荐的 代言人及以上级别人数
+     */
+    public void setReferTotalAgentCount(Integer referTotalAgentCount) {
+        this.referTotalAgentCount = referTotalAgentCount;
     }
 
     /**

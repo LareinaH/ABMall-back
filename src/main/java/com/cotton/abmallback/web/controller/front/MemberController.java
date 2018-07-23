@@ -297,7 +297,7 @@ public class MemberController extends ABMallFrontBaseController {
                                                          @RequestParam(defaultValue = "")String level) {
 
         Example example = new Example(Member.class);
-        example.setOrderByClause("gmt_create desc");
+        example.setOrderByClause("refer_total_agent_count desc,gmt_create desc");
 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("referrerId", getCurrentMemberId());
