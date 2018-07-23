@@ -100,7 +100,9 @@ public class ContentStudyManagerController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
-    public RestResponse<PageInfo<ContentStudy>> queryPageList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "4") int pageSize, @RequestBody(required = false) Map<String, Object> conditions) {
+    public RestResponse<PageInfo<ContentStudy>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
+                                                              @RequestParam(defaultValue = "4") int pageSize,
+                                                              @RequestBody(required = false) Map<String, Object> conditions) {
 
         Example example = new Example(ContentStudy.class);
         example.setOrderByClause("gmt_create desc");

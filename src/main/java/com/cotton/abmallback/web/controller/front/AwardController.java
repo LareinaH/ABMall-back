@@ -103,8 +103,21 @@ public class AwardController extends ABMallFrontBaseController {
                     OrderGoods orderGoods = orderGoodsService.selectOne(model);
 
                     if(null != member) {
-                        accountMoneyFlowVO.setBuyerName(member.getName());
-                        accountMoneyFlowVO.setBuyerPhoto(member.getPhoto());
+                        //获取用户引荐人
+                        if(member.getReferrerId() != null) {
+                            Member referrerMember = memberService.getById(member.getReferrerId());
+
+                            if (referrerMember != null){
+
+                                accountMoneyFlowVO.setBuyerName(referrerMember.getName() + "中的" + member.getName());
+                            }else {
+                                accountMoneyFlowVO.setBuyerName(member.getName());
+                                accountMoneyFlowVO.setBuyerPhoto(member.getPhoto());
+                            }
+                        }else {
+                            accountMoneyFlowVO.setBuyerName(member.getName());
+                            accountMoneyFlowVO.setBuyerPhoto(member.getPhoto());
+                        }
                     }
                     if(null != orderGoods) {
                         accountMoneyFlowVO.setOrderGoodName(orderGoods.getGoodName());
