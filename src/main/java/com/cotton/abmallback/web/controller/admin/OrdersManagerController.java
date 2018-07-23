@@ -258,8 +258,12 @@ public class OrdersManagerController extends ABMallAdminBaseController {
         ordersPageInfo.getList().forEach(x -> {
             if (orderGoodsMap.containsKey(x.getId())) {
                 OrdersWithGoodsInfo owgi = new OrdersWithGoodsInfo();
-                owgi.setOrders(x);
-                owgi.setOrderGoods(orderGoodsMap.get(x.getId()));
+                BeanUtils.copyProperties(x, owgi);
+                OrderGoods orderGoods = orderGoodsMap.get(x.getId());
+                owgi.setGoodsSpecificationNo(orderGoods.getGoodsSpecificationNo());
+                owgi.setGoodsSpecificationName(orderGoods.getGoodsSpecificationName());
+                owgi.setGoodName(orderGoods.getGoodName());
+                owgi.setGoodNum(orderGoods.getGoodNum());
                 ordersWithGoodsInfoList.add(owgi);
             } else {
                 logger.warn("order {} could not find goods info", x.getId());

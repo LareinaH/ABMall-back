@@ -1,26 +1,54 @@
 package com.cotton.abmallback.model.vo;
 
-import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
 
-public class OrdersWithGoodsInfo {
-    private Orders orders;
+public class OrdersWithGoodsInfo extends Orders {
+    /**
+     * 规格编号
+     */
+    private String goodsSpecificationNo;
 
-    private OrderGoods orderGoods;
+    /**
+     * 商品名称
+     */
+    private String goodName;
 
-    public Orders getOrders() {
-        return orders;
+    private String goodsSpecificationName;
+
+    /**
+     * 商品数量
+     */
+    private Integer goodNum;
+
+    public String getGoodsSpecificationNo() {
+        return goodsSpecificationNo;
     }
 
-    public void setOrders(Orders orders) {
-        this.orders = orders;
+    public void setGoodsSpecificationNo(String goodsSpecificationNo) {
+        this.goodsSpecificationNo = goodsSpecificationNo;
     }
 
-    public OrderGoods getOrderGoods() {
-        return orderGoods;
+    public String getGoodName() {
+        return goodName;
     }
 
-    public void setOrderGoods(OrderGoods orderGoods) {
-        this.orderGoods = orderGoods;
+    public void setGoodName(String goodName) {
+        this.goodName = goodName;
+    }
+
+    public String getGoodsSpecificationName() {
+        return goodsSpecificationName;
+    }
+
+    public void setGoodsSpecificationName(String goodsSpecificationName) {
+        this.goodsSpecificationName = goodsSpecificationName;
+    }
+
+    public Integer getGoodNum() {
+        return goodNum;
+    }
+
+    public void setGoodNum(Integer goodNum) {
+        this.goodNum = goodNum;
     }
 }
