@@ -108,8 +108,9 @@ public class AwardController extends ABMallFrontBaseController {
                             Member referrerMember = memberService.getById(member.getReferrerId());
 
                             if (referrerMember != null){
-
                                 accountMoneyFlowVO.setBuyerName(referrerMember.getName() + "中的" + member.getName());
+                                accountMoneyFlowVO.setBuyerPhoto(member.getPhoto());
+
                             }else {
                                 accountMoneyFlowVO.setBuyerName(member.getName());
                                 accountMoneyFlowVO.setBuyerPhoto(member.getPhoto());
