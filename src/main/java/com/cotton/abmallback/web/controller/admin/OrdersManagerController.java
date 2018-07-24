@@ -2,8 +2,11 @@ package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.enumeration.OrderReturnStatusEnum;
 import com.cotton.abmallback.enumeration.OrderStatusEnum;
+import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.OrderReplenish;
 import com.cotton.abmallback.model.Orders;
+import com.cotton.abmallback.model.vo.OrdersWithGoodsInfo;
+import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrderReplenishService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.web.controller.ABMallAdminBaseController;
@@ -12,16 +15,16 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * OrdersManager
@@ -39,6 +42,9 @@ public class OrdersManagerController extends ABMallAdminBaseController {
     private OrdersService ordersService;
 
     private OrderReplenishService replenishService;
+
+    @Autowired
+    OrderGoodsService orderGoodsService;
 
     @Autowired
     public OrdersManagerController(OrdersService ordersService, OrderReplenishService replenishService) {
@@ -189,7 +195,7 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
     @ResponseBody
     @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
-    public RestResponse<PageInfo<Orders>> queryPageList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "4") int pageSize, @RequestBody() Map<String, Object> conditions) {
+    public RestResponse<PageInfo<OrdersWithGoodsInfo>> queryPageList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "4") int pageSize, @RequestBody() Map<String, Object> conditions) {
 
         Example example = new Example(Orders.class);
         example.setOrderByClause("gmt_create desc");
@@ -237,13 +243,37 @@ public class OrdersManagerController extends ABMallAdminBaseController {
 
         PageInfo<Orders> ordersPageInfo = ordersService.query(pageNum, pageSize, example);
 
-        if (ordersPageInfo == null) {
-            logger.error("读取列表失败");
-            return RestResponse.getSystemInnerErrorResponse();
-        }
-        return RestResponse.getSuccesseResponse(ordersPageInfo);
-    }
+        Example e2 = new Example(OrderGoods.class);
+        Example.Criteria c2 = e2.createCriteria();
+        c2.andIn("orderId", ordersPageInfo.getList().stream().map(x -> x.getId()).collect(Collectors.toList()));
 
+        List<OrderGoods> orderGoodsList = orderGoodsService.queryList(e2);
+        Map<Long, OrderGoods> orderGoodsMap = orderGoodsList.stream().collect(Collectors.toMap(OrderGoods::getOrderId, Function.identity()));
+
+        PageInfo<OrdersWithGoodsInfo> pageInfo = new PageInfo<>();
+
+        BeanUtils.copyProperties(ordersPageInfo, pageInfo);
+
+        List<OrdersWithGoodsInfo> ordersWithGoodsInfoList = new ArrayList<>();
+        ordersPageInfo.getList().forEach(x -> {
+            if (orderGoodsMap.containsKey(x.getId())) {
+                OrdersWithGoodsInfo owgi = new OrdersWithGoodsInfo();
+                BeanUtils.copyProperties(x, owgi);
+                OrderGoods orderGoods = orderGoodsMap.get(x.getId());
+                owgi.setGoodsSpecificationNo(orderGoods.getGoodsSpecificationNo());
+                owgi.setGoodsSpecificationName(orderGoods.getGoodsSpecificationName());
+                owgi.setGoodName(orderGoods.getGoodName());
+                owgi.setGoodNum(orderGoods.getGoodNum());
+                ordersWithGoodsInfoList.add(owgi);
+            } else {
+                logger.warn("order {} could not find goods info", x.getId());
+            }
+        });
+
+        pageInfo.setList(ordersWithGoodsInfoList);
+
+        return RestResponse.getSuccesseResponse(pageInfo);
+    }
 
     @ResponseBody
     @RequestMapping(value = "/delete", method = {RequestMethod.DELETE})

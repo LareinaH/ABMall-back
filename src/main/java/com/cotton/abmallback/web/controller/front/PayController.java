@@ -1,5 +1,6 @@
 package com.cotton.abmallback.web.controller.front;
 
+import com.cotton.abmallback.enumeration.MemberLevelEnum;
 import com.cotton.abmallback.manager.DistributionManager;
 import com.cotton.abmallback.manager.PromotionManager;
 import com.cotton.abmallback.model.Member;
@@ -90,11 +91,49 @@ public class PayController {
         //Member member = memberService.getById(236L);
         //promotionManager.memberPromotion(member,0);
 
-       distributionManager.orderDistribute(orderNo);
+       //distributionManager.orderDistribute(orderNo);
+
+        intMemberCount();
 
 
 
         return RestResponse.getSuccesseResponse(map);
+    }
+
+    private void  intMemberCount(){
+
+        List<Member> memberList = memberService.queryList();
+
+        for(Member member : memberList){
+
+            member.setReferTotalCount((int)getRefferPeopleCount(member.getId()));
+            member.setReferTotalAgentCount((int)getAgentPeopleCount(member.getId()));
+
+            memberService.update(member);
+        }
+
+    }
+
+    private long  getAgentPeopleCount(long referrerId){
+        Example example = new Example(Member.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("referrerId", referrerId);
+        criteria.andEqualTo("isDeleted", false);
+
+        List<String> levelList = new ArrayList<>();
+        levelList.add(MemberLevelEnum.WHITE.name());
+        criteria.andNotIn("level", levelList);
+
+        return memberService.count(example);
+    }
+
+    private long  getRefferPeopleCount(long referrerId){
+        Example example = new Example(Member.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("referrerId", referrerId);
+        criteria.andEqualTo("isDeleted", false);
+
+        return memberService.count(example);
     }
 
 
