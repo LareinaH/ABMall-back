@@ -55,8 +55,8 @@ public class ScanHandler extends AbstractHandler {
 
                 Member member = memberList.get(0);
                 if (null == member.getReferrerId()) {
-                    getRefferUser(wxMessage, member);
-                    countRefferUser(member.getReferrerId());
+                    getReferUser(wxMessage, member);
+                    countReferUser(member.getReferrerId());
                     member.setOpenId(userWxInfo.getOpenId());
                     memberService.update(member);
                 }
@@ -73,11 +73,10 @@ public class ScanHandler extends AbstractHandler {
                 newMember.setPhoto(userWxInfo.getHeadImgUrl());
 
                 //获取引荐人信息
-                getRefferUser(wxMessage, newMember);
+                getReferUser(wxMessage, newMember);
 
                 memberService.insert(newMember);
-                countRefferUser(newMember.getReferrerId());
-
+                countReferUser(newMember.getReferrerId());
 
             }
 
@@ -92,10 +91,13 @@ public class ScanHandler extends AbstractHandler {
     }
 
 
-    private void getRefferUser(WxMpXmlMessage wxMessage, Member member) {
+    private void getReferUser(WxMpXmlMessage wxMessage, Member member) {
         String eventKey = wxMessage.getEventKey();
 
         this.logger.info("eventKey: " + eventKey);
+
+        //默认设置为云鼎的id
+        long referrerId = 160L;
 
         if (!StringUtils.isBlank(eventKey)) {
 
@@ -104,20 +106,20 @@ public class ScanHandler extends AbstractHandler {
             JSONObject jsonObject = JSON.parseObject(jsonStr);
 
             if (null != jsonObject && jsonObject.get("referrerId") != null) {
-                member.setReferrerId(Long.valueOf(jsonObject.get("referrerId").toString()));
+                referrerId = Long.valueOf(jsonObject.get("referrerId").toString());
             }
-
         }
+        member.setReferrerId(referrerId);
     }
 
-    private void countRefferUser(Long remmberId) {
+    private void countReferUser(Long referMemberId) {
 
-        Member refferMember = memberService.getById(remmberId);
-        refferMember.setReferTotalCount( refferMember.getReferTotalCount() + 1);
+        Member referMember = memberService.getById(referMemberId);
+        referMember.setReferTotalCount( referMember.getReferTotalCount() + 1);
 
-        promotionManager.memberPromotion(refferMember,0L);
+        promotionManager.memberPromotion(referMember,0L);
 
-        memberService.update(refferMember);
+        memberService.update(referMember);
 
     }
 }

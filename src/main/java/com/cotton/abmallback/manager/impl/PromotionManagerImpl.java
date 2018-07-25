@@ -70,15 +70,23 @@ public class PromotionManagerImpl implements PromotionManager {
                     //发放奖励
                     String money = sendPromotionReward(member, newLevel, orderId);
                     //发送消息通知
-                    sendPromotionMessage(member, newLevel,BigDecimal.valueOf(Double.valueOf(money)));
+                    sendPromotionMessage(member, newLevel, BigDecimal.valueOf(Double.valueOf(money)));
 
                     //校验自己的上级是否升级
-                    if(member.getReferrerId() != null){
+                    if (member.getReferrerId() != null) {
 
-                    Member referrerMember = memberService.getById(member.getReferrerId());
-                    if(referrerMember != null) {
-                        memberPromotion(referrerMember, 0);
-                    }
+                        Member referrerMember = memberService.getById(member.getReferrerId());
+
+                        if (referrerMember != null) {
+
+                            //晋级为代理的时候，上级的统计数 +1
+                            if(newLevel.equals(MemberLevelEnum.AGENT)){
+
+                                referrerMember.setReferTotalAgentCount(referrerMember.getReferTotalCount() +1);
+                                memberService.update(referrerMember);
+                            }
+                            memberPromotion(referrerMember, 0);
+                        }
                     }
                 }
             }
@@ -94,8 +102,8 @@ public class PromotionManagerImpl implements PromotionManager {
         model.setIsDeleted(false);
         model.setLevel(MemberLevelEnum.V2.name());
         List<Member> members = memberService.queryList(model);
-        for(Member member : members){
-            memberPromotion(member,0);
+        for (Member member : members) {
+            memberPromotion(member, 0);
         }
     }
 
@@ -106,7 +114,7 @@ public class PromotionManagerImpl implements PromotionManager {
 
         String totalMoney = "0";
         String totalMemberCount = "0";
-        String totalV1Count="0";
+        String totalV1Count = "0";
         String shopTimes = "0";
 
         //获取newLevel的晋级条件
@@ -130,16 +138,14 @@ public class PromotionManagerImpl implements PromotionManager {
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_PEOPLE.name()).getValue();
                 totalV1Count = map.get(DistributionItemEnum.PROMOTION_V2_SHARE_V1_PEOPLE.name()).getValue();
 
-                return (getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount)) &&
-                        (getV1PeopleCount(member.getId()) >= Long.valueOf(totalV1Count));
+                return (getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount)) && (getV1PeopleCount(member.getId()) >= Long.valueOf(totalV1Count));
 
             case V3:
                 // 晋级V3的条件是：直接分享XXX代言人，V3自己获得返佣XXXX元
                 totalMoney = map.get(DistributionItemEnum.PROMOTION_V3_MONEY.name()).getValue();
                 totalMemberCount = map.get(DistributionItemEnum.PROMOTION_V3_SHARE_PEOPLE.name()).getValue();
 
-                return (getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount)) &&
-                        (member.getMoneyTotalEarn().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >=0);
+                return (getAgentPeopleCount(member.getId()) >= Long.valueOf(totalMemberCount)) && (member.getMoneyTotalEarn().compareTo(BigDecimal.valueOf(Double.valueOf(totalMoney))) >= 0);
 
             default:
                 return false;
@@ -162,7 +168,7 @@ public class PromotionManagerImpl implements PromotionManager {
     }
 
 
-    private long  getV1PeopleCount(long referrerId){
+    private long getV1PeopleCount(long referrerId) {
         Example example = new Example(Member.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("referrerId", referrerId);
@@ -177,7 +183,7 @@ public class PromotionManagerImpl implements PromotionManager {
     }
 
 
-    private long  getAgentPeopleCount(long referrerId){
+    private long getAgentPeopleCount(long referrerId) {
         Example example = new Example(Member.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("referrerId", referrerId);
@@ -189,7 +195,7 @@ public class PromotionManagerImpl implements PromotionManager {
     /**
      * 给升级的会员发放奖励
      */
-    private String  sendPromotionReward(Member member, MemberLevelEnum newLevel, long orderId) {
+    private String sendPromotionReward(Member member, MemberLevelEnum newLevel, long orderId) {
 
         Map<String, DistributionConfig> map = distributionConfigService.getAllDistributionConfig();
 
@@ -236,9 +242,9 @@ public class PromotionManagerImpl implements PromotionManager {
     /**
      * 发送消息通知
      */
-    private void sendPromotionMessage(Member member, MemberLevelEnum newLevel,BigDecimal money) {
+    private void sendPromotionMessage(Member member, MemberLevelEnum newLevel, BigDecimal money) {
 
-        messageManager.sendPromotionAward(member.getId(),newLevel.name(),money);
+        messageManager.sendPromotionAward(member.getId(), newLevel.name(), money);
     }
 
 }

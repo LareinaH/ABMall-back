@@ -112,6 +112,9 @@ public class ContentStudyManagerController extends BaseController {
 
         if (null != conditions) {
 
+            if(null != conditions.get("title")){
+                criteria.andLike("title","%" + conditions.get("title").toString()+ "%");
+            }
         }
 
         PageInfo<ContentStudy> contentStudyPageInfo = contentStudyService.query(pageNum, pageSize, example);

@@ -25,103 +25,105 @@ import java.util.Map;
 @Component
 public class SubscribeHandler extends AbstractHandler {
 
-  private final MemberService memberService;
+    private final MemberService memberService;
 
-  private final PromotionManager promotionManager;
+    private final PromotionManager promotionManager;
 
 
-  public SubscribeHandler(MemberService memberService, PromotionManager promotionManager) {
-    this.memberService = memberService;
-    this.promotionManager = promotionManager;
-  }
+    public SubscribeHandler(MemberService memberService, PromotionManager promotionManager) {
+        this.memberService = memberService;
+        this.promotionManager = promotionManager;
+    }
 
-  @Override
-  public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
+    @Override
+    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService weixinService, WxSessionManager sessionManager) throws WxErrorException {
 
-    this.logger.info("处理未关注的扫码事件 : {}",wxMessage);
+        this.logger.info("处理未关注的扫码事件 : {}", wxMessage);
 
-    // 获取微信用户基本信息
-    WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
+        // 获取微信用户基本信息
+        WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);
 
-    if (userWxInfo != null) {
-      //查看用户是否存在
-      Member model = new Member();
-      model.setUnionId(userWxInfo.getUnionId());
-      model.setIsDeleted(false);
+        if (userWxInfo != null) {
+            //查看用户是否存在
+            Member model = new Member();
+            model.setUnionId(userWxInfo.getUnionId());
+            model.setIsDeleted(false);
 
-      List<Member> memberList = memberService.queryList(model);
+            List<Member> memberList = memberService.queryList(model);
 
-      if (null != memberList && memberList.size() > 0) {
-        this.logger.info("该用户已经存在: " + wxMessage.getFromUser());
+            if (null != memberList && memberList.size() > 0) {
+                this.logger.info("该用户已经存在: " + wxMessage.getFromUser());
 
-        Member member = memberList.get(0);
-        if (null == member.getReferrerId()) {
-          getRefferUser(wxMessage, member);
-          countRefferUser(member.getReferrerId());
-          member.setOpenId(userWxInfo.getOpenId());
-          memberService.update(member);
+                Member member = memberList.get(0);
+                if (null == member.getReferrerId()) {
+                    getReferUser(wxMessage, member);
+                    countReferUser(member.getReferrerId());
+                    member.setOpenId(userWxInfo.getOpenId());
+                    memberService.update(member);
+                }
+            } else {
+
+                //注册新用户
+                Member newMember = new Member();
+                newMember.setUnionId(userWxInfo.getUnionId());
+                newMember.setOpenId(userWxInfo.getOpenId());
+                newMember.setName(userWxInfo.getNickname());
+                newMember.setWechatName(userWxInfo.getNickname());
+                newMember.setIsDeleted(false);
+                newMember.setLevel(MemberLevelEnum.WHITE.name());
+                newMember.setPhoto(userWxInfo.getHeadImgUrl());
+
+                //获取引荐人信息
+                getReferUser(wxMessage, newMember);
+
+                memberService.insert(newMember);
+                countReferUser(newMember.getReferrerId());
+            }
+
+            try {
+                return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
+            } catch (Exception e) {
+                this.logger.error(e.getMessage(), e);
+            }
         }
-      } else {
 
-        //注册新用户
-        Member newMember = new Member();
-        newMember.setUnionId(userWxInfo.getUnionId());
-        newMember.setOpenId(userWxInfo.getOpenId());
-        newMember.setName(userWxInfo.getNickname());
-        newMember.setWechatName(userWxInfo.getNickname());
-        newMember.setIsDeleted(false);
-        newMember.setLevel(MemberLevelEnum.WHITE.name());
-        newMember.setPhoto(userWxInfo.getHeadImgUrl());
+        logger.error("关注账号错误：获取微信用户信息错误：{}", wxMessage);
 
-        //获取引荐人信息
-        getRefferUser(wxMessage, newMember);
-
-        memberService.insert(newMember);
-        countRefferUser(newMember.getReferrerId());
-
-
-      }
-
-      try {
         return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
-      } catch (Exception e) {
-        this.logger.error(e.getMessage(), e);
-      }
     }
 
-    logger.error("关注账号错误：获取微信用户信息错误：{}",wxMessage);
+    private void getReferUser(WxMpXmlMessage wxMessage, Member member) {
+        String eventKey = wxMessage.getEventKey();
 
-    return new TextBuilder().build("感谢关注绿色云鼎公众号！", wxMessage, weixinService);
-  }
+        this.logger.info("eventKey: " + eventKey);
 
-  private void getRefferUser(WxMpXmlMessage wxMessage, Member member) {
-    String eventKey = wxMessage.getEventKey();
+        //默认设置为云鼎的id
+        long referrerId = 160L;
 
-    this.logger.info("eventKey: " + eventKey);
+        if (!StringUtils.isBlank(eventKey)) {
 
-    if (!StringUtils.isBlank(eventKey)) {
+            String jsonStr = eventKey.substring(eventKey.indexOf("{"), eventKey.indexOf("}") + 1);
 
-      String jsonStr = eventKey.substring(eventKey.indexOf("{"),eventKey.indexOf("}") + 1);
+            JSONObject jsonObject = JSON.parseObject(jsonStr);
 
-      JSONObject jsonObject = JSON.parseObject(jsonStr);
+            if (null != jsonObject && jsonObject.get("referrerId") != null) {
+                referrerId = Long.valueOf(jsonObject.get("referrerId").toString());
+            }
 
-      if (null != jsonObject && jsonObject.get("referrerId") != null) {
-        member.setReferrerId(Long.valueOf(jsonObject.get("referrerId").toString()));
-      }
-
-    }
-  }
-
-  private void countRefferUser(Long remmberId) {
-
-    Member refferMember = memberService.getById(remmberId);
-    if(null != refferMember) {
-      refferMember.setReferTotalCount(refferMember.getReferTotalCount() + 1);
-
-      promotionManager.memberPromotion(refferMember, 0L);
-
-      memberService.update(refferMember);
+        }
+        member.setReferrerId(referrerId);
     }
 
-  }
+    private void countReferUser(Long referMemberId) {
+
+        Member referMember = memberService.getById(referMemberId);
+        if (null != referMember) {
+            referMember.setReferTotalCount(referMember.getReferTotalCount() + 1);
+
+            promotionManager.memberPromotion(referMember, 0L);
+
+            memberService.update(referMember);
+        }
+
+    }
 }

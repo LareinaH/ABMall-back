@@ -134,14 +134,14 @@ public class DistributionManagerImpl implements DistributionManager {
             if (count <= 1) {
                 //首次购物 分享分享奖励
                 //1.1 self
-                totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, self, selfSharePercent));
+                     totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, self, selfSharePercent));
                 //1.2 第一层
                 if (null != first) {
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, first, firstSharePercent));
+                   totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, first, firstSharePercent));
                 }
                 //1.2 第二层
                 if (null != second) {
-                    totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, second, secondSharePercent));
+                   totalDistrubtionMoney = totalDistrubtionMoney.add(distributionShareAward(orders, second, secondSharePercent));
                 }
                 //1.2 第三层
                 if (null != third) {

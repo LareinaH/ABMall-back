@@ -96,10 +96,12 @@ public class LoginController extends ABMallFrontBaseController {
      */
     private RestResponse<LoginMemberVO> loginMobile(String phoneNum, String code, String deviceType) {
 
+        logger.info("用户登录，手机登录。phoneNum： {},设备类型：{}",phoneNum,deviceType);
+
         //校验验证码
-    /*    if(!smsManager.checkCaptcha(phoneNum,code)){
+       if(!smsManager.checkCaptcha(phoneNum,code)){
             return RestResponse.getFailedResponse(500,"验证码错误");
-        }*/
+        }
         //根据手机号查找用户
         Member model = new Member();
         model.setPhoneNum(phoneNum);
@@ -133,6 +135,8 @@ public class LoginController extends ABMallFrontBaseController {
      */
     private RestResponse<LoginMemberVO> loginWeChatApp(String unionId,String openId,String headImageUrl, String nickname, String deviceType) {
 
+        logger.info("用户登录，微信授权登录。nickname：{} unionId：{},设备类型：{}",nickname,unionId,deviceType);
+
         //根据unionId号查找用户
         if(StringUtils.isBlank(unionId)){
             return RestResponse.getFailedResponse(1,"unionId 为空");
@@ -165,6 +169,7 @@ public class LoginController extends ABMallFrontBaseController {
             newMember.setIsDeleted(false);
             newMember.setLevel(MemberLevelEnum.WHITE.name());
             newMember.setPhoto(headImageUrl);
+            newMember.setReferrerId(160L);
 
             if(deviceType.equalsIgnoreCase(DeviceType.IOS.name())){
                 newMember.setTokenIos(token);
@@ -188,6 +193,9 @@ public class LoginController extends ABMallFrontBaseController {
      */
     private RestResponse<LoginMemberVO> loginWeChatMp(String code){
 
+        logger.info("用户登录，微信公众号登录。");
+
+
         //通过code换取网页授权access_token
         WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
         try {
@@ -206,6 +214,8 @@ public class LoginController extends ABMallFrontBaseController {
         if(null == wxMpOAuth2AccessToken){
             return RestResponse.getFailedResponse(1,"登录失败");
         }
+
+        logger.info("用户登录，微信公众号登录。unionId: {}",wxMpOAuth2AccessToken.getUnionId());
 
         String token =  UUID.randomUUID().toString();
 
@@ -242,6 +252,8 @@ public class LoginController extends ABMallFrontBaseController {
             newMember.setLevel(MemberLevelEnum.WHITE.name());
             newMember.setPhoto(wxMpUser.getHeadImgUrl());
             newMember.setTokenWechatMp(token);
+            //默认挂载到云鼎下
+            newMember.setReferrerId(160L);
 
             if(memberService.insert(newMember)){
 
