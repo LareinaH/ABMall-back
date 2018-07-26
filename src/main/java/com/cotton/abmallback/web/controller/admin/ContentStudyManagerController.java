@@ -1,5 +1,7 @@
 package com.cotton.abmallback.web.controller.admin;
 
+import com.cotton.abmallback.enumeration.ContentStudyStatusEnum;
+import com.cotton.abmallback.mapper.ContentStudyMapper;
 import com.cotton.abmallback.model.ContentStudy;
 import com.cotton.abmallback.service.ContentStudyService;
 import com.cotton.base.common.RestResponse;
@@ -30,6 +32,9 @@ public class ContentStudyManagerController extends BaseController {
     private Logger logger = LoggerFactory.getLogger(ContentStudyManagerController.class);
 
     private ContentStudyService contentStudyService;
+
+    @Autowired
+    ContentStudyMapper contentStudyMapper;
 
     @Autowired
     public ContentStudyManagerController(ContentStudyService contentStudyService) {
@@ -67,6 +72,17 @@ public class ContentStudyManagerController extends BaseController {
 
         return RestResponse.getSuccesseResponse();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateStatus", method = {RequestMethod.POST})
+    public RestResponse<Void> updateStatus(
+            @RequestParam(value = "id") Long id,
+            @RequestParam(value = "status") String status
+    ) {
+        contentStudyMapper.updateStatus(id, status);
+        return RestResponse.getSuccesseResponse();
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/get", method = {RequestMethod.GET})
