@@ -44,9 +44,10 @@ public class MemberManagerController extends BaseController {
     private OrdersService ordersService;
 
     @Autowired
-    public MemberManagerController(MemberService memberService, StatMapper statMapper) {
+    public MemberManagerController(MemberService memberService, StatMapper statMapper, OrdersService ordersService) {
         this.memberService = memberService;
         this.statMapper = statMapper;
+        this.ordersService = ordersService;
     }
 
     @ResponseBody
@@ -113,7 +114,7 @@ public class MemberManagerController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
-    public RestResponse<PageInfo<Member>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
+    public RestResponse<PageInfo<MemberVO>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
                                                         @RequestParam(defaultValue = "4") int pageSize,
                                                         @RequestBody(required = false) Map<String, Object> conditions) {
 
@@ -182,8 +183,9 @@ public class MemberManagerController extends BaseController {
                 memberVO.setOrdersCount(count);
 
                 //获取团队信息
-                Map<String,Long> teamInfo = statMapper.getMemberTeamCountGroupByLevel(member.getId());
+                List<Map<String,Long>> teamInfo = statMapper.getMemberTeamCountGroupByLevel(member.getId());
 
+                /*
                 if(null != teamInfo.get(MemberLevelEnum.WHITE.name())){
                     memberVO.setTeamWhiteCount(teamInfo.get(MemberLevelEnum.WHITE.name()));
                 }
@@ -199,12 +201,13 @@ public class MemberManagerController extends BaseController {
                 if(null != teamInfo.get(MemberLevelEnum.V3.name())){
                     memberVO.setTeamV3Count(teamInfo.get(MemberLevelEnum.V3.name()));
                 }
+                */
 
                 memberVOS.add(memberVO);
             }
             memberVOPageInfo.setList(memberVOS);
         }
-        return RestResponse.getSuccesseResponse(memberPageInfo);
+        return RestResponse.getSuccesseResponse(memberVOPageInfo);
     }
 
 

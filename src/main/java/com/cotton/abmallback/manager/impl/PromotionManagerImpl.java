@@ -82,7 +82,7 @@ public class PromotionManagerImpl implements PromotionManager {
                             //晋级为代理的时候，上级的统计数 +1
                             if(newLevel.equals(MemberLevelEnum.AGENT)){
 
-                                referrerMember.setReferTotalAgentCount(referrerMember.getReferTotalCount() +1);
+                                referrerMember.setReferTotalAgentCount(referrerMember.getReferTotalAgentCount() +1);
                                 memberService.update(referrerMember);
                             }
                             memberPromotion(referrerMember, 0);

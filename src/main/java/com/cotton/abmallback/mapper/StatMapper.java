@@ -18,6 +18,6 @@ public interface StatMapper {
     List<Map<String, Long>> getOrderStatusStats(@Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd);
 
 
-    @Select("select level,count(*)  from member WHERE referrer_id = #{id} GROUP BY level; ")
-    Map<String,Long> getMemberTeamCountGroupByLevel(@Param("id") Long memberId);
+    @Select("select level,count(*)  from member WHERE referrer_id = #{id} and is_deleted=0 GROUP BY level")
+    List<Map<String,Long>> getMemberTeamCountGroupByLevel(@Param("id") Long memberId);
 }
