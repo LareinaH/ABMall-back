@@ -69,6 +69,14 @@ public class ConfigController {
                     return jo;
                 }).collect(Collectors.toList());
                 break;
+            case "memberLevel":
+                object = Arrays.stream(MemberLevelEnum.values()).map(x -> {
+                    JSONObject jo = new JSONObject();
+                    jo.put("value", x.name());
+                    jo.put("label", x.getDisplayName());
+                    return jo;
+                }).collect(Collectors.toList());
+                break;
             default:
                 object = null;
                 break;
