@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.mapper.StatMapper;
 import com.cotton.base.common.RestResponse;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class StatController {
 
     @RequestMapping(value = "/memberStat", method = {RequestMethod.GET})
     public RestResponse<Map<String, Object>> memberStat() {
-        Map<String, Object> resultMap = new HashMap<>(10);
+        Map<String, Object> resultMap = new HashMap<>(16);
 
         Date lastDayBegin = getLastDayBegin();
         Date lastDayEnd = getLastDayEnd();
@@ -81,7 +82,7 @@ public class StatController {
         resultMap.put("memberOrdersCountAvg", String.format("%.2f", (double) ordersTotalCount / agentMemberCount));
 
         //累积会员人均购物额=累积至昨日会员购物总额/累积至昨日会员总数
-        resultMap.put("memberOrdersMoneyAvg", String.format("%.2f", orderMoney.divide(BigDecimal.valueOf(agentMemberCount).multiply(BigDecimal.valueOf(100)),2, BigDecimal.ROUND_HALF_EVEN)));
+        resultMap.put("memberOrdersMoneyAvg", String.format("%.2f", orderMoney.divide(BigDecimal.valueOf(agentMemberCount).multiply(BigDecimal.valueOf(100)), 2, BigDecimal.ROUND_HALF_EVEN)));
 
 
         //复购率=累积至昨日复够用户数/累积至昨日用户数
@@ -90,10 +91,10 @@ public class StatController {
 
         //上月复购率
         long repurchaseMemberCountLastMonth = statMapper.getRepurchaseMemberCountByTime(lastMonthBegin, lastMonthEnd);
-        if(memberTotalCountLastMonth > 0) {
+        if (memberTotalCountLastMonth > 0) {
             resultMap.put("repurchasePercentLastMonth", String.format("%.2f", (double) repurchaseMemberCountLastMonth / memberTotalCountLastMonth));
-        }else {
-            resultMap.put("repurchasePercentLastMonth",0);
+        } else {
+            resultMap.put("repurchasePercentLastMonth", 0);
 
         }
 
@@ -102,6 +103,22 @@ public class StatController {
 
         return RestResponse.getSuccesseResponse(resultMap);
     }
+
+    @RequestMapping(value = "/ordersRank", method = {RequestMethod.GET})
+    public RestResponse<PageInfo<Map<String, Object>>> ordersRank(@RequestParam(defaultValue = "1") int pageNum,
+                                                                  @RequestParam(defaultValue = "4") int pageSize,
+                                                                  @RequestParam(value = "gmtStart") String gmtStart,
+                                                                  @RequestParam(value = "gmtEnd") String gmtEnd,
+                                                                  @RequestParam(value = "sortKey",defaultValue = "id") String sortKey,
+                                                                  @RequestParam(value = "sortOrder",defaultValue = "desc") String sortOrder) {
+        PageInfo<Map<String, Object>> listPageInfo = new PageInfo<>();
+
+        listPageInfo.setTotal(statMapper.countOrdersRank(gmtStart, gmtEnd));
+        listPageInfo.setList(statMapper.ordersRank((pageNum - 1) * pageSize, pageSize, gmtStart, gmtEnd, sortKey, sortOrder));
+
+        return RestResponse.getSuccesseResponse(listPageInfo);
+    }
+
 
     private Date getLastDayBegin() {
         //昨天零点
@@ -117,7 +134,7 @@ public class StatController {
 
     private Date getLastMonthBegin() {
         LocalDate today = LocalDate.now();
-        LocalDate firstday = LocalDate.of(today.getYear(),today.getMonth().minus(1),1);
+        LocalDate firstday = LocalDate.of(today.getYear(), today.getMonth().minus(1), 1);
         ZoneId zone = ZoneId.systemDefault();
         return Date.from(firstday.atStartOfDay(zone).toInstant());
     }

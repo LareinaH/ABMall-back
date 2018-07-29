@@ -1,6 +1,5 @@
 package com.cotton.abmallback.mapper;
 
-import javafx.util.Pair;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -97,5 +96,19 @@ public interface StatMapper {
     //总购物额度
     @Select("select sum(total_money) from orders where is_deleted=0 and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL');")
     BigDecimal getOrderMoney();
+
+
+    @Select("SELECT a.id , sum(a.total_money) as total_money ,sum(a.rebate_money) as rebate_money, count(*) as order_count, b.good_name,b.goods_specification_name,b.good_specification_id as good_specification_id ,b.goods_specification_no,b.good_price from (" +
+            "SELECT id, total_money ,rebate_money FROM orders WHERE ( is_deleted = '0' and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL') and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd} ) )as a " +
+            "left JOIN order_goods as b on (a.id = b.order_id)" +
+            "GROUP BY good_specification_id ORDER BY ${sortKey} ${sortOrder}  LIMIT #{start},#{pageSize}")
+    List<Map<String, Object>> ordersRank(@Param( "start") int start, @Param( "pageSize") int pageSize, @Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd, @Param("sortKey") String sortKey,@Param("sortOrder") String sortOrder);
+
+
+    @Select("SELECT count(*) from (SELECT good_specification_id FROM (" +
+            "SELECT id, total_money ,rebate_money FROM orders WHERE (is_deleted = '0'  and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL') and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd} ))as a " +
+            "left JOIN order_goods as b on (a.id = b.order_id) " +
+            "GROUP BY good_specification_id) as d")
+    long countOrdersRank(@Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd);
 
 }
