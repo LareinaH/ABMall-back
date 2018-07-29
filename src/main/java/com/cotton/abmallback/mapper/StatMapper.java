@@ -4,20 +4,98 @@ import javafx.util.Pair;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public interface StatMapper {
 
+
+    /* ***************************会员相关*********************************** */
+
+    /**
+     * 总用户数（包括小白用户）
+     * @return
+     */
     @Select("select count(*) from member where is_deleted=0")
     Long getTotalMember();
 
+
+    /**
+     * 总会员数(不包含小白)
+     * @return
+     */
+    @Select("select count(*) from member where is_deleted=0 and level != 'WHITE'")
+    Long getAgentMemberCount();
+
+    /**
+     * 一段时间区间的会员数目
+     */
+    @Select("select count(*) from member where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd} and level != 'WHITE'")
+    Long getAgentMemberCountByTime(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd);
+
+    /**
+     * 复购会员数
+     */
+    @Select("SELECT count(*) FROM (" +
+            "SELECT  member_id,count(*) as a from orders WHERE is_deleted = '0'  " +
+            "and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')" +
+            "GROUP BY member_id HAVING count(*) > 1 )" +
+            "as aa")
+    long getRepurchaseMemberCount();
+
+    /**
+     * 一段时间区间的复购会员数
+     */
+    @Select("SELECT count(*) FROM (" +
+            "SELECT  member_id,count(*) as a from orders WHERE is_deleted = '0'" +
+            "and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL') " +
+            "and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd} " +
+            "GROUP BY member_id HAVING count(*) > 1 )" +
+            "as aa")
+    long getRepurchaseMemberCountByTime(@Param("gmtStart")Date gmtStart, @Param("gmtEnd") Date gmtEnd);
+
+    /**
+     * 会员团队统计
+     * @param memberId
+     * @return
+     */
+    @Select("select level,count(*)  from member WHERE referrer_id = #{id} and is_deleted=0 GROUP BY level")
+    List<Map<String,Long>> getMemberTeamCountGroupByLevel(@Param("id") Long memberId);
+
+
+    /* ***************************订单相关*********************************** */
+
+
+    /**
+     * 总订单数
+     * @return
+     */
+    @Select("select count(*) from orders where is_deleted=0 and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')")
+    Long getTotalOrders();
+
+    /**
+     * 一段时间的订单数
+     */
+    @Select("select count(*) from orders where is_deleted=0 and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL') and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}")
+    Long getOrdersCountByTime(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd);
+
+    /**
+     * 订单状态统计
+     * @param gmtStart
+     * @param gmtEnd
+     * @return
+     */
     @Select("select order_status as orderStatus, count(*) as sum from orders " +
             "where is_deleted=0 and date(gmt_create) >= #{gmtStart} and date(gmt_create) <= #{gmtEnd}" +
             "group by order_status order by sum desc")
     List<Map<String, Long>> getOrderStatusStats(@Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd);
 
 
-    @Select("select level,count(*)  from member WHERE referrer_id = #{id} and is_deleted=0 GROUP BY level")
-    List<Map<String,Long>> getMemberTeamCountGroupByLevel(@Param("id") Long memberId);
+
+    //总购物额度
+    @Select("select sum(total_money) from orders where is_deleted=0 and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL');")
+    BigDecimal getOrderMoney();
+
 }

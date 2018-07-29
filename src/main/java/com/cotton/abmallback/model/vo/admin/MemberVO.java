@@ -19,32 +19,32 @@ public class MemberVO extends Member {
     /**
      * 有效订单数目
      */
-    private Long ordersCount;
+    private Long ordersCount = 0L;
 
     /**
      * 团队中white数目
      */
-    private Long teamWhiteCount;
+    private Long teamWhiteCount = 0L;
 
     /**
      * 团队中Agent数目
      */
-    private Long teamAgentCount;
+    private Long teamAgentCount = 0L;
 
     /**
      * 团队中V1数目
      */
-    private Long teamV1Count;
+    private Long teamV1Count = 0L;
 
     /**
      * 团队中V2数目
      */
-    private Long teamV2Count;
+    private Long teamV2Count = 0L;
 
     /**
      * 团队中V3数目
      */
-    private Long teamV3Count;
+    private Long teamV3Count = 0L;
 
 
     public String getReferrerName() {

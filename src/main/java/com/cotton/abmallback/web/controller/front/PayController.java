@@ -91,9 +91,11 @@ public class PayController {
         //Member member = memberService.getById(236L);
         //promotionManager.memberPromotion(member,0);
 
-       //distributionManager.orderDistribute(orderNo);
+       distributionManager.orderDistribute(orderNo);
 
-        //intMemberCount();
+
+       // intMemberCount();
+
 
 
 

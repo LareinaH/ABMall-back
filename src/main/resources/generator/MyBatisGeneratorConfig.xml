@@ -59,7 +59,7 @@
                 </table>
 
                 -->
-        		<table tableName="member">
+        		<table tableName="member" domainObjectName="Member">
                     <property name="useActualColumnNames" value="false" />
                     <generatedKey column="id" sqlStatement="Mysql" identity="true" />
                     <ignoreColumn column="id" />
