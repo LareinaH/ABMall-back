@@ -163,7 +163,7 @@ public class StatController {
         LocalDate today = LocalDate.now();
         LocalDate lastday = today.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth());
         ZoneId zone = ZoneId.systemDefault();
-        return Date.from(lastday.atStartOfDay(zone).toInstant());
+        return Date.from(LocalDateTime.of(lastday, LocalTime.MAX).atZone(zone).toInstant());
     }
 
     public Date getLastLastMonthBegin() {
@@ -177,7 +177,7 @@ public class StatController {
         LocalDate today = LocalDate.now();
         LocalDate lastday = today.minusMonths(2).with(TemporalAdjusters.lastDayOfMonth());
         ZoneId zone = ZoneId.systemDefault();
-        return Date.from(lastday.atStartOfDay(zone).toInstant());
+        return Date.from(LocalDateTime.of(lastday, LocalTime.MAX).atZone(zone).toInstant());
     }
 
     public Date getMonthBegin(int year, int month) {
@@ -190,5 +190,15 @@ public class StatController {
         LocalDate lastday = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
         ZoneId zone = ZoneId.systemDefault();
         return Date.from(lastday.atStartOfDay(zone).toInstant());
+    }
+
+    public static void main(String[] args) {
+        StatController statController = new StatController();
+        System.out.println(statController.getLastDayBegin());
+        System.out.println(statController.getLastDayEnd());
+        System.out.println(statController.getLastMonthBegin());
+        System.out.println(statController.getLastMonthEnd());
+        System.out.println(statController.getLastLastMonthBegin());
+        System.out.println(statController.getLastLastMonthEnd());
     }
 }
