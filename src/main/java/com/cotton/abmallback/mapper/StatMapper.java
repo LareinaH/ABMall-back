@@ -88,7 +88,7 @@ public interface StatMapper {
             " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')" +
             " and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
             " and pay_mode=#{payMode}")
-    Long getOrdersCountByTime(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd, @Param("payMode") String payMode);
+    Long getOrdersCountByTimeByPayMode(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd, @Param("payMode") String payMode);
 
     /**
      * 订单状态统计
@@ -135,7 +135,7 @@ public interface StatMapper {
             " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
             " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')" +
             " and pay_mode=#{payMode}")
-    BigDecimal getTotalSaleMoney(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd, @Param("payMode") String payMode);
+    BigDecimal getTotalSaleMoneyByPayMode(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd, @Param("payMode") String payMode);
 
     @Select("select DATE_FORMAT(gmt_create, '%Y-%m-%d') as histDay, sum(total_money) as totalMoney from orders" +
             " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +

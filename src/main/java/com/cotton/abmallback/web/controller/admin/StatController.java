@@ -150,10 +150,10 @@ public class StatController {
             monthResult.put("id", i);
             monthResult.put("month", String.format("%d-%02d", year, i));
             monthResult.put("totalSoldMoney", statMapper.getTotalSaleMoney(start, end));
-            monthResult.put("alipayTotalMoney", statMapper.getTotalSaleMoney(start, end, "alipay"));
-            monthResult.put("alipayTotalCount", statMapper.getOrdersCountByTime(start, end, "'alipay"));
-            monthResult.put("wechatTotalMoney", statMapper.getTotalSaleMoney(start, end, "wechat"));
-            monthResult.put("wechatTotalCount", statMapper.getOrdersCountByTime(start, end, "'wechat"));
+            monthResult.put("alipayTotalMoney", statMapper.getTotalSaleMoneyByPayMode(start, end, "alipay"));
+            monthResult.put("alipayTotalCount", statMapper.getOrdersCountByTimeByPayMode(start, end, "'alipay"));
+            monthResult.put("wechatTotalMoney", statMapper.getTotalSaleMoneyByPayMode(start, end, "wechat"));
+            monthResult.put("wechatTotalCount", statMapper.getOrdersCountByTimeByPayMode(start, end, "'wechat"));
             monthResult.put("orderCount", statMapper.getOrdersCountByTime(start, end));
             monthResult.put("totalRebateMoney", statMapper.getTotalRebateMoney(start, end));
             resultMap.add(monthResult);
