@@ -87,7 +87,7 @@ public interface StatMapper {
      * @return
      */
     @Select("select order_status as orderStatus, count(*) as sum from orders " +
-            "where is_deleted=0 and date(gmt_create) >= #{gmtStart} and date(gmt_create) <= #{gmtEnd}" +
+            "where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
             "group by order_status order by sum desc")
     List<Map<String, Long>> getOrderStatusStats(@Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd);
 
@@ -111,4 +111,15 @@ public interface StatMapper {
             "GROUP BY good_specification_id) as d")
     long countOrdersRank(@Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd);
 
+    @Select("select sum(total_money) from orders" +
+            " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
+            " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')")
+    BigDecimal getTotalSaleMoney(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd);
+
+    @Select("select DATE_FORMAT(gmt_create, '%Y-%m-%d'), sum(total_money) from orders" +
+            " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
+            " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')" +
+            " group by DATE_FORMAT(gmt_create, '%Y-%m-%d')" +
+            " order by gmt_create")
+    List<Map<String, BigDecimal>> getSalesMoneyTrend(@Param("gmtStart") String gmtStart, @Param("gmtEnd") String gmtEnd);
 }

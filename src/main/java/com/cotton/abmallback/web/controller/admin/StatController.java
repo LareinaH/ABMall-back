@@ -119,29 +119,75 @@ public class StatController {
         return RestResponse.getSuccesseResponse(listPageInfo);
     }
 
+    @RequestMapping(value = "/getSalesMoneyStat", method = {RequestMethod.GET})
+    public RestResponse<Map<String, Object>> getSalesMoneyStat() {
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("totalSalesMoney", statMapper.getTotalSaleMoney(new Date(0L), new Date()));
+        resultMap.put("lastMonthSalesMoney", statMapper.getTotalSaleMoney(getLastMonthBegin(), getLastMonthEnd()));
+        resultMap.put("lastlastMonthSalesMoney", statMapper.getTotalSaleMoney(getLastLastMonthBegin(), getLastLastMonthEnd()));
+        resultMap.put("yesterdaySalesMoney", statMapper.getTotalSaleMoney(getLastDayBegin(), getLastDayEnd()));
+        resultMap.put("totalOrdersCount", statMapper.getTotalOrders());
 
-    private Date getLastDayBegin() {
+        return RestResponse.getSuccesseResponse(resultMap);
+    }
+    @RequestMapping(value = "/getSalesMoneyTrend", method = {RequestMethod.GET})
+    public RestResponse<List<Map<String, BigDecimal>>> getSalesMoneyTrend(
+            @RequestParam(value = "gmtStart") String gmtStart,
+            @RequestParam(value = "gmtEnd") String gmtEnd
+    ) {
+        return RestResponse.getSuccesseResponse(statMapper.getSalesMoneyTrend(gmtStart, gmtEnd));
+    }
+
+
+
+    public Date getLastDayBegin() {
         //昨天零点
         ZoneId zone = ZoneId.systemDefault();
         return Date.from(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIN).atZone(zone).toInstant());
     }
 
-    private Date getLastDayEnd() {
+    public Date getLastDayEnd() {
         //昨天结束
         ZoneId zone = ZoneId.systemDefault();
         return Date.from(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MAX).atZone(zone).toInstant());
     }
 
-    private Date getLastMonthBegin() {
+    public Date getLastMonthBegin() {
         LocalDate today = LocalDate.now();
         LocalDate firstday = LocalDate.of(today.getYear(), today.getMonth().minus(1), 1);
         ZoneId zone = ZoneId.systemDefault();
         return Date.from(firstday.atStartOfDay(zone).toInstant());
     }
 
-    private Date getLastMonthEnd() {
+    public Date getLastMonthEnd() {
         LocalDate today = LocalDate.now();
         LocalDate lastday = today.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth());
+        ZoneId zone = ZoneId.systemDefault();
+        return Date.from(lastday.atStartOfDay(zone).toInstant());
+    }
+
+    public Date getLastLastMonthBegin() {
+        LocalDate today = LocalDate.now();
+        LocalDate firstday = LocalDate.of(today.getYear(), today.getMonth().minus(2), 1);
+        ZoneId zone = ZoneId.systemDefault();
+        return Date.from(firstday.atStartOfDay(zone).toInstant());
+    }
+
+    public Date getLastLastMonthEnd() {
+        LocalDate today = LocalDate.now();
+        LocalDate lastday = today.minusMonths(2).with(TemporalAdjusters.lastDayOfMonth());
+        ZoneId zone = ZoneId.systemDefault();
+        return Date.from(lastday.atStartOfDay(zone).toInstant());
+    }
+
+    public Date getMonthBegin(int year, int month) {
+        LocalDate firstday = LocalDate.of(year, month, 1);
+        ZoneId zone = ZoneId.systemDefault();
+        return Date.from(firstday.atStartOfDay(zone).toInstant());
+    }
+
+    public Date getMonthEnd(int year, int month) {
+        LocalDate lastday = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
         ZoneId zone = ZoneId.systemDefault();
         return Date.from(lastday.atStartOfDay(zone).toInstant());
     }
