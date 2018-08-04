@@ -138,7 +138,28 @@ public class StatController {
         return RestResponse.getSuccesseResponse(statMapper.getSalesMoneyTrend(gmtStart, gmtEnd));
     }
 
-
+    @RequestMapping(value = "/getYearStat", method = {RequestMethod.GET})
+    public RestResponse<List<Map<String, Object>>> getYearStat(
+            @RequestParam(value = "year") Integer year
+    ) {
+        List<Map<String, Object>> resultMap = new ArrayList<>();
+        for (int i=1; i<13; i++) {
+            Map<String, Object> monthResult = new TreeMap<>();
+            Date start = getMonthBegin(year, i);
+            Date end = getMonthEnd(year, i);
+            monthResult.put("id", i);
+            monthResult.put("month", String.format("%d-%02d", year, i));
+            monthResult.put("totalSoldMoney", statMapper.getTotalSaleMoney(start, end));
+            monthResult.put("alipayTotalMoney", statMapper.getTotalSaleMoney(start, end, "alipay"));
+            monthResult.put("alipayTotalCount", statMapper.getOrdersCountByTime(start, end, "'alipay"));
+            monthResult.put("wechatTotalMoney", statMapper.getTotalSaleMoney(start, end, "wechat"));
+            monthResult.put("wechatTotalCount", statMapper.getOrdersCountByTime(start, end, "'wechat"));
+            monthResult.put("orderCount", statMapper.getOrdersCountByTime(start, end));
+            monthResult.put("totalRebateMoney", statMapper.getTotalRebateMoney(start, end));
+            resultMap.add(monthResult);
+        }
+        return RestResponse.getSuccesseResponse(resultMap);
+    }
 
     public Date getLastDayBegin() {
         //昨天零点

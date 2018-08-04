@@ -77,8 +77,18 @@ public interface StatMapper {
     /**
      * 一段时间的订单数
      */
-    @Select("select count(*) from orders where is_deleted=0 and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL') and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}")
+    @Select("select count(*) from orders" +
+            " where is_deleted=0" +
+            " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')" +
+            " and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}")
     Long getOrdersCountByTime(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd);
+
+    @Select("select count(*) from orders" +
+            " where is_deleted=0" +
+            " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')" +
+            " and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
+            " and pay_mode=#{payMode}")
+    Long getOrdersCountByTime(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd, @Param("payMode") String payMode);
 
     /**
      * 订单状态统计
@@ -115,6 +125,17 @@ public interface StatMapper {
             " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
             " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')")
     BigDecimal getTotalSaleMoney(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd);
+
+    @Select("select COALESCE(sum(rebate_money), 0) from orders" +
+            " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
+            " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')")
+    BigDecimal getTotalRebateMoney(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd);
+
+    @Select("select COALESCE(sum(total_money), 0) from orders" +
+            " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
+            " and order_status not in ('WAIT_BUYER_PAY','CANCEL','SYSTEM_CANCEL')" +
+            " and pay_mode=#{payMode}")
+    BigDecimal getTotalSaleMoney(@Param("gmtStart") Date gmtStart, @Param("gmtEnd") Date gmtEnd, @Param("payMode") String payMode);
 
     @Select("select DATE_FORMAT(gmt_create, '%Y-%m-%d') as histDay, sum(total_money) as totalMoney from orders" +
             " where is_deleted=0 and gmt_create >= #{gmtStart} and gmt_create <= #{gmtEnd}" +
