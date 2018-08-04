@@ -210,7 +210,7 @@ public class StatController {
     public Date getMonthEnd(int year, int month) {
         LocalDate lastday = LocalDate.of(year, month, 1).with(TemporalAdjusters.lastDayOfMonth());
         ZoneId zone = ZoneId.systemDefault();
-        return Date.from(lastday.atStartOfDay(zone).toInstant());
+        return Date.from(LocalDateTime.of(lastday, LocalTime.MAX).atZone(zone).toInstant());
     }
 
     public static void main(String[] args) {
@@ -221,5 +221,7 @@ public class StatController {
         System.out.println(statController.getLastMonthEnd());
         System.out.println(statController.getLastLastMonthBegin());
         System.out.println(statController.getLastLastMonthEnd());
+        System.out.println(statController.getMonthBegin(2018, 7));
+        System.out.println(statController.getMonthEnd(2018, 7));
     }
 }
