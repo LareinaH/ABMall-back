@@ -15,6 +15,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -158,6 +159,19 @@ public class StatController {
             monthResult.put("totalRebateMoney", statMapper.getTotalRebateMoney(start, end));
             resultMap.add(monthResult);
         }
+
+        Map<String, Object> sumResult = new TreeMap<>();
+        sumResult.put("id", 13);
+        sumResult.put("month", "合计");
+        sumResult.put("totalSoldMoney", resultMap.stream().map(x -> (BigDecimal)x.get("totalSoldMoney")).reduce(BigDecimal.ZERO, BigDecimal::add));
+        sumResult.put("alipayTotalMoney", resultMap.stream().map(x -> (BigDecimal)x.get("alipayTotalMoney")).reduce(BigDecimal.ZERO, BigDecimal::add));
+        sumResult.put("alipayTotalCount", resultMap.stream().mapToLong(x -> (Long)x.get("alipayTotalCount")).sum());
+        sumResult.put("wechatTotalMoney", resultMap.stream().map(x -> (BigDecimal)x.get("wechatTotalMoney")).reduce(BigDecimal.ZERO, BigDecimal::add));
+        sumResult.put("wechatTotalCount", resultMap.stream().mapToLong(x -> (Long)x.get("wechatTotalCount")).sum());
+        sumResult.put("orderCount", resultMap.stream().mapToLong(x -> (Long)x.get("orderCount")).sum());
+        sumResult.put("totalRebateMoney", resultMap.stream().map(x -> (BigDecimal)x.get("totalRebateMoney")).reduce(BigDecimal.ZERO, BigDecimal::add));
+        resultMap.add(sumResult);
+
         return RestResponse.getSuccesseResponse(resultMap);
     }
 
