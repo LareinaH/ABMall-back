@@ -1,9 +1,8 @@
 package com.cotton.abmallback.web.controller.front;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.cotton.abmallback.enumeration.DeviceType;
 import com.cotton.abmallback.enumeration.MemberLevelEnum;
+import com.cotton.abmallback.manager.PromotionManager;
 import com.cotton.abmallback.manager.SmsManager;
 import com.cotton.abmallback.model.Member;
 import com.cotton.abmallback.model.vo.front.LoginMemberVO;
@@ -43,11 +42,14 @@ public class LoginController extends ABMallFrontBaseController {
 
     private WxMpService wxService;
 
+    private PromotionManager promotionManager;
+
     @Autowired
-    public LoginController(MemberService memberService, SmsManager smsManager, WxMpService wxService) {
+    public LoginController(MemberService memberService, SmsManager smsManager, WxMpService wxService, PromotionManager promotionManager) {
         this.memberService = memberService;
         this.smsManager = smsManager;
         this.wxService = wxService;
+        this.promotionManager = promotionManager;
     }
 
     @ResponseBody
@@ -56,6 +58,7 @@ public class LoginController extends ABMallFrontBaseController {
                                              @RequestParam(defaultValue = "false") boolean bWechat,
                                       @RequestParam(required = false)  String phoneNum,
                                       @RequestParam(required = false)  String code,
+                                      @RequestParam(required = false)  String refferId,
                                       @RequestParam(required = false)  String unionId,
                                       @RequestParam(required = false)  String openId,
                                       @RequestParam(required = false)  String headImageUrl,
@@ -67,7 +70,7 @@ public class LoginController extends ABMallFrontBaseController {
                 return RestResponse.getFailedResponse(1, "code不能为空");
             }
 
-            return loginWeChatMp(code);
+            return loginWeChatMp(code,refferId);
         }
 
         if(!DeviceType.IOS.name().equalsIgnoreCase(deviceType) &&
@@ -191,7 +194,7 @@ public class LoginController extends ABMallFrontBaseController {
      * 微信公众号登录
      * @return RestResponse
      */
-    private RestResponse<LoginMemberVO> loginWeChatMp(String code){
+    private RestResponse<LoginMemberVO> loginWeChatMp(String code,String refferId){
 
         logger.info("用户登录，微信公众号登录。");
 
@@ -252,10 +255,28 @@ public class LoginController extends ABMallFrontBaseController {
             newMember.setLevel(MemberLevelEnum.WHITE.name());
             newMember.setPhoto(wxMpUser.getHeadImgUrl());
             newMember.setTokenWechatMp(token);
+
+            Member referMember = null;
             //默认挂载到云鼎下
-            newMember.setReferrerId(160L);
+
+            if(StringUtils.isNotBlank(refferId)){
+                long lReferId = Long.valueOf(refferId);
+                newMember.setReferrerId(lReferId);
+                referMember = memberService.getById(lReferId);
+            }
+
+            if(referMember == null){
+                referMember = memberService.getById(160L);
+                newMember.setReferrerId(160L);
+            }
+
 
             if(memberService.insert(newMember)){
+
+                referMember.setReferTotalCount( referMember.getReferTotalCount() + 1);
+                memberService.update(referMember);
+
+                promotionManager.memberPromotion(referMember,0L);
 
                 return RestResponse.getSuccesseResponse(translateLoginVO(newMember,token));
             }
