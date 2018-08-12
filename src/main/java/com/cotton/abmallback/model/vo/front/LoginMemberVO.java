@@ -34,6 +34,12 @@ public class LoginMemberVO {
      */
     private String level;
 
+
+    /**
+     * 引荐人Id
+     */
+    private Long referrerId;
+
     /**
      * 是否绑定手机
      */
@@ -112,5 +118,13 @@ public class LoginMemberVO {
 
     public void setBindPhone(boolean bindPhone) {
         isBindPhone = bindPhone;
+    }
+
+    public Long getReferrerId() {
+        return referrerId;
+    }
+
+    public void setReferrerId(Long referrerId) {
+        this.referrerId = referrerId;
     }
 }

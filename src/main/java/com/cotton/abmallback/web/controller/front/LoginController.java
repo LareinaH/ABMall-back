@@ -172,7 +172,7 @@ public class LoginController extends ABMallFrontBaseController {
             newMember.setIsDeleted(false);
             newMember.setLevel(MemberLevelEnum.WHITE.name());
             newMember.setPhoto(headImageUrl);
-            newMember.setReferrerId(160L);
+            //newMember.setReferrerId(160L);
 
             if(deviceType.equalsIgnoreCase(DeviceType.IOS.name())){
                 newMember.setTokenIos(token);
@@ -257,7 +257,6 @@ public class LoginController extends ABMallFrontBaseController {
             newMember.setTokenWechatMp(token);
 
             Member referMember = null;
-            //默认挂载到云鼎下
 
             if(StringUtils.isNotBlank(refferId)){
                 long lReferId = Long.valueOf(refferId);
@@ -265,10 +264,11 @@ public class LoginController extends ABMallFrontBaseController {
                 referMember = memberService.getById(lReferId);
             }
 
-            if(referMember == null){
+            //
+/*            if(referMember == null){
                 referMember = memberService.getById(160L);
                 newMember.setReferrerId(160L);
-            }
+            }*/
 
 
             if(memberService.insert(newMember)){
@@ -344,6 +344,7 @@ public class LoginController extends ABMallFrontBaseController {
         loginMemberVO.setBindPhone(StringUtils.isNotBlank(member.getPhoneNum()));
         loginMemberVO.setTicket(token);
         loginMemberVO.setPhoneNum(member.getPhoneNum());
+        loginMemberVO.setReferrerId(member.getReferrerId());
 
         return loginMemberVO;
     }
