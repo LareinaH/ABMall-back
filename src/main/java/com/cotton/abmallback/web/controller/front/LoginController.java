@@ -273,10 +273,13 @@ public class LoginController extends ABMallFrontBaseController {
 
             if(memberService.insert(newMember)){
 
-                referMember.setReferTotalCount( referMember.getReferTotalCount() + 1);
-                memberService.update(referMember);
+                if(referMember != null) {
 
-                promotionManager.memberPromotion(referMember,0L);
+                    referMember.setReferTotalCount(referMember.getReferTotalCount() + 1);
+                    memberService.update(referMember);
+
+                    promotionManager.memberPromotion(referMember, 0L);
+                }
 
                 return RestResponse.getSuccesseResponse(translateLoginVO(newMember,token));
             }

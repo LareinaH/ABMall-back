@@ -98,7 +98,7 @@ public class SubscribeHandler extends AbstractHandler {
         this.logger.info("eventKey: " + eventKey);
 
         //默认设置为云鼎的id
-        long referrerId = 160L;
+        Long referrerId  = null;
 
         if (!StringUtils.isBlank(eventKey)) {
 
@@ -111,12 +111,15 @@ public class SubscribeHandler extends AbstractHandler {
             }
 
         }
-        member.setReferrerId(referrerId);
+        if(referrerId != null) {
+            member.setReferrerId(referrerId);
+        }
     }
 
     private void countReferUser(Long referMemberId) {
 
         Member referMember = memberService.getById(referMemberId);
+
         if (null != referMember) {
             referMember.setReferTotalCount(referMember.getReferTotalCount() + 1);
 

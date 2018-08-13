@@ -97,7 +97,7 @@ public class ScanHandler extends AbstractHandler {
         this.logger.info("eventKey: " + eventKey);
 
         //默认设置为云鼎的id
-        long referrerId = 160L;
+        Long referrerId = null;
 
         if (!StringUtils.isBlank(eventKey)) {
 
@@ -115,11 +115,13 @@ public class ScanHandler extends AbstractHandler {
     private void countReferUser(Long referMemberId) {
 
         Member referMember = memberService.getById(referMemberId);
-        referMember.setReferTotalCount( referMember.getReferTotalCount() + 1);
 
-        promotionManager.memberPromotion(referMember,0L);
+        if(referMember != null) {
+            referMember.setReferTotalCount(referMember.getReferTotalCount() + 1);
 
-        memberService.update(referMember);
+            promotionManager.memberPromotion(referMember, 0L);
 
+            memberService.update(referMember);
+        }
     }
 }
