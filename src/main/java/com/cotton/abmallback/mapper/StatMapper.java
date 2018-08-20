@@ -60,8 +60,8 @@ public interface StatMapper {
      * @param memberId
      * @return
      */
-    @Select("select level,count(*)  from member WHERE referrer_id = #{id} and is_deleted=0 GROUP BY level")
-    List<Map<String,Long>> getMemberTeamCountGroupByLevel(@Param("id") Long memberId);
+    @Select("select level,count(*) as count  from member WHERE referrer_id = #{id} and is_deleted=0 GROUP BY level")
+    List<Map<String,Object>> getMemberTeamCountGroupByLevel(@Param("id") Long memberId);
 
 
     /* ***************************订单相关*********************************** */

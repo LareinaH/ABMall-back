@@ -183,25 +183,25 @@ public class MemberManagerController extends BaseController {
                 memberVO.setOrdersCount(count);
 
                 //获取团队信息
-                List<Map<String,Long>> teamInfo = statMapper.getMemberTeamCountGroupByLevel(member.getId());
+                List<Map<String,Object>> teamInfoList = statMapper.getMemberTeamCountGroupByLevel(member.getId());
 
-                /*
-                if(null != teamInfo.get(MemberLevelEnum.WHITE.name())){
-                    memberVO.setTeamWhiteCount(teamInfo.get(MemberLevelEnum.WHITE.name()));
+                if(teamInfoList.size() > 0) {
+
+                    for(Map<String,Object> teamInfo : teamInfoList) {
+
+                        if (null != teamInfo.get("level") &&teamInfo.get("level").equals(MemberLevelEnum.WHITE.name())) {
+                            memberVO.setTeamWhiteCount((long)teamInfo.get("count"));
+                        }else if (null != teamInfo.get("level") &&teamInfo.get("level").equals(MemberLevelEnum.AGENT.name())) {
+                            memberVO.setTeamAgentCount((long)teamInfo.get("count"));
+                        }else if (null != teamInfo.get("level") &&teamInfo.get("level").equals(MemberLevelEnum.V1.name())) {
+                            memberVO.setTeamV1Count((long)teamInfo.get("count"));
+                        }else if (null != teamInfo.get("level") &&teamInfo.get("level").equals(MemberLevelEnum.V2.name())) {
+                            memberVO.setTeamV2Count((long)teamInfo.get("count"));
+                        }else if (null != teamInfo.get("level") &&teamInfo.get("level").equals(MemberLevelEnum.V3.name())) {
+                            memberVO.setTeamV3Count((long)teamInfo.get("count"));
+                        }
+                    }
                 }
-                if(null != teamInfo.get(MemberLevelEnum.AGENT.name())){
-                    memberVO.setTeamAgentCount(teamInfo.get(MemberLevelEnum.AGENT.name()));
-                }
-                if(null != teamInfo.get(MemberLevelEnum.V1.name())){
-                    memberVO.setTeamV1Count(teamInfo.get(MemberLevelEnum.V1.name()));
-                }
-                if(null != teamInfo.get(MemberLevelEnum.V2.name())){
-                    memberVO.setTeamV2Count(teamInfo.get(MemberLevelEnum.V2.name()));
-                }
-                if(null != teamInfo.get(MemberLevelEnum.V3.name())){
-                    memberVO.setTeamV3Count(teamInfo.get(MemberLevelEnum.V3.name()));
-                }
-                */
 
                 memberVOS.add(memberVO);
             }
