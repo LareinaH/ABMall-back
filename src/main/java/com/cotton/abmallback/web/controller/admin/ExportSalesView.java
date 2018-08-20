@@ -18,9 +18,13 @@ public class ExportSalesView extends ExcelView {
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
         header.createCell(cellIndex).setCellValue("销售额");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
-        header.createCell(cellIndex).setCellValue("支付宝金额/单数");
+        header.createCell(cellIndex).setCellValue("支付宝金额");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
-        header.createCell(cellIndex).setCellValue("微信金额/单数");
+        header.createCell(cellIndex).setCellValue("支付宝单数");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("微信金额");
+        header.getCell(cellIndex++).setCellStyle(super.cellStyle);
+        header.createCell(cellIndex).setCellValue("微信单数");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
         header.createCell(cellIndex).setCellValue("订单量");
         header.getCell(cellIndex++).setCellStyle(super.cellStyle);
