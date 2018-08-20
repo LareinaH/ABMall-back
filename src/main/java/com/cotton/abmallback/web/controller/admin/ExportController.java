@@ -4,6 +4,8 @@ import com.cotton.abmallback.model.OrderGoods;
 import com.cotton.abmallback.model.Orders;
 import com.cotton.abmallback.service.OrderGoodsService;
 import com.cotton.abmallback.service.OrdersService;
+import com.cotton.base.common.RestResponse;
+import com.cotton.base.service.ServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,9 @@ public class ExportController {
 
     @Autowired
     OrderGoodsService orderGoodsService;
+
+    @Autowired
+    StatController statController;
 
     @RequestMapping(value = "/exportOrder", method = RequestMethod.GET)
     public ModelAndView exportOrder(
@@ -79,5 +84,23 @@ public class ExportController {
         map.put("sheetName", "订单列表");
 
         return new ModelAndView(new ExportOrderView(), map);
+    }
+
+    @RequestMapping(value = "/exportSales", method = RequestMethod.GET)
+    public ModelAndView exportSales(
+            @RequestParam(value = "year") Integer year
+    ) throws Exception {
+
+        RestResponse<List<Map<String, Object>>> response = statController.getYearStat(year);
+        if (!response.getSuccessed()) {
+            throw new Exception("获取导出数据异常");
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("detail", response.getData());
+        map.put("name", String.format("%d年销售额统计-%d", year, System.currentTimeMillis()));
+        map.put("sheetName", "销售额统计");
+
+        return new ModelAndView(new ExportSalesView(), map);
     }
 }
