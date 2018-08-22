@@ -123,7 +123,7 @@ public class ExportController {
         return new ModelAndView(new ExportSalesView(), map);
     }
 
-    @RequestMapping(value = "/exportUsers", method = {RequestMethod.POST})
+    @RequestMapping(value = "/exportUsers", method = {RequestMethod.GET})
     public ModelAndView exportUsers(
             int pageNum,
             int pageSize,
