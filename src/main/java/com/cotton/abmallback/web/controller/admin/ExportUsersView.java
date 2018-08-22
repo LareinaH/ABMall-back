@@ -2,6 +2,7 @@ package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.enumeration.MemberLevelEnum;
 import com.cotton.abmallback.model.vo.admin.MemberVO;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -53,7 +54,7 @@ public class ExportUsersView extends ExcelView {
             int ci = 0;
             Row row = sheet.createRow(rowIndex.getAndIncrement());
             row.createCell(ci++).setCellValue(x.getName());
-            row.createCell(ci++).setCellValue(x.getGmtCreate());
+            row.createCell(ci++).setCellValue(DateFormatUtils.format(x.getGmtCreate(), "yyyy-MM-dd hh:mm:ss"));
             row.createCell(ci++).setCellValue(x.getReferrerName());
             row.createCell(ci++).setCellValue(MemberLevelEnum.valueOf(x.getLevel()).getDisplayName());
             row.createCell(ci++).setCellValue(x.getPhoneNum());
@@ -67,9 +68,6 @@ public class ExportUsersView extends ExcelView {
             row.createCell(ci++).setCellValue(x.getMoneyTotalSpend().toPlainString());
             row.createCell(ci++).setCellValue(x.getOrdersCount());
             row.createCell(ci++).setCellValue(x.getMoneyTotalEarn().toPlainString());
-            row.createCell(ci++).setCellValue(x.getName());
-            row.createCell(ci++).setCellValue(x.getName());
-            row.createCell(ci++).setCellValue(x.getName());
         });
     }
 
