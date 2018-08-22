@@ -57,7 +57,7 @@ public class ExportUsersView extends ExcelView {
             row.createCell(ci++).setCellValue(x.getReferrerName());
             row.createCell(ci++).setCellValue(MemberLevelEnum.valueOf(x.getLevel()).getDisplayName());
             row.createCell(ci++).setCellValue(x.getPhoneNum());
-            row.createCell(ci++).setCellValue(x.getTeamV3Count();
+            row.createCell(ci++).setCellValue(x.getTeamV3Count());
             row.createCell(ci++).setCellValue(x.getTeamV2Count());
             row.createCell(ci++).setCellValue(x.getTeamV1Count());
             row.createCell(ci++).setCellValue(x.getTeamAgentCount());
