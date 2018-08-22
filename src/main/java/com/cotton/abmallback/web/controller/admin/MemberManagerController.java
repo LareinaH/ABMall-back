@@ -11,6 +11,8 @@ import com.cotton.abmallback.service.OrdersService;
 import com.cotton.base.common.RestResponse;
 import com.cotton.base.controller.BaseController;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +119,7 @@ public class MemberManagerController extends BaseController {
     @RequestMapping(value = "/queryPageList", method = {RequestMethod.POST})
     public RestResponse<PageInfo<MemberVO>> queryPageList(@RequestParam(defaultValue = "1") int pageNum,
                                                         @RequestParam(defaultValue = "4") int pageSize,
-                                                        @RequestBody(required = false) Map<String, Object> conditions) {
+                                                        @RequestBody(required = false) Map<String, Object> conditions) throws ParseException {
 
         Example example = new Example(Member.class);
         example.setOrderByClause("gmt_create desc");
@@ -125,6 +128,15 @@ public class MemberManagerController extends BaseController {
         criteria.andEqualTo("isDeleted", false);
 
         if (null != conditions) {
+            String gmtStart = (String)conditions.get("gmtStart");
+            String gmtEnd = (String)conditions.get("gmtEnd");
+            if (StringUtils.isNotBlank(gmtStart)) {
+                criteria.andGreaterThanOrEqualTo("gmtCreate", DateUtils.parseDate(gmtStart, "yyyy-MM-dd"));
+            }
+
+            if (StringUtils.isNotBlank(gmtEnd)) {
+                criteria.andLessThanOrEqualTo("gmtCreate", DateUtils.parseDate(gmtEnd, "yyyy-MM-dd"));
+            }
 
             if(null != conditions.get("name")){
                 criteria.andLike("name","%" + conditions.get("name").toString()+ "%");
