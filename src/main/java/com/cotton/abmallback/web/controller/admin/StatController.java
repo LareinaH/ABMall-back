@@ -1,13 +1,20 @@
 package com.cotton.abmallback.web.controller.admin;
 
 import com.cotton.abmallback.mapper.StatMapper;
+import com.cotton.abmallback.model.excel.ShipInOut;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +22,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -227,15 +235,140 @@ public class StatController {
         return Date.from(LocalDateTime.of(lastday, LocalTime.MAX).atZone(zone).toInstant());
     }
 
-    public static void main(String[] args) {
+    public ShipInOut fromRowToShipInOut(Row row) {
+        ShipInOut shipInOut = new ShipInOut();
+        shipInOut.setId(row.getCell(0).getStringCellValue());
+        shipInOut.setShipNameCn(row.getCell(1).getStringCellValue());
+        shipInOut.setShipIdentity(row.getCell(2).getStringCellValue());
+        shipInOut.setTotalTon(row.getCell(3).getNumericCellValue());
+        shipInOut.setWeightTon(row.getCell(4).getNumericCellValue());
+        shipInOut.setPower(row.getCell(5).getNumericCellValue());
+        shipInOut.setShipType(row.getCell(6).getStringCellValue());
+        shipInOut.setShipBorn(row.getCell(7).getStringCellValue());
+        shipInOut.setShipLength(row.getCell(8).getNumericCellValue());
+        shipInOut.setShipWidth(row.getCell(9).getNumericCellValue());
+        shipInOut.setInOutType(row.getCell(10).getStringCellValue());
+        shipInOut.setShipOrg(row.getCell(11).getStringCellValue());
+        shipInOut.setApplyDateTime(row.getCell(12).getDateCellValue());
+//        shipInOut.setPreInOutDateTime(row.getCell(13).getDateCellValue());
+        shipInOut.setPortName(row.getCell(14).getStringCellValue());
+        shipInOut.setParkName(row.getCell(15).getStringCellValue());
+        shipInOut.setUpDownPort(row.getCell(16) == null ? "" : row.getCell(16).getStringCellValue());
+        shipInOut.setRegularCert(row.getCell(17).getStringCellValue());
+        shipInOut.setShipCount(row.getCell(18).getNumericCellValue());
+        shipInOut.setRealWeightTon(row.getCell(19).getNumericCellValue());
+        shipInOut.setLoadingTon(row.getCell(20).getNumericCellValue());
+        shipInOut.setRealPassengerCount(row.getCell(21).getNumericCellValue());
+        shipInOut.setUpDownPassengerCount(row.getCell(22).getNumericCellValue());
+        shipInOut.setGoodsType(row.getCell(23) == null ? "" : row.getCell(23).getStringCellValue());
+        return shipInOut;
+    }
+
+    public void readExcel(List<ShipInOut> shipInOutList, String fileName) throws IOException, InvalidFormatException {
+        InputStream is = new ClassPathResource(fileName).getInputStream();
+        Workbook wb = null;
+        try {
+            wb = WorkbookFactory.create(is);
+
+            Sheet sheet = wb.getSheetAt(0);
+
+            for (Row row : sheet) {
+                ShipInOut shipInOut = fromRowToShipInOut(row);
+                shipInOutList.add(shipInOut);
+            }
+        } finally {
+            if (wb != null) {
+                wb.close();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException, InvalidFormatException {
         StatController statController = new StatController();
-        System.out.println(statController.getLastDayBegin());
-        System.out.println(statController.getLastDayEnd());
-        System.out.println(statController.getLastMonthBegin());
-        System.out.println(statController.getLastMonthEnd());
-        System.out.println(statController.getLastLastMonthBegin());
-        System.out.println(statController.getLastLastMonthEnd());
-        System.out.println(statController.getMonthBegin(2018, 7));
-        System.out.println(statController.getMonthEnd(2018, 7));
+        List<ShipInOut> shipInOutList = new ArrayList<>(1500000);
+        List<String> fileList = Arrays.asList(
+                "201810.xlsx"
+        );
+        for (String s : fileList) {
+            statController.readExcel(shipInOutList, s);
+        }
+
+        Map<String, Map<Double, Map<String, List<ShipInOut>>>> map =
+                shipInOutList.stream().collect(Collectors.groupingBy(
+                        ShipInOut::getShipNameCn,
+                        Collectors.groupingBy(
+                                ShipInOut::getLoadingTon,
+                                Collectors.groupingBy(
+                                        ShipInOut::getGoodsType
+                                )
+                        )
+                ));
+
+        List<String> writerList = new ArrayList<>(1500000);
+        map.entrySet().forEach(
+                shipNameCN -> {
+                    shipNameCN.getValue().entrySet().forEach(
+                            loadingTon -> {
+                                loadingTon.getValue().entrySet().forEach(
+                                        goodsType -> {
+                                            List<ShipInOut> shipInOuts = goodsType.getValue().stream().sorted(Comparator.comparing(ShipInOut::getApplyDateTime)).collect(Collectors.toList());
+
+                                            int i = 0;
+                                            while (i < shipInOuts.size()) {
+                                                ShipInOut thisTime = shipInOuts.get(i);
+                                                if ("进港".equals(thisTime.getInOutType())) {
+                                                    writerList.add(thisTime.toString());
+                                                    i++;
+                                                } else if ("出港".equals(thisTime.getInOutType())) {
+                                                    if (i + 1 >= shipInOuts.size()) {
+                                                        // 已经是最后一个了
+                                                        writerList.add(thisTime.toString());
+                                                        i++;
+                                                    } else {
+                                                        // 判断下一个是否是进港,并且关联
+                                                        ShipInOut next = shipInOuts.get(i + 1);
+                                                        if ("进港".equals(next.getInOutType())) {
+                                                            if (thisTime.getUpDownPort().equals(next.getShipOrg())) {
+                                                                // 只留出港数据
+                                                                writerList.add(thisTime.toString());
+                                                                i += 2;
+                                                                System.out.println(
+                                                                        String.format(
+                                                                                "drop %s for same record %s",
+                                                                                next.getId(), thisTime.getId()
+                                                                        )
+                                                                );
+                                                            } else {
+                                                                writerList.add(shipInOuts.get(0).toString());
+                                                                i++;
+                                                            }
+                                                        } else {
+                                                            // 下一个是出港,跟本次不关联
+                                                            writerList.add(shipInOuts.get(0).toString());
+                                                            i++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                );
+                            }
+                    );
+                }
+        );
+
+        OutputStreamWriter out = null;
+        try {
+            out = new OutputStreamWriter(new FileOutputStream("result.csv"),"gbk");
+            for (String s : writerList) {
+                out.write(s + "\n");
+            }
+
+            out.flush();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
     }
 }
