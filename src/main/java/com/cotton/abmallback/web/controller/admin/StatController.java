@@ -237,42 +237,49 @@ public class StatController {
 
     public ShipInOut fromRowToShipInOut(Row row) {
         ShipInOut shipInOut = new ShipInOut();
-        shipInOut.setId(row.getCell(0).getStringCellValue());
-        shipInOut.setShipNameCn(row.getCell(1).getStringCellValue());
-        shipInOut.setShipIdentity(row.getCell(2).getStringCellValue());
-        shipInOut.setTotalTon(row.getCell(3).getNumericCellValue());
-        shipInOut.setWeightTon(row.getCell(4).getNumericCellValue());
-        shipInOut.setPower(row.getCell(5).getNumericCellValue());
-        shipInOut.setShipType(row.getCell(6).getStringCellValue());
-        shipInOut.setShipBorn(row.getCell(7).getStringCellValue());
-        shipInOut.setShipLength(row.getCell(8).getNumericCellValue());
-        shipInOut.setShipWidth(row.getCell(9).getNumericCellValue());
-        shipInOut.setInOutType(row.getCell(10).getStringCellValue());
-        shipInOut.setShipOrg(row.getCell(11).getStringCellValue());
-        shipInOut.setApplyDateTime(row.getCell(12).getDateCellValue());
+//        shipInOut.setId(row.getCell(0).getStringCellValue());
+        shipInOut.setShipNameCn(row.getCell(0).getStringCellValue());
+//        shipInOut.setShipIdentity(row.getCell(1).getStringCellValue());
+//        shipInOut.setTotalTon(row.getCell(3).getNumericCellValue());
+//        shipInOut.setWeightTon(row.getCell(4).getNumericCellValue());
+//        shipInOut.setPower(row.getCell(5).getNumericCellValue());
+        shipInOut.setShipType(row.getCell(1).getStringCellValue());
+        shipInOut.setShipBorn(row.getCell(2).getStringCellValue());
+//        shipInOut.setShipLength(row.getCell(8).getNumericCellValue());
+//        shipInOut.setShipWidth(row.getCell(9).getNumericCellValue());
+        shipInOut.setInOutType(row.getCell(3).getStringCellValue());
+        shipInOut.setShipOrg(row.getCell(4).getStringCellValue());
+        shipInOut.setApplyDateTime(row.getCell(5).getDateCellValue());
 //        shipInOut.setPreInOutDateTime(row.getCell(13).getDateCellValue());
-        shipInOut.setPortName(row.getCell(14).getStringCellValue());
-        shipInOut.setParkName(row.getCell(15).getStringCellValue());
-        shipInOut.setUpDownPort(row.getCell(16) == null ? "" : row.getCell(16).getStringCellValue());
-        shipInOut.setRegularCert(row.getCell(17).getStringCellValue());
-        shipInOut.setShipCount(row.getCell(18).getNumericCellValue());
-        shipInOut.setRealWeightTon(row.getCell(19).getNumericCellValue());
-        shipInOut.setLoadingTon(row.getCell(20).getNumericCellValue());
-        shipInOut.setRealPassengerCount(row.getCell(21).getNumericCellValue());
-        shipInOut.setUpDownPassengerCount(row.getCell(22).getNumericCellValue());
-        shipInOut.setGoodsType(row.getCell(23) == null ? "" : row.getCell(23).getStringCellValue());
+        shipInOut.setPortName(row.getCell(6).getStringCellValue());
+        shipInOut.setParkName(row.getCell(7).getStringCellValue());
+        shipInOut.setUpDownPort(row.getCell(8) == null ? "" : row.getCell(8).getStringCellValue());
+//        shipInOut.setRegularCert(row.getCell(17).getStringCellValue());
+//        shipInOut.setShipCount(row.getCell(18).getNumericCellValue());
+        shipInOut.setRealWeightTon(row.getCell(9).getNumericCellValue());
+        shipInOut.setLoadingTon(row.getCell(10).getNumericCellValue());
+        shipInOut.setRealPassengerCount(row.getCell(11).getNumericCellValue());
+        shipInOut.setUpDownPassengerCount(row.getCell(12).getNumericCellValue());
+        shipInOut.setGoodsType(row.getCell(13) == null ? "" : row.getCell(13).getStringCellValue());
         return shipInOut;
     }
 
     public void readExcel(List<ShipInOut> shipInOutList, String fileName) throws IOException, InvalidFormatException {
         InputStream is = new ClassPathResource(fileName).getInputStream();
         Workbook wb = null;
+        int i = 0;
         try {
             wb = WorkbookFactory.create(is);
 
             Sheet sheet = wb.getSheetAt(0);
 
             for (Row row : sheet) {
+                if (i == 0) {
+                    i++;
+                    continue;
+                }
+                System.out.println("read line " + i);
+                i++;
                 ShipInOut shipInOut = fromRowToShipInOut(row);
                 shipInOutList.add(shipInOut);
             }
@@ -287,9 +294,24 @@ public class StatController {
         StatController statController = new StatController();
         List<ShipInOut> shipInOutList = new ArrayList<>(1500000);
         List<String> fileList = Arrays.asList(
-                "201810.xlsx"
+                "20180817 下一港浙江省地方海事局2017年7月至12月 进出港报告数据.xlsx",
+                "20180817 下一港浙江省地方海事局2018年1月至8月16日进出港报告数据.xlsx",
+                "2017.7.xlsx",
+                "2017.8.xlsx",
+                "2017.9.xlsx",
+                "2017.10.xlsx",
+                "2017.11.xlsx",
+                "2017.12.xlsx",
+                "2018.1.xlsx",
+                "2018.2.xlsx",
+                "2018.3.xlsx",
+                "2018.4.xlsx",
+                "2018.5.xlsx",
+                "2018.6.xlsx",
+                "2018.7.xlsx"
         );
         for (String s : fileList) {
+            System.out.println("add file " + s);
             statController.readExcel(shipInOutList, s);
         }
 
@@ -332,11 +354,17 @@ public class StatController {
                                                                 // 只留出港数据
                                                                 writerList.add(thisTime.toString());
                                                                 i += 2;
+//                                                                System.out.println(
+//                                                                        String.format(
+//                                                                                "drop %s for same record %s",
+//                                                                                next.getId(), thisTime.getId()
+//                                                                        )
+//                                                                );
                                                                 System.out.println(
-                                                                        String.format(
-                                                                                "drop %s for same record %s",
-                                                                                next.getId(), thisTime.getId()
-                                                                        )
+                                                                    String.format(
+                                                                            "drop %s for same record %s",
+                                                                            next.getShipNameCn(), thisTime.getShipNameCn()
+                                                                    )
                                                                 );
                                                             } else {
                                                                 writerList.add(shipInOuts.get(0).toString());
