@@ -125,7 +125,7 @@ public class WechatPayController {
         BigDecimal var = new BigDecimal("100");
         request.setTotalFee(orders.getTotalMoney().multiply(var).intValue());
         request.setSpbillCreateIp(ip);
-        request.setNotifyUrl("http://47.104.174.30:80/api/v1/wechat/pay/parseOrderNotifyResult");
+        request.setNotifyUrl("http://admin.yund.live:80/api/v1/wechat/pay/parseOrderNotifyResult");
         request.setTradeType(tradeType);
 
         if("APP".equalsIgnoreCase(tradeType)) {
