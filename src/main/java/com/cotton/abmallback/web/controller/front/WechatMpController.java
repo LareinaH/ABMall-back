@@ -173,14 +173,31 @@ public class WechatMpController extends BaseController {
     public RestResponse<Void> createMenu(){
 
         try {
+
+
             //微信商城
             WxMenu wxMenu = new WxMenu();
             List<WxMenuButton> wxMenuButtonList = new ArrayList<>();
             WxMenuButton wxMenuButton = new WxMenuButton();
             wxMenuButton.setType("view");
-            wxMenuButton.setName("云鼎官网");
-            wxMenuButton.setUrl("http://yund.live/");
+            wxMenuButton.setName("走进云鼎");
             wxMenuButtonList.add(wxMenuButton);
+            List<WxMenuButton> subButton = new ArrayList<>();
+
+            WxMenuButton sub1 = new WxMenuButton();
+            sub1.setType("view");
+            sub1.setName("云鼎官网");
+            sub1.setUrl("http://yund.live/");
+            subButton.add(sub1);
+
+            WxMenuButton sub2 = new WxMenuButton();
+            sub2.setType("view");
+            sub2.setName("点我尝新");
+            sub2.setUrl("http://56048477.m.weimob.com/vshop_fx/index.php?c=newgoods&m=newgoodsdetails&goodsid=1299261&aid=56048477&share_openid=oFPye0kolGp7GCpX0KZa7YgcIpn4&t=1535954027&fid=0&from=singlemessage");
+            subButton.add(sub2);
+
+            wxMenuButton.setSubButtons(subButton);
+
             WxMenuButton wxMenuButton2 = new WxMenuButton();
             wxMenuButton2.setType("view");
             wxMenuButton2.setName("云鼎商城");
