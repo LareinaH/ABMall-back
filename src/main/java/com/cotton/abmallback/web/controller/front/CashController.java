@@ -8,8 +8,9 @@ import com.cotton.abmallback.model.RedpackRecord;
 import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.RedpackRecordService;
-import com.cotton.abmallback.third.wechat.JufenyunService;
 import com.cotton.abmallback.third.wechat.JufenyunResultObject;
+import com.cotton.abmallback.third.wechat.JufenyunService;
+import com.cotton.abmallback.third.wechat.YaoyaolaService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
 import com.github.pagehelper.PageInfo;
@@ -52,6 +53,8 @@ public class CashController extends ABMallFrontBaseController {
 
     private final JufenyunService jufenyunService;
 
+    private final YaoyaolaService yaoyaolaService;
+
     private final MemberService memberService;
 
     private final RedpackRecordService redpackRecordService;
@@ -59,9 +62,10 @@ public class CashController extends ABMallFrontBaseController {
     private final WxMpService wxMpService;
 
     @Autowired
-    public CashController(CashPickUpService cashPickUpService, JufenyunService jufenyunService, MemberService memberService, RedpackRecordService redpackRecordService, WxMpService wxMpService) {
+    public CashController(CashPickUpService cashPickUpService, JufenyunService jufenyunService, YaoyaolaService yaoyaolaService, MemberService memberService, RedpackRecordService redpackRecordService, WxMpService wxMpService) {
         this.cashPickUpService = cashPickUpService;
         this.jufenyunService = jufenyunService;
+        this.yaoyaolaService = yaoyaolaService;
         this.memberService = memberService;
         this.redpackRecordService = redpackRecordService;
         this.wxMpService = wxMpService;
@@ -129,8 +133,8 @@ public class CashController extends ABMallFrontBaseController {
         }
 
         //TODO:上限金额根据等级判断
-        if (money.compareTo(new BigDecimal(500)) > 0) {
-            return RestResponse.getFailedResponse(500, "提现金额不能大于500元。");
+        if (money.compareTo(new BigDecimal(200)) > 0) {
+            return RestResponse.getFailedResponse(500, "提现金额不能大于200元。");
         }
 
         //判断当日提现次数
@@ -155,7 +159,9 @@ public class CashController extends ABMallFrontBaseController {
         }
 
         //发送红包
-        JufenyunResultObject jufenyunResultObject = jufenyunService.sendRedpack(member.getOpenId(), money);
+        //JufenyunResultObject jufenyunResultObject = jufenyunService.sendRedpack(member.getOpenId(), money);
+
+        JufenyunResultObject jufenyunResultObject = yaoyaolaService.sendRedpack(member.getOpenId(), money);
 
         if (null == jufenyunResultObject) {
             return RestResponse.getFailedResponse(500, "提现异常，请联系客服人员。");
@@ -212,7 +218,7 @@ public class CashController extends ABMallFrontBaseController {
         String moneyStr = "￥" + money.toString() + "元";
         WxMpTemplateData data3 = new WxMpTemplateData("keyword2", moneyStr);
         list.add(data3);
-        WxMpTemplateData data4 = new WxMpTemplateData("remark", "点击查看,赶快领取吧！");
+        WxMpTemplateData data4 = new WxMpTemplateData("remark", "点击查看,赶快领取吧！（60s内有效哦，抓紧时间）");
         list.add(data4);
         mpTemplateMessage.setData(list);
 

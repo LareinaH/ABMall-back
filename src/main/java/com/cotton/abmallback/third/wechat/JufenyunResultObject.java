@@ -72,7 +72,7 @@ public class JufenyunResultObject {
         this.redpack_url = redpack_url;
     }
 
-    public class Redpack{
+    public static class Redpack{
 
         /**
          *红包编号	红包编号。此编号为唯一存在。发放通知结果也返回此编号
