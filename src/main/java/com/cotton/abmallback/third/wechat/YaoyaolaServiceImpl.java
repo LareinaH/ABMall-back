@@ -66,6 +66,8 @@ public class YaoyaolaServiceImpl implements YaoyaolaService {
                 jufenyunResultObject.setRedpack_url(redpack_url);
                 jufenyunResultObject.setRedpack_sn(ticket);
 
+                return jufenyunResultObject;
+
             }
         }
 
