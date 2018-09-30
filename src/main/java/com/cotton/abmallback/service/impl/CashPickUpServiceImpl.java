@@ -8,6 +8,7 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.RedpackRecordService;
 import com.cotton.abmallback.third.wechat.JufenyunResultObject;
 import com.cotton.abmallback.third.wechat.JufenyunService;
+import com.cotton.abmallback.third.wechat.YaoyaolaService;
 import com.cotton.base.service.impl.BaseServiceImpl;
 import com.cotton.abmallback.model.CashPickUp;
 import com.cotton.abmallback.service.CashPickUpService;
@@ -38,12 +39,15 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
 
     private final JufenyunService jufenyunService;
 
+    private final YaoyaolaService yaoyaolaService;
+
     private final MemberService memberService;
 
-    public CashPickUpServiceImpl(WxPayService wxPayService, RedpackRecordService redpackRecordService, JufenyunService jufenyunService, MemberService memberService) {
+    public CashPickUpServiceImpl(WxPayService wxPayService, RedpackRecordService redpackRecordService, JufenyunService jufenyunService, YaoyaolaService yaoyaolaService, MemberService memberService) {
         this.wxPayService = wxPayService;
         this.redpackRecordService = redpackRecordService;
         this.jufenyunService = jufenyunService;
+        this.yaoyaolaService = yaoyaolaService;
         this.memberService = memberService;
     }
 
@@ -52,6 +56,7 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
 
         Example example = new Example(RedpackRecord.class);
         Example.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("gmt_create desc");
         criteria.andEqualTo("isDeleted", false);
 
         List<String> statusList = new ArrayList<>();
@@ -65,7 +70,7 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
 
             for (RedpackRecord redpackRecord : redpackRecordPageInfo.getList()) {
 
-                JufenyunResultObject jufenyunResultObject = jufenyunService.getRedpackInfo(redpackRecord.getRedpackSn());
+                JufenyunResultObject jufenyunResultObject = yaoyaolaService.getRedpackInfo(redpackRecord.getRedpackSn());
 
                 if (null != jufenyunResultObject) {
                     switch (jufenyunResultObject.getRedpack().getStatus()) {
