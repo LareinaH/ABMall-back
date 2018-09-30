@@ -14,11 +14,13 @@ import com.cotton.abmallback.model.CashPickUp;
 import com.cotton.abmallback.service.CashPickUpService;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,6 +66,10 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
         statusList.add(RedpackStatusEnum.SEND.name());
         criteria.andIn("status", statusList);
 
+        Date now = new Date();
+        now = DateUtils.addMinutes(now,-1);
+        criteria.andLessThan("gmtCreate",now);
+
         PageInfo<RedpackRecord> redpackRecordPageInfo = redpackRecordService.query(1, 20, example);
 
         if (null != redpackRecordPageInfo && redpackRecordPageInfo.getList().size() > 0) {
@@ -78,6 +84,7 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
                         case 4:
                             cashPickUpSuccess(redpackRecord);
                             break;
+                        case 0:
                         case 3:
                             cashPickUpFailed(redpackRecord,RedpackStatusEnum.RETURN);
                             break;
@@ -129,6 +136,7 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
             Member member = memberService.getById(cashPickUp.getMemberId());
             member.setMoneyLock(member.getMoneyLock().subtract(cashPickUp.getMoney()));
             memberService.update(member);
+            update(cashPickUp);
         }
 
     }
