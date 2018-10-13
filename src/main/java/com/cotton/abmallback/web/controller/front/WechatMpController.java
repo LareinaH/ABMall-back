@@ -178,31 +178,52 @@ public class WechatMpController extends BaseController {
             //微信商城
             WxMenu wxMenu = new WxMenu();
             List<WxMenuButton> wxMenuButtonList = new ArrayList<>();
+
+            //走进云鼎
             WxMenuButton wxMenuButton = new WxMenuButton();
             wxMenuButton.setType("view");
             wxMenuButton.setName("走进云鼎");
             wxMenuButtonList.add(wxMenuButton);
             List<WxMenuButton> subButton = new ArrayList<>();
-
-            WxMenuButton sub1 = new WxMenuButton();
-            sub1.setType("view");
-            sub1.setName("云鼎官网");
-            sub1.setUrl("http://yund.live/");
-            subButton.add(sub1);
-
-            WxMenuButton sub2 = new WxMenuButton();
-            sub2.setType("view");
-            sub2.setName("点我尝新");
-            sub2.setUrl("http://56048477.m.weimob.com/vshop_fx/index.php?c=newgoods&m=newgoodsdetails&goodsid=1299261&aid=56048477&share_openid=oFPye0kolGp7GCpX0KZa7YgcIpn4&t=1535954027&fid=0&from=singlemessage");
-            subButton.add(sub2);
-
             wxMenuButton.setSubButtons(subButton);
 
+            {
+                WxMenuButton sub1 = new WxMenuButton();
+                sub1.setType("view");
+                sub1.setName("云鼎官网");
+                sub1.setUrl("http://yund.live/");
+                subButton.add(sub1);
+
+                WxMenuButton sub2 = new WxMenuButton();
+                sub2.setType("view");
+                sub2.setName("点我尝新");
+                sub2.setUrl("http://56048477.m.weimob.com/vshop_fx/index.php?c=newgoods&m=newgoodsdetails&goodsid=1299261&aid=56048477&share_openid=oFPye0kolGp7GCpX0KZa7YgcIpn4&t=1535954027&fid=0&from=singlemessage");
+                subButton.add(sub2);
+            }
+
+
+            //云鼎商城
             WxMenuButton wxMenuButton2 = new WxMenuButton();
             wxMenuButton2.setType("view");
             wxMenuButton2.setName("云鼎商城");
-            wxMenuButton2.setUrl("http://wx.yund.live/wxindex.html");
             wxMenuButtonList.add(wxMenuButton2);
+            List<WxMenuButton> subButton2 = new ArrayList<>();
+            wxMenuButton2.setSubButtons(subButton2);
+            {
+                WxMenuButton sub3 = new WxMenuButton();
+                sub3.setType("view");
+                sub3.setName("云鼎优品粮票");
+                sub3.setUrl("http://56048477.m.weimob.com/vshop_fx/index.php?c=newgoods&m=newgoodsdetails&goodsid=1377349&aid=56048477&share_openid=oFPye0kolGp7GCpX0KZa7YgcIpn4&t=1539347231&fid=0&from=singlemessage&sionid=ea8692b313204318bfd8880c84385612");
+                subButton2.add(sub3);
+
+                WxMenuButton sub4 = new WxMenuButton();
+                sub4.setType("view");
+                sub4.setName("云鼎商城");
+                sub4.setUrl("http://wx.yund.live/wxindex.html");
+                subButton2.add(sub4);
+            }
+
+
             wxMenu.setButtons(wxMenuButtonList);
             wxService.getMenuService().menuCreate(wxMenu);
 
