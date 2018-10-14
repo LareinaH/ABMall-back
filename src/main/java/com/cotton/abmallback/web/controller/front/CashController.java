@@ -10,6 +10,7 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.RedpackRecordService;
 import com.cotton.abmallback.third.wechat.JufenyunResultObject;
 import com.cotton.abmallback.third.wechat.JufenyunService;
+import com.cotton.abmallback.third.wechat.WechatRedpackService;
 import com.cotton.abmallback.third.wechat.YaoyaolaService;
 import com.cotton.abmallback.web.controller.ABMallFrontBaseController;
 import com.cotton.base.common.RestResponse;
@@ -54,6 +55,8 @@ public class CashController extends ABMallFrontBaseController {
     private final JufenyunService jufenyunService;
 
     private final YaoyaolaService yaoyaolaService;
+
+    private final WechatRedpackService wechatRedpackService;
 
     private final MemberService memberService;
 
@@ -128,13 +131,13 @@ public class CashController extends ABMallFrontBaseController {
             return RestResponse.getFailedResponse(500, "提现金额不能大于可提现金额。");
         }
 
-        if (money.compareTo(new BigDecimal(0.3)) < 0) {
-            return RestResponse.getFailedResponse(500, "提现金额不能小于0.3元。");
+        if (money.compareTo(new BigDecimal(1.0)) < 0) {
+            return RestResponse.getFailedResponse(500, "提现金额不能小于1元。");
         }
 
         //TODO:上限金额根据等级判断
-        if (money.compareTo(new BigDecimal(200)) > 0) {
-            return RestResponse.getFailedResponse(500, "提现金额不能大于200元。");
+        if (money.compareTo(new BigDecimal(499)) > 0) {
+            return RestResponse.getFailedResponse(500, "提现金额不能大于499元。");
         }
 
         //判断当日提现次数
@@ -161,8 +164,11 @@ public class CashController extends ABMallFrontBaseController {
         //发送红包
         //JufenyunResultObject jufenyunResultObject = jufenyunService.sendRedpack(member.getOpenId(), money);
 
-        JufenyunResultObject jufenyunResultObject = yaoyaolaService.sendRedpack(member.getOpenId(), money);
 
+        //JufenyunResultObject jufenyunResultObject = yaoyaolaService.sendRedpack(member.getOpenId(), money);
+
+
+        JufenyunResultObject jufenyunResultObject = wechatRedpackService.sendRedpack(member.getOpenId(),money);
         if (null == jufenyunResultObject) {
             return RestResponse.getFailedResponse(500, "提现异常，请联系客服人员。");
         }
@@ -180,7 +186,7 @@ public class CashController extends ABMallFrontBaseController {
             redpackRecord.setCashPickUpId(cashPickUp.getId());
             redpackRecord.setRedpackSn(jufenyunResultObject.getRedpack_sn());
             redpackRecord.setRedpackUrl(jufenyunResultObject.getRedpack_url());
-            redpackRecord.setRedpeckSource("jufenyun");
+            redpackRecord.setRedpeckSource("wechat");
             redpackRecord.setStatus(RedpackStatusEnum.WAIT_SEND.name());
             redpackRecord.setTotalMoney(money);
 
@@ -189,11 +195,11 @@ public class CashController extends ABMallFrontBaseController {
             member.setMoneyLock(member.getMoneyLock().add(money));
             memberService.update(member);
 
-            //如果消息发送失败 红包会退回
+     /*       //如果消息发送失败 红包会退回
             if (!sendWxMessage(member.getOpenId(), jufenyunResultObject.getRedpack_url(), money)) {
 
                 return RestResponse.getFailedResponse(500, "申请提现失败,消息发送失败");
-            }
+            }*/
 
             return RestResponse.getSuccesseResponse();
         } else
