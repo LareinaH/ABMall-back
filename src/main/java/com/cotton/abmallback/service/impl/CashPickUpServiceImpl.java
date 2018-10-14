@@ -8,6 +8,7 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.RedpackRecordService;
 import com.cotton.abmallback.third.wechat.JufenyunResultObject;
 import com.cotton.abmallback.third.wechat.JufenyunService;
+import com.cotton.abmallback.third.wechat.WechatRedpackService;
 import com.cotton.abmallback.third.wechat.YaoyaolaService;
 import com.cotton.base.service.impl.BaseServiceImpl;
 import com.cotton.abmallback.model.CashPickUp;
@@ -43,13 +44,16 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
 
     private final YaoyaolaService yaoyaolaService;
 
+    private final WechatRedpackService wechatRedpackService;
+
     private final MemberService memberService;
 
-    public CashPickUpServiceImpl(WxPayService wxPayService, RedpackRecordService redpackRecordService, JufenyunService jufenyunService, YaoyaolaService yaoyaolaService, MemberService memberService) {
+    public CashPickUpServiceImpl(WxPayService wxPayService, RedpackRecordService redpackRecordService, JufenyunService jufenyunService, YaoyaolaService yaoyaolaService, WechatRedpackService wechatRedpackService, MemberService memberService) {
         this.wxPayService = wxPayService;
         this.redpackRecordService = redpackRecordService;
         this.jufenyunService = jufenyunService;
         this.yaoyaolaService = yaoyaolaService;
+        this.wechatRedpackService = wechatRedpackService;
         this.memberService = memberService;
     }
 
@@ -76,8 +80,9 @@ public class CashPickUpServiceImpl extends BaseServiceImpl<CashPickUp> implement
 
             for (RedpackRecord redpackRecord : redpackRecordPageInfo.getList()) {
 
-                JufenyunResultObject jufenyunResultObject = yaoyaolaService.getRedpackInfo(redpackRecord.getRedpackSn());
+                //JufenyunResultObject jufenyunResultObject = yaoyaolaService.getRedpackInfo(redpackRecord.getRedpackSn());
 
+                JufenyunResultObject jufenyunResultObject = wechatRedpackService.getRedpackInfo(redpackRecord.getRedpackSn());
                 if (null != jufenyunResultObject) {
                     switch (jufenyunResultObject.getRedpack().getStatus()) {
                         case 1:
