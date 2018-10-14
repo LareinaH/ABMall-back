@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cotton.abmallback.mapper.MemberReferrerRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.cotton.abmallback.model.MemberReferrerRecord" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="referrer_id" property="referrerId" jdbcType="BIGINT" />
+    <result column="gmt_begin" property="gmtBegin" jdbcType="TIMESTAMP" />
+    <result column="gmt_end" property="gmtEnd" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

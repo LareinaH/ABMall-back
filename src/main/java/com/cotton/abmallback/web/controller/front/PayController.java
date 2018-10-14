@@ -9,6 +9,7 @@ import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.third.wechat.JufenyunResultObject;
 import com.cotton.abmallback.third.wechat.JufenyunService;
+import com.cotton.abmallback.third.wechat.WechatRedpackService;
 import com.cotton.abmallback.third.wechat.YaoyaolaService;
 import com.cotton.base.common.RestResponse;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -64,6 +65,10 @@ public class PayController {
     @Autowired
     private YaoyaolaService yaoyaolaService;
 
+    @Autowired
+    private WechatRedpackService wechatRedpackService;
+
+
     @ResponseBody
     @RequestMapping(value = "/example")
     public RestResponse<Map<String, Object>> example(String orderNo) {
@@ -99,13 +104,16 @@ public class PayController {
        //distributionManager.orderDistribute(orderNo);
 
 
-       // intMemberCount();
+       //intMemberCount();
 
 
 
-        JufenyunResultObject jufenyunResultObject = yaoyaolaService.getRedpackInfo("fe6409d550e26f50caa1a94678cd2421");
+        //JufenyunResultObject jufenyunResultObject = yaoyaolaService.getRedpackInfo("fe6409d550e26f50caa1a94678cd2421");
 
-        map.put("status",jufenyunResultObject.getRedpack().getStatus());
+        //map.put("status",jufenyunResultObject.getRedpack().getStatus());
+
+        JufenyunResultObject resultObject = wechatRedpackService.sendRedpack("o8HRJ041PumGvdNo46oMeY2rSrmU",new BigDecimal("0.5"));
+        map.put("info",resultObject);
 
         return RestResponse.getSuccesseResponse(map);
     }

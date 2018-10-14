@@ -30,4 +30,11 @@
     <result column="token_wechat_mp" jdbcType="VARCHAR" property="tokenWechatMp" />
     <result column="recommend_code_url" jdbcType="VARCHAR" property="recommendCodeUrl" />
   </resultMap>
+
+  <select id="queryUnbuyMemberIn48Hours" resultMap="BaseResultMap">
+    SELECT  a.id,a.referrer_id,a.name FROM member as a left join
+    orders as b on a.id = b.member_id WHERE
+    a.gmt_create &lt; date_add(current_timestamp, interval -48 hour) AND a.referrer_id &gt; 0 AND  a.is_deleted != 1
+    and (b.order_status is null or b.order_status  IN ('CANCLE','SYSTEM_CANCEL')) GROUP BY a.id,a.referrer_id,a.name;
+  </select>
 </mapper>

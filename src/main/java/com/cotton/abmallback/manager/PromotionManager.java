@@ -18,6 +18,9 @@ public interface PromotionManager {
      */
     void memberPromotion(Member member,long orderId);
 
+    /**
+     * 会员晋级 定时任务
+     */
     void memberPromotionAll();
 
 }

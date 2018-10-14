@@ -59,14 +59,14 @@
                 </table>
 
                 -->
-        		<table tableName="member" domainObjectName="Member">
+      <!--  		<table tableName="member" domainObjectName="Member">
                     <property name="useActualColumnNames" value="false" />
                     <generatedKey column="id" sqlStatement="Mysql" identity="true" />
                     <ignoreColumn column="id" />
                     <ignoreColumn column="is_deleted" />
                     <ignoreColumn column="gmt_create" />
                     <ignoreColumn column="gmt_modify" />
-                </table>
+                </table>-->
         <!--		<table tableName="member_address">
                     <property name="useActualColumnNames" value="false" />
                     <generatedKey column="id" sqlStatement="Mysql" identity="true" />
@@ -270,6 +270,15 @@
              <ignoreColumn column="gmt_create" />
              <ignoreColumn column="gmt_modify" />
          </table>-->
+
+        <table tableName="member_referrer_record">
+            <property name="useActualColumnNames" value="false" />
+            <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+            <ignoreColumn column="id" />
+            <ignoreColumn column="is_deleted" />
+            <ignoreColumn column="gmt_create" />
+            <ignoreColumn column="gmt_modify" />
+        </table>
     </context>
 
 </generatorConfiguration>

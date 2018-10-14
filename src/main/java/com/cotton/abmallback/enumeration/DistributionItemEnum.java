@@ -64,6 +64,27 @@ public enum DistributionItemEnum {
     /**
      * V3 额外奖励
      */
-    V3_AWARD_MONEY
+    V3_AWARD_MONEY,
+
+    /**
+     * 绑定引荐人红包-开关
+     */
+    REFERRER_REDPACK_SWICH,
+    /**
+     * 绑定引荐人红包-红包总金额
+     */
+    REFERRER_REDPACK_TOTAL_MONEY,
+    /**
+     * 绑定引荐人红包-红包总个数
+     */
+    REFERRER_REDPACK_TOTAL_COUNT,
+    /**
+     * 绑定引荐人红包-已发放个数
+     */
+    REFERRER_REDPACK_TOTAL_SEND_COUNT,
+    /**
+     * 绑定引荐人红包-已发放金额
+     */
+    REFERRER_REDPACK_TOTAL_SEND_MONEY
 
 }
