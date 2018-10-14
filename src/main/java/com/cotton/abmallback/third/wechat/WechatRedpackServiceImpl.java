@@ -61,12 +61,11 @@ public class WechatRedpackServiceImpl implements WechatRedpackService {
         } catch (WxPayException e) {
             JufenyunResultObject resultObject = new JufenyunResultObject();
             resultObject.setMessage(e.toString());
-
             logger.error("发送红包失败",e);
+            return resultObject;
+
         }
 
-
-        return null;
     }
 
     @Override
