@@ -112,8 +112,10 @@ public class PayController {
 
         //map.put("status",jufenyunResultObject.getRedpack().getStatus());
 
-        JufenyunResultObject resultObject = wechatRedpackService.sendRedpack("o8HRJ041PumGvdNo46oMeY2rSrmU",new BigDecimal("0.5"));
-        map.put("info",resultObject);
+        //JufenyunResultObject resultObject = wechatRedpackService.sendRedpack("o8HRJ041PumGvdNo46oMeY2rSrmU",new BigDecimal("0.5"));
+        //map.put("info",resultObject);
+
+        map.put("xx",wechatRedpackService.getRedpackInfo("1539532364"));
 
         return RestResponse.getSuccesseResponse(map);
     }

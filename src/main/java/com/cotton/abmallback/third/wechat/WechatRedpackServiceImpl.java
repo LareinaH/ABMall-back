@@ -96,6 +96,7 @@ public class WechatRedpackServiceImpl implements WechatRedpackService {
                 JufenyunResultObject.Redpack redpack = new JufenyunResultObject.Redpack();
                 jufenyunResultObject.setRedpack(redpack);
                 redpack.setStatus(status);
+                return  jufenyunResultObject;
 
 
             }else {
