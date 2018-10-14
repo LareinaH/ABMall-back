@@ -65,10 +65,11 @@ public class CashController extends ABMallFrontBaseController {
     private final WxMpService wxMpService;
 
     @Autowired
-    public CashController(CashPickUpService cashPickUpService, JufenyunService jufenyunService, YaoyaolaService yaoyaolaService, MemberService memberService, RedpackRecordService redpackRecordService, WxMpService wxMpService) {
+    public CashController(CashPickUpService cashPickUpService, JufenyunService jufenyunService, YaoyaolaService yaoyaolaService, WechatRedpackService wechatRedpackService, MemberService memberService, RedpackRecordService redpackRecordService, WxMpService wxMpService) {
         this.cashPickUpService = cashPickUpService;
         this.jufenyunService = jufenyunService;
         this.yaoyaolaService = yaoyaolaService;
+        this.wechatRedpackService = wechatRedpackService;
         this.memberService = memberService;
         this.redpackRecordService = redpackRecordService;
         this.wxMpService = wxMpService;
