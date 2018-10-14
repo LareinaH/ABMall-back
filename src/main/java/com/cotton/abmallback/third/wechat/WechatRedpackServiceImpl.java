@@ -42,6 +42,7 @@ public class WechatRedpackServiceImpl implements WechatRedpackService {
         request.setClientIp("47.104.174.30");
         request.setActName("福利来啦");
         request.setRemark("提现红包");
+        request.setSceneId("PRODUCT_1");
         try {
             WxPaySendRedpackResult wxPaySendRedpackResult =  wxPayService.sendRedpack(request);
 
