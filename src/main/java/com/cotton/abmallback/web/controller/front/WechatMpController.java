@@ -233,7 +233,6 @@ public class WechatMpController extends BaseController {
                 sub4.setName("云鼎商城");
                 sub4.setUrl("http://wx.yund.live/wxindex.html");
                 subButton2.add(sub4);
-
             }
 
 
