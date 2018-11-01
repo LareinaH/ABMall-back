@@ -210,6 +210,12 @@ public class WechatMpController extends BaseController {
             List<WxMenuButton> subButton2 = new ArrayList<>();
             wxMenuButton2.setSubButtons(subButton2);
             {
+                WxMenuButton sub5 = new WxMenuButton();
+                sub5.setType("view");
+                sub5.setName("引流爆品");
+                sub5.setUrl("http://56048477.m.weimob.com/fx_vshop/56048477/Goods/GoodsListNew?ClassifyId=452110&share_openid=&qr=0&aid=56048477&shareid=oFPye0kolGp7GCpX0KZa7YgcIpn4&channel=share&v=44692551&sdagentid=0&agentid=0&employeesid=0&from=singlemessage&sionid=81c7843731994e85bc1f83d0ac85164c");
+                subButton2.add(sub5);
+
                 WxMenuButton sub3 = new WxMenuButton();
                 sub3.setType("view");
                 sub3.setName("云鼎优品粮票");
@@ -221,6 +227,7 @@ public class WechatMpController extends BaseController {
                 sub4.setName("云鼎商城");
                 sub4.setUrl("http://wx.yund.live/wxindex.html");
                 subButton2.add(sub4);
+
             }
 
 
