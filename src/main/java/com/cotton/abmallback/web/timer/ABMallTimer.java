@@ -135,7 +135,7 @@ public class ABMallTimer {
 
 
 
-    @Scheduled(cron = "0 0 16 ? * MON-FRI" )
+    @Scheduled(cron = "0 0 15 ? * MON-FRI" )
     public void tishichifan() {
         TextMessage message = new TextMessage("开始订餐了，订明天午饭的，在群里 +1  不+1 明天中午没有饭吃哦！！");
         message.setIsAtAll(true);
@@ -147,7 +147,7 @@ public class ABMallTimer {
         }
     }
 
-    @Scheduled(cron = "0 0 20 ? * MON-FRI" )
+    @Scheduled(cron = "0 0 18 ? * MON-FRI" )
     public void jieshuchifan() {
         TextMessage message = new TextMessage("订餐时间结束了哦，+1的小哥哥、小姐姐，明天午餐看不到你了哦！！");
         message.setIsAtAll(true);
