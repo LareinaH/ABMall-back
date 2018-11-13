@@ -6,10 +6,6 @@ import com.cotton.abmallback.service.CashPickUpService;
 import com.cotton.abmallback.service.MemberService;
 import com.cotton.abmallback.service.OrdersService;
 import com.cotton.abmallback.service.ShopActivitiesService;
-import com.dingtalk.chatbot.DingtalkChatbotClient;
-import com.dingtalk.chatbot.SendResult;
-import com.dingtalk.chatbot.demo.TestConfig;
-import com.dingtalk.chatbot.message.TextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,8 +37,6 @@ public class ABMallTimer {
     private final MemberService memberService;
 
     private Logger logger = LoggerFactory.getLogger(ABMallTimer.class);
-
-    private DingtalkChatbotClient client = new DingtalkChatbotClient();
 
     private String CHATBOT_WEBHOOK = "https://oapi.dingtalk.com/robot/send?access_token=963b6104ea2d0c8c304d126a2b3996f1e6af5ff3bc3f2ca50a0fc4058df2724e";
 
