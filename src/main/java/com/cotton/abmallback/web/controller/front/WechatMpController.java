@@ -174,6 +174,7 @@ public class WechatMpController extends BaseController {
 
         try {
 
+            wxService.getMenuService().menuDelete();
 
             //微信商城
             WxMenu wxMenu = new WxMenu();
@@ -233,6 +234,7 @@ public class WechatMpController extends BaseController {
 
             wxMenu.setButtons(wxMenuButtonList);
             wxService.getMenuService().menuCreate(wxMenu);
+
 
             WxMpMenu wxMpMenu = wxService.getMenuService().menuGet();
 
