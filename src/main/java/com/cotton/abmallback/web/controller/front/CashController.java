@@ -118,7 +118,9 @@ public class CashController extends ABMallFrontBaseController {
     @RequestMapping(value = "/applyPickUpCash", method = {RequestMethod.POST})
     public RestResponse<Void> applyPickUpCash(@RequestParam() BigDecimal money) {
 
+        return RestResponse.getFailedResponse(500, "提现功能暂时关闭哦！有需求请联系运营");
 
+ /*
         Member member = getCurrentMember();
 
         if (StringUtils.isBlank(member.getOpenId())) {
@@ -196,19 +198,18 @@ public class CashController extends ABMallFrontBaseController {
             member.setMoneyLock(member.getMoneyLock().add(money));
             memberService.update(member);
 
-     /*       //如果消息发送失败 红包会退回
+     *//*       //如果消息发送失败 红包会退回
             if (!sendWxMessage(member.getOpenId(), jufenyunResultObject.getRedpack_url(), money)) {
 
                 return RestResponse.getFailedResponse(500, "申请提现失败,消息发送失败");
-            }*/
+            }*//*
 
             return RestResponse.getSuccesseResponse();
         } else
 
         {
             return RestResponse.getFailedResponse(500, "申请提现失败");
-        }
-
+        }*/
 
     }
 
